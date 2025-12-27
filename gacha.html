@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+.card-area{flex:1;display:flex;justify-content:center}
+
+
+.card {
+width:220px;height:300px;border-radius:12px;background:linear-gradient(180deg,#0f1b2a,#071018);display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;transform-origin:center;box-shadow:0 10px 30px rgba(0,0,0,0.6);position:relative;overflow:hidden
+}
+.card.flare { animation:flipIn 900ms cubic-bezier(.2,.9,.3,1); }
+@keyframes flipIn {
+0%{transform:rotateX(90deg) scale(0.6);opacity:0}
+60%{transform:rotateX(-10deg) scale(1.03);opacity:1}
+100%{transform:rotateX(0deg) scale(1)}
+}
+
+
+.controls{width:240px}
+button{width:100%;padding:12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+.btn-gacha{background:linear-gradient(90deg,var(--accent),#ffb86b);color:#071018}
+.btn-reset{margin-top:10px;background:#1b1f2a;color:#cfe9ff}
+
+
+.log{margin-top:20px;background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;font-size:14px;max-height:180px;overflow:auto}
+
+
+/* rarity styles */
+.rarity-SSR{background:linear-gradient(180deg,#ffd166,#ffb86b);color:#071018}
+.rarity-SR{background:linear-gradient(180deg,#7cf6ff,#4bbfd9);color:#071018}
+.rarity-R{background:linear-gradient(180deg,#d7d9df,#9aa0ab);color:#071018}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>가챠</h1>
+<a href="index.html" style="color:inherit;opacity:0.8;text-decoration:none">메인으로</a>
+</header>
+
+
+<div class="stage">
+<div class="card-area">
+<div id="card" class="card">?</div>
+</div>
+
+
+<div class="controls">
+<button id="pullBtn" class="btn-gacha">한 번 뽑기</button>
+<button id="resetBtn" class="btn-reset">로그 초기화</button>
+<div class="log" id="log"></div>
+</div>
+</div>
+</div>
+
+
+<script type="module">
+// 간단 가챠 코드. 필요하면 Firebase 기록 추가.
+
+
+// 풀(예시). weight는 확률 가중치
+const POOL = [
+{ id:'A', name:'자쿠드-전설', rarity:'SSR', weight:1 },
+{ id:'B', name:'자쿠드-희귀', rarity:'SR', weight:6 },
+{ id:'C', name:'자쿠드-일반', rarity:'R', weight:93 }
+];
+
+
+const cardEl = document.getElementById('card');
+const pullBtn = document.getElementById('pullBtn');
+const resetBtn = document.getElementById('resetBtn');
+const logEl = document.getElementById('log');
+
+
+function weightedDraw(pool){
+const total = pool.reduce((s,p)=>s+p.weight,0);
+let r = Math.random()*total;
+for(const p of pool){ r-=p.weight; if(r<=0) return p; }
+return pool[pool.length-1];
+}
+
+
+function showResult(p){
+cardEl.className = 'card flare';
+cardEl.textContent = p.name;
+cardEl.classList.remove('rarity-SSR','rarity-SR','rarity-R');
+cardEl.classList.add('rarity-' + p.rarity);
+}
+
+
+function appendLog(text){
+const d = new Date();
+const line = document.createElement('div');
+line.textContent = `[${d.toLocaleTimeString()}] ${text}`;
+logEl.prepend(line);
+}
+
+
+pullBtn.addEventListener('click', async ()=>{
+pullBtn.disabled = true;
+pullBtn.textContent = '연출중...';
+
+
+// 연출 타이밍
+cardEl.className = 'card';
+cardEl.textContent = '...';
+
+
+// 짧은 대기(연출용). 실제로는 CSS 애니메이션과 소리 추가 가능
+await new Promise(r=>setTimeout(r, 800));
+
+
+const res = weightedDraw(POOL);
+
+
+// 결과 표시
+showResult(res);
+appendLog(`${res.rarity} 획득: ${res.name}`);
+
+
+// DB 기록이 필요하면 여기서 호출. (예: fetch로 cloud function 호출)
+// 예시: await fetch('/.netlify/functions/draw', {method:'POST', body:JSON.stringify({item:res})});
+
+
+pullBtn.disabled = false;
+pullBtn.textContent = '한 번 뽑기';
+});
+
+
+resetBtn.addEventListener('click', ()=>{ logEl.innerHTML=''; appendLog('로그 초기화됨'); });
+
+
+// 초기 상태
+appendLog('가챠 준비 완료');
+
+
+</script>
+</body>
+</html>
