@@ -1,133 +1,171 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>자쿠드 숭배 시뮬레이터</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-html{
-  font-size: 100%;
-}
-body{
-  margin:0;
-  font-family:"Noto Sans KR",system-ui;
-  background:#f6f8fb;
-  color:#0f172a;
-}
+  :root{
+    --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --muted:#475569; --text:#0f172a;
+  }
+  html.dark{
+    --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --muted:#9aa0ab; --text:#eaf6ff;
+  }
+  html{font-size:100%}
+  body{
+    margin:0;
+    font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    background:var(--bg);
+    color:var(--text);
+  }
 
-/* ===== HEADER ===== */
-.header{
-  background:#ffffff;
-  border-bottom:1px solid #e5e7eb;
-}
-.header-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0.75rem 1.2rem;
-}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:0.6rem;
-  text-decoration:none;
-  color:#0f172a;
-}
-.brand img{
-  width:40px;
-  height:40px;
-  object-fit:contain;
-}
-.brand span{
-  font-size:1.05rem;
-  font-weight:800;
-}
+  /* header */
+  .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
+  .header-top{ display:flex; align-items:center; justify-content:space-between; padding:0.8rem 1.2rem; gap:0.75rem; }
+  .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
+  .brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; }
+  .brand .title{
+    font-size:1.6rem; /* 페이지 이름 더 크게 */
+    font-weight:900;
+    line-height:1;
+  }
 
-/* My Home 버튼 */
-.myhome-btn{
-  padding:0.45rem 0.9rem;
-  border-radius:0.6rem;
-  border:1px solid #d1d5db;
-  background:#ffffff;
-  font-weight:600;
-  cursor:pointer;
-}
+  /* right controls (SP + My Home) */
+  .right-controls{ display:flex; align-items:center; gap:0.6rem; }
+  .sp-badge{
+    padding:0.35rem 0.6rem; border-radius:0.6rem; background:transparent; border:1px solid rgba(0,0,0,0.06);
+    font-weight:800; color:var(--accent);
+  }
+  .myhome-btn{
+    padding:0.45rem 0.9rem; border-radius:0.6rem; border:1px solid var(--line); background:var(--card); font-weight:700; cursor:pointer;
+  }
 
-/* ===== NAV ===== */
-.nav{
-  display:flex;
-  gap:0.5rem;
-  padding:0.5rem 1.2rem;
-}
-.nav a{
-  text-decoration:none;
-  padding:0.45rem 0.9rem;
-  border-radius:0.6rem;
-  font-weight:700;
-  font-size:0.9rem;
-  color:#475569;
-}
-.nav a.active{
-  background:#eef2ff;
-  color:#3730a3;
-}
+  /* nav (2nd row) */
+  .nav-row{ display:flex; align-items:center; justify-content:space-between; padding:0.45rem 1.2rem; border-top:1px solid var(--line); gap:0.5rem; }
+  .nav-left{ display:flex; gap:0.5rem; align-items:center; }
+  .nav-left a{
+    text-decoration:none; padding:0.4rem 0.8rem; border-radius:0.6rem; font-weight:700; font-size:0.95rem; color:var(--muted);
+  }
+  /* 강조는 각 페이지에서 active를 붙여주면 된다. 기본(메인)에서는 강조 없음. */
+  .nav-left a.active{
+    background:#eef2ff; color:#3730a3;
+  }
 
-/* ===== MAIN ===== */
-main{
-  max-width:860px;
-  margin:2rem auto;
-  padding:0 1.2rem;
-}
-h1{
-  font-size:1.4rem;
-  font-weight:800;
-  margin-bottom:0.6rem;
-}
-p{
-  line-height:1.7;
-  font-size:0.95rem;
-}
-.card{
-  margin-top:1.5rem;
-  padding:1.4rem;
-  border-radius:0.9rem;
-  background:#ffffff;
-  border:1px solid #e5e7eb;
-}
+  /* theme switch */
+  .theme-wrap{ display:flex; align-items:center; gap:0.5rem; }
+  .theme-label{ color:var(--muted); font-weight:700; font-size:0.9rem; }
+  .theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
+  .theme-switch input{ opacity:0; width:0; height:0; }
+  .slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
+  .slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
+  .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),#ffb86b); }
+  .theme-switch input:checked + .slider::before{ transform:translateX(20px); }
+
+  /* main */
+  main{ max-width:980px; margin:2rem auto; padding:0 1.2rem; }
+  h1{ font-size:1.5rem; margin:0 0 .6rem 0; color:var(--accent); font-weight:900; }
+  .card{ background:var(--card); border:1px solid var(--line); padding:1.2rem; border-radius:12px; box-shadow:0 8px 22px rgba(0,0,0,0.04); color:var(--muted) }
+
+  @media(max-width:720px){
+    .brand .title{ font-size:1.15rem }
+    .sp-badge{ display:none }
+  }
 </style>
 </head>
-
 <body>
 
 <header class="header">
   <div class="header-top">
     <a class="brand" href="index.html">
       <img src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고">
-      <span>자쿠드 숭배 시뮬레이터</span>
+      <span class="title">자쿠드 숭배 시뮬레이터</span>
     </a>
-    <button class="myhome-btn">My Home</button>
+
+    <div class="right-controls">
+      <div id="spBadge" class="sp-badge">0 SP</div>
+      <a href="home.html"><button class="myhome-btn" type="button">My Home</button></a>
+    </div>
   </div>
 
-  <nav class="nav">
-    <a href="index.html" class="active">자쿠드 숭배하기</a>
-    <a href="bible.html">자쿠드 성경</a>
-    <a href="gacha.html">자쿠드 제네레이터</a>
-  </nav>
+  <div class="nav-row">
+    <div class="nav-left">
+      <a id="link-worship" href="worship.html">자쿠드 숭배하기</a>
+      <a id="link-bible" href="bible.html">자쿠드 성경</a>
+      <a id="link-generator" href="generator.html">자쿠드 제네레이터</a>
+    </div>
+
+    <div class="theme-wrap" aria-hidden="false">
+      <span class="theme-label">다크</span>
+      <label class="theme-switch" title="다크 모드 토글">
+        <input id="themeToggle" type="checkbox" />
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
 </header>
 
 <main>
   <h1>자쿠드를 숭배해야 하는 이유</h1>
+
   <div class="card">
     <p>
-      이곳은 자쿠드를 숭배하는 공식 시뮬레이션 공간이다.<br>
-      모든 숭배는 의미를 가지며, 모든 클릭은 신성하다.<br><br>
-      상단 네비게이션을 통해 숭배, 성경, 제네레이터로 이동할 수 있다.
+      이곳은 자쿠드를 숭배하는 공식 시뮬레이션 공간입니다.<br>
+      상단 네비에서 숭배, 성경, 제네레이터로 이동하세요.
     </p>
   </div>
 </main>
 
+<script>
+/* SP 표시 유지 (localStorage) */
+(function(){
+  const KEY = 'zk_sp_v1';
+  const el = document.getElementById('spBadge');
+  const read = ()=> parseInt(localStorage.getItem(KEY) || '0', 10);
+  const writeUI = ()=> el.textContent = read() + ' SP';
+  writeUI();
+  // 페이지만 여기서 유지. 실제 숭배 페이지에서 증가하면 해당 값이 갱신됨 on reload.
+  // Provide a small API to update from other pages if needed.
+  window.__updateSP = writeUI;
+})();
+
+/* 다크 모드 토글 (localStorage 유지) */
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  const apply = (t) => {
+    if(t === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+    toggle.checked = (t === 'dark');
+  };
+  const saved = localStorage.getItem('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  apply(initial);
+  toggle.addEventListener('change', () => {
+    const next = toggle.checked ? 'dark' : 'light';
+    localStorage.setItem('theme', next);
+    apply(next);
+  });
+})();
+
+/* 네비 강조 자동 처리: 각 페이지에서 pathname에 맞추어 active 클래스 부여.
+   여기(index.html)에서는 기본적으로 아무것도 강조하지 않음.
+   (worship.html 등 다른 파일에서 동일 스크립트 로드하면 자동으로 강조됨)
+*/
+(function(){
+  const path = location.pathname.split('/').pop();
+  const map = {
+    'worship.html':'link-worship',
+    'bible.html':'link-bible',
+    'generator.html':'link-generator'
+  };
+  const id = map[path];
+  if(id){
+    const el = document.getElementById(id);
+    if(el) el.classList.add('active');
+  }
+})();
+</script>
 </body>
 </html>
