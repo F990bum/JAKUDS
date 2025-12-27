@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>자쿠드 성경</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  html{font-size:100%}
+  :root{--bg:#f7fafc;--card:#fff;--accent:#2563eb;--muted:#6b7280}
+  html.dark{--bg:#071018;--card:#0b1724;--accent:#ffd166;--muted:#9aa0ab}
+  body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--muted)}
+  .header{position:sticky;top:0;background:var(--card);box-shadow:0 1px 0 rgba(0,0,0,0.04)}
+  .header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem}
+  main{max-width:960px;margin:1.5rem auto;padding:1rem}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem}
+  .card{background:linear-gradient(180deg,#fff,#f1f5f9);padding:1rem;border-radius:10px;box-shadow:0 12px 28px rgba(10,20,40,0.06);text-align:center}
+  .card a{display:block;text-decoration:none;color:inherit;font-weight:800;font-size:1rem}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a class="brand" href="worship.html"><img id="siteLogo3" data-ibb="https://ibb.co/ZrgK1DJ" alt="logo" style="width:3rem;height:3rem;border-radius:6px"></a>
+    <div style="display:flex;gap:1rem"><a href="worship.html">숭배하기</a><a href="generator.html">제네레이터</a></div>
+  </div>
+  <div style="padding:.5rem 1.25rem;border-top:1px solid #eee;display:flex;justify-content:flex-end">
+    <label style="display:flex;align-items:center;gap:.5rem"><span style="color:var(--muted)">다크</span><input id="themeToggle3" type="checkbox"></label>
+  </div>
+</header>
+
+<main>
+  <h1>자쿠드 성경</h1>
+  <p>장(Chapter)을 클릭하면 해당 장으로 이동. 장 파일은 직접 만드시오.</p>
+
+  <div class="grid">
+    <!-- 링크는 사용자가 각 장을 만들면 연결 -->
+    <div class="card"><a href="bible/chapter1.html">1장</a></div>
+    <div class="card"><a href="bible/chapter2.html">2장</a></div>
+    <div class="card"><a href="bible/chapter3.html">3장</a></div>
+    <div class="card"><a href="bible/chapter4.html">4장</a></div>
+    <div class="card"><a href="bible/chapter5.html">5장</a></div>
+    <div class="card"><a href="bible/chapter6.html">6장</a></div>
+    <div class="card"><a href="bible/chapter7.html">7장</a></div>
+    <div class="card"><a href="bible/chapter8.html">8장</a></div>
+    <div class="card"><a href="bible/chapter9.html">9장</a></div>
+    <div class="card"><a href="bible/chapter10.html">10장</a></div>
+  </div>
+</main>
+
+<script>
+/* logo try */
+(function(){ const img=document.getElementById('siteLogo3'); const base=img.dataset.ibb; const cand=[base.replace('ibb.co','i.ibb.co')+'.png','/assets/logo.png']; let i=0; function next(){ if(i>=cand.length) return; img.src=cand[i++]; } img.addEventListener('error',next); next(); })();
+/* theme */
+(function(){ const t=document.getElementById('themeToggle3'); const apply=v=>{ if(v==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); t.checked=(v==='dark'); }; const s=localStorage.getItem('theme')|| (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'); apply(s); t.addEventListener('change',()=>{ const n=t.checked?'dark':'light'; localStorage.setItem('theme',n); apply(n); }); })();
+</script>
+</body>
+</html>
