@@ -17,7 +17,6 @@
   html.dark{
     --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
     --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff; --shadow:rgba(0,0,0,0.45);
-    --crit-yellow:#ffd166; --crit-orange:#ff9f1c; --crit-red:#ff3b30;
   }
   html{font-size:100%}
   body{margin:0;font-family:"Noto Sans KR",system-ui; background:var(--bg); color:var(--text); overflow-x:hidden}
@@ -27,11 +26,11 @@
   .header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.8rem 1.2rem; }
   .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
   .brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
-  .brand .title{ font-size:1.8rem; font-weight:900; color:var(--text-strong); }
+  .brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); } /* 메인과 동일 */
 
   .right-controls{ display:flex; align-items:center; gap:0.6rem; }
-  .sp-badge{ padding:0.35rem 0.6rem; border-radius:0.6rem; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:110px; text-align:center; }
-  .myhome-btn{ padding:0.45rem 0.9rem; border-radius:0.6rem; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; }
+  .sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:110px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; }
+  .myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; }
 
   /* nav */
   .nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.5rem; padding:0.45rem 1.2rem; border-top:1px solid var(--line); }
@@ -52,12 +51,11 @@
   main{ max-width:1180px; margin:1.5rem auto; padding:1rem; display:flex; gap:1rem; align-items:flex-start; }
   .left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1rem; align-items:center; }
   .card-wrap{ width:400px; height:480px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; }
-  /* worship button increased size for both lines */
   #worshipBtn{ width:92%; height:82%; border-radius:14px; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 18px 40px rgba(0,0,0,0.14); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0.4rem; line-height:1.05; }
   .worship-line.big{ font-size:2.6rem; line-height:1; }   /* increased */
-  .worship-line.small{ font-size:1.2rem; opacity:0.95; margin-top:8px; } /* increased */
+  .worship-line.small{ font-size:1.2rem; opacity:0.95; margin-top:8px; }
 
-  .right{ width:420px; display:flex; flex-direction:column; gap:0.9rem; } /* widened to fit BUY MAX */
+  .right{ width:420px; display:flex; flex-direction:column; gap:0.9rem; }
   .meta{ background:var(--card); border-radius:10px; padding:0.85rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
   .meta .row{ display:flex; justify-content:space-between; margin-bottom:0.4rem; }
   .store-title{ margin-top:0.2rem;font-weight:800;color:var(--text-strong) }
@@ -92,12 +90,9 @@
   }
   html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rgba(10,10,20,0.92)); color:var(--text); }
 
-  @keyframes floatUp{
-    0%{ transform:translate(-50%, -10% ) scale(1); opacity:1; }
-    100%{ transform:translate(-50%, -180% ) scale(1.04); opacity:0; }
-  }
+  @keyframes floatUp{ 0%{ transform:translate(-50%, -10% ) scale(1); opacity:1; } 100%{ transform:translate(-50%, -180% ) scale(1.04); opacity:0; } }
 
-  /* Critical text styling when inserted inline */
+  /* Critical text styling */
   .crit-text { font-weight:900; margin-right:8px; }
 
   @media(max-width:920px){
@@ -112,7 +107,7 @@
 <header class="header">
   <div class="header-top">
     <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
-      <img id="logo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="logo" onerror="this.onerror=null;this.src='/assets/logo.png'">
+      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고" onerror="this.onerror=null;this.src='/assets/logo.png'">
       <span class="title">자쿠드 숭배 시뮬레이터</span>
     </a>
 
@@ -168,31 +163,31 @@
         <strong>신도</strong> : 신도 1명당 크리티컬 확률 +1%. 크리티컬 레벨 시스템 적용(100% = 한 단계 상승).<br>
         <strong>제단</strong> : 모든 크리티컬의 보상 배율에 추가 비율 +2%/제단.<br>
         <strong>사원</strong> : 사원 1개당 피버 발동 확률 +0.5%. 피버 발동 시 클릭 보상 ×1.5, SPS ×2 (지속 시간 10초).<br>
-        <strong>헌신 강화</strong> : 짝수 레벨마다 전체 SPS가 2배가 됩니다(레벨 2 → ×2, 레벨 4 → ×4, ...).
+        <strong>헌신 강화</strong> : 매 레벨마다 클릭 보상 ×2, 전체 SPS ×2 (레벨 n이면 ×2^n).
       </div>
-
     </div>
   </aside>
 </main>
 
 <script>
-/* ========== Config & Units ========== */
+/* --------------------
+   Config / Units / Cap
+   -------------------- */
 const KEY = 'zk_tycoon_v1';
-const UNITS = ['M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','KU']; // mapping starts at 1,000,000 => M
+const UNITS = ['M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','KU']; // 1e6 -> M
 const MAX_UNIT_INDEX = UNITS.length - 1;
-const MAX_KU = 550_000_000; // 550,000,000 KU
-// numeric cap computed as MAX_KU * 1000^(exp_of_KU), where exp_of_KU = index + 2
-const KU_EXP = (MAX_UNIT_INDEX + 2);
-let NUMERIC_MAX = null;
+const MAX_KU_COUNT = 550_000_000; // 550,000,000 KU
+// compute numeric cap: MAX_KU_COUNT * 1000^(MAX_UNIT_INDEX+2)
+let NUMERIC_MAX = Number.MAX_SAFE_INTEGER;
 try {
-  // May overflow; clamp to Number.MAX_SAFE_INTEGER
-  const maybe = MAX_KU * Math.pow(1000, KU_EXP);
-  NUMERIC_MAX = Number.isFinite(maybe) ? Math.min(maybe, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER;
-} catch(e) {
-  NUMERIC_MAX = Number.MAX_SAFE_INTEGER;
-}
+  const exp = MAX_UNIT_INDEX + 2;
+  const val = MAX_KU_COUNT * Math.pow(1000, exp);
+  if(Number.isFinite(val) && val < Number.MAX_SAFE_INTEGER) NUMERIC_MAX = Math.floor(val);
+} catch(e){ /* keep safe max */ }
 
-/* ========== Default State ========== */
+/* --------------------
+   Default state
+   -------------------- */
 const DEFAULT = {
   sp: 0,
   totalClicks: 0,
@@ -208,12 +203,14 @@ const DEFAULT = {
   },
   startTimestamp: null,
   playAcc: 0,
-  lastSaved: 0
+  lastSaved: 0,
+  _feverMultiplier: 1
 };
-
 let state = loadState();
 
-/* ========== DOM ========== */
+/* --------------------
+   DOM refs
+   -------------------- */
 const spBadge = document.getElementById('spBadge');
 const totalSP = document.getElementById('totalSP');
 const totalClicks = document.getElementById('totalClicks');
@@ -223,273 +220,64 @@ const worshipBtn = document.getElementById('worshipBtn');
 const storeEl = document.getElementById('store');
 const playTimeEl = document.getElementById('playTime');
 
-/* ========== Utilities ========== */
+/* --------------------
+   Helpers
+   -------------------- */
 function jsonClone(o){ return JSON.parse(JSON.stringify(o)); }
-
-function clampToMax(n){
-  if(n > NUMERIC_MAX) return NUMERIC_MAX;
-  return n;
+function clampToMax(n){ return Math.min(n, NUMERIC_MAX); }
+function formatFloatingAmount(n){
+  const rounded = Math.round((n + Number.EPSILON) * 100) / 100;
+  if(Math.abs(rounded - Math.round(rounded)) < 1e-9) return Math.round(rounded);
+  return rounded.toFixed(2);
 }
-
 function formatTotalSPValue(n){
-  // if <1,000,000 use commas
-  if(n < 1_000_000) return Math.floor(n).toLocaleString() + ' SP';
-  // else compute exponent
+  n = Math.floor(n);
+  if(n < 1_000_000) return n.toLocaleString() + ' SP';
   const exp = Math.floor(Math.log10(n) / 3);
   const useExp = Math.max(exp, 2);
   const unitIndex = useExp - 2;
   const value = n / Math.pow(1000, useExp);
-  if(unitIndex > MAX_UNIT_INDEX){
-    // beyond KU cap: show KU with cap note
-    return value.toFixed(2) + ' ' + UNITS[MAX_UNIT_INDEX] + (n >= NUMERIC_MAX ? ' (MAX)' : '');
-  }
+  if(unitIndex > MAX_UNIT_INDEX) return value.toFixed(2) + ' ' + UNITS[MAX_UNIT_INDEX];
   return value.toFixed(2) + ' ' + UNITS[unitIndex];
 }
 
-/* ========== Mechanics ========== */
-/* Calculate SPS with devotion effects and fever */
+/* --------------------
+   Mechanics: SPS, fever, crit
+   -------------------- */
 function calcSPS(){
   let total = 0;
   for(const k of ['follower','altar','temple']){
     const b = state.buildings[k];
     total += b.count * b.sps;
   }
+  // devotion: every level doubles SPS (2^level)
   const devLevel = state.upgrades.devotion.level || 0;
-  const devMultiplier = Math.pow(2, Math.floor(devLevel / 2));
+  const devMultiplier = Math.pow(2, devLevel);
   total *= devMultiplier;
-  if(isFeverActive()) total *= 2;
+  // fever multiplier
+  total *= getCurrentFeverMultiplier();
   state.sps = total;
   return total;
 }
 
-/* Fever handling: can have multi-level fever similar to crit */
+/* Fever: sample multi-level and apply multiplier 1.5 * 2^level */
 let feverExpire = null;
 function isFeverActive(){ return feverExpire && Date.now() < feverExpire; }
-function triggerFeverWithLevel(level){
-  // base fever multiplier = 1.5. each level doubles that.
-  // duration fixed 10s regardless of level (adjustable)
-  const duration = 10000;
+function getCurrentFeverMultiplier(){ return isFeverActive() ? (state._feverMultiplier || 1.5) : 1; }
+function triggerFever(level){
+  // level >=0 -> multiplier = 1.5 * 2^level
+  const mult = 1.5 * Math.pow(2, Math.max(0, level));
+  const duration = 10000; // 10s
+  state._feverMultiplier = mult;
   feverExpire = Date.now() + duration;
   updateUI();
-  setTimeout(()=> updateUI(), duration + 60);
+  setTimeout(()=> { state._feverMultiplier = 1; feverExpire = null; updateUI(); }, duration + 50);
 }
 
-/* Critical distribution: algorithm
-   - totalCritPercent P (e.g. 101)
-   - n = floor(P/100), r = P % 100
-   - if n == 0:
-       prob_noncrit = 100 - r
-       prob_level0 = r
-     else:
-       prob_level(n) = r
-       prob_level(n-1) = 100 - r
-   - purchase/distribution uses randomness accordingly
-   - multiplier for level k = 2^(k+1)  (level0 -> x2, level1 -> x4, level2 -> x8)
-*/
-function sampleCritLevel(P){
-  // P is percent (0..inf)
-  if(P <= 0) return {level:-1, isCrit:false}; // no crit
-  const n = Math.floor(P / 100);
-  const r = P % 100;
-  const rnd = Math.random() * 100;
-  if(n === 0){
-    if(rnd < r) return {level:0, isCrit:true};
-    return {level:-1, isCrit:false};
-  } else {
-    if(rnd < r) return {level: n, isCrit:true};
-    return {level: n - 1, isCrit:true};
-  }
-}
-
-/* ========== Formatting helpers ========== */
-function formatFloatingAmount(n){
-  // show integer if near-int, else two decimals
-  const rounded = Math.round((n + Number.EPSILON) * 100) / 100;
-  if(Math.abs(rounded - Math.round(rounded)) < 1e-9) return Math.round(rounded);
-  return rounded.toFixed(2);
-}
-
-/* ========== Store logic with BUY MAX ========== */
-const ITEMS = [
-  { key:'follower', label:'신도', desc:'+0.5 SPS + 크리티컬 확률 +1%', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'altar', label:'제단', desc:'+2 SPS + 크리티컬 보상 +2%/제단', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'temple', label:'사원', desc:'+12 SPS + 피버 확률 +0.5%/사원', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'devotion', label:'헌신 강화', desc:'수동 파워 2배, 짝수 레벨마다 SPS 배수', costFn: (u)=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)) }
-];
-
-function renderStore(){
-  storeEl.innerHTML = '';
-  ITEMS.forEach(item=>{
-    const container = document.createElement('div');
-    container.className = 'item';
-    const left = document.createElement('div'); left.className='item-left';
-    const right = document.createElement('div'); right.className='item-right';
-
-    if(item.key === 'devotion'){
-      const u = state.upgrades.devotion;
-      left.innerHTML = `<div style="font-weight:800">${item.label} (Lv ${u.level})</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
-      const cost = item.costFn(u);
-      const btnBuy = document.createElement('button');
-      btnBuy.textContent = cost.toLocaleString() + ' SP';
-      btnBuy.className = 'buy';
-      btnBuy.disabled = state.sp < cost;
-      btnBuy.addEventListener('pointerdown', (e)=> { e.preventDefault(); buyItemDevotion(); });
-      right.appendChild(btnBuy);
-
-      // Buy Max for devotion: loop until can't afford (levels small)
-      const btnMax = document.createElement('button');
-      btnMax.textContent = 'BUY MAX';
-      btnMax.className = 'buy-max';
-      btnMax.disabled = state.sp < cost;
-      btnMax.addEventListener('pointerdown', (e)=> { e.preventDefault(); buyMaxDevotion(); });
-      right.appendChild(btnMax);
-
-    } else {
-      const b = state.buildings[item.key];
-      left.innerHTML = `<div style="font-weight:800">${item.label} x${b.count}</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
-      const cost = item.costFn(b);
-      const btnBuy = document.createElement('button');
-      btnBuy.textContent = cost.toLocaleString() + ' SP';
-      btnBuy.className = 'buy';
-      btnBuy.disabled = state.sp < cost;
-      btnBuy.addEventListener('pointerdown', (e)=> { e.preventDefault(); buyBuilding(item); });
-      right.appendChild(btnBuy);
-
-      const btnMax = document.createElement('button');
-      btnMax.textContent = 'BUY MAX';
-      btnMax.className = 'buy-max';
-      btnMax.disabled = state.sp < cost;
-      btnMax.addEventListener('pointerdown', (e)=> { e.preventDefault(); buyMaxBuilding(item); });
-      right.appendChild(btnMax);
-    }
-
-    container.appendChild(left);
-    container.appendChild(right);
-    storeEl.appendChild(container);
-  });
-}
-
-/* buy single building */
-function buyBuilding(item){
-  const b = state.buildings[item.key];
-  const currentCost = Math.ceil(b.baseCost * Math.pow(1.15, b.count));
-  if(state.sp < currentCost) return;
-  state.sp = clampToMax(state.sp - currentCost);
-  b.count += 1;
-  saveState(); updateUI();
-}
-
-/* buy max building using geometric series formula */
-function buyMaxBuilding(item){
-  const b = state.buildings[item.key];
-  const r = 1.15;
-  const base = b.baseCost;
-  const c = b.count;
-  const available = state.sp;
-  // compute n such that base * r^c * (r^n - 1)/(r - 1) <= available
-  const numerator = available * (r - 1);
-  const denom = base * Math.pow(r, c);
-  if(numer numeratorZeroCheck){} // no-op to avoid unused
-  if(denom <= 0) return;
-  const inside = 1 + numerator / denom;
-  if(inside <= 1) return;
-  const n = Math.floor(Math.log(inside) / Math.log(r));
-  if(n <= 0) return;
-  // cost sum
-  const costSum = base * Math.pow(r, c) * (Math.pow(r, n) - 1) / (r - 1);
-  // apply
-  state.sp = clampToMax(state.sp - costSum);
-  b.count += n;
-  saveState(); updateUI();
-}
-
-/* buy max for devotion upgrade (iterate until can't afford; small loop) */
-function buyMaxDevotion(){
-  const u = state.upgrades.devotion;
-  let bought = 0;
-  while(true){
-    const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
-    if(state.sp < cost) break;
-    state.sp -= cost;
-    u.level += 1;
-    state.manualPower *= u.effect;
-    bought++;
-    if(bought > 200) break; // safety
-  }
-  saveState(); updateUI();
-}
-
-/* buy devotion single */
-function buyItemDevotion(){
-  const u = state.upgrades.devotion;
-  const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
-  if(state.sp < cost) return;
-  state.sp -= cost;
-  u.level += 1;
-  state.manualPower *= u.effect;
-  saveState(); updateUI();
-}
-
-/* ========== Worship handling (pointerdown for immediacy) ========== */
-worshipBtn.addEventListener('pointerdown', (ev)=>{
-  // FEVER: compute total fever percent = temple.count * 0.5
-  const templeCount = state.buildings.temple.count || 0;
-  const feverPercent = templeCount * 0.5;
-  // sample fever using same multi-level method
-  const feverLevel = sampleMultiLevel(feverPercent); // returns {level: -1 (no), lvl}
-  if(feverLevel.level >= 0){
-    // trigger fever with multiplier 1.5 * 2^level
-    const mult = 1.5 * Math.pow(2, feverLevel.level);
-    triggerFeverWithMultiplier(mult, 10000);
-  }
-
-  // CRITICAL: compute totalCritPercent
-  const baseCrit = 2; // percent
-  const shindoCount = state.buildings.follower.count || 0;
-  const altarCount = state.buildings.altar.count || 0;
-  const critPercent = baseCrit + shindoCount * 1;
-  // sample crit level
-  const critSample = sampleMultiLevel(critPercent);
-  // determine multiplier: base multiply factor = 2^(level+1)
-  let critMultiplier = 1;
-  let isCrit = false;
-  if(critSample.level >= 0){
-    isCrit = true;
-    critMultiplier = Math.pow(2, critSample.level + 1);
-    // apply altar bonus to critical reward: multiply final multiplier by (1 + altarCount * 0.02)
-    if(altarCount > 0) critMultiplier *= (1 + altarCount * 0.02);
-  }
-
-  // fever multiplier if active now
-  const feverActiveNow = isFeverActive();
-  let feverClickMultiplier = 1.0;
-  if(feverActiveNow) feverClickMultiplier = 1.5; // base fever click multiplier; fever levels handled in triggerFeverWithMultiplier
-
-  // final gain
-  const baseGain = state.manualPower;
-  const finalMultiplier = (isCrit ? critMultiplier : 1) * feverClickMultiplier;
-  const gain = baseGain * finalMultiplier;
-
-  state.sp = clampToMax(state.sp + gain);
-  state.totalClicks += 1;
-  saveState(); updateUI();
-
-  // floating: 5px above pointer
-  const x = ev.clientX + window.scrollX;
-  const y = ev.clientY + window.scrollY - 5;
-  if(isCrit){
-    const critInfo = critLevelDisplay(critSample.level);
-    showFloatingAt(x, y, `🛐 +${formatFloatingAmount(gain)}`, critInfo);
-  } else {
-    showFloatingAt(x, y, `🛐 +${formatFloatingAmount(gain)}`, null);
-  }
-});
-
-/* Helper: sample multi-level (shared by crit and fever)
-   - P percent -> n = floor(P/100), r = P % 100
-   - if n == 0 -> probability: level0 with r%, non (level -1) with 100-r%
-   - if n >=1  -> probability level n with r%, level n-1 with 100-r%
-   returns { level: -1 or >=0, r, n }
+/* sampleMultiLevel (used for crit & fever)
+   Ppercent -> n = floor(P/100), r = P % 100
+   if n==0: prob(level0)=r%, prob(no)=100-r%
+   if n>=1: prob(level n)=r%, prob(level n-1)=100-r%
 */
 function sampleMultiLevel(Ppercent){
   if(Ppercent <= 0) return { level: -1, n:0, r:0 };
@@ -505,35 +293,197 @@ function sampleMultiLevel(Ppercent){
   }
 }
 
-/* crit level display mapping */
+/* crit level -> multiplier mapping:
+   level -1 -> no crit -> x1
+   level 0 -> CRITICAL -> x2
+   level 1 -> CRITICAL! -> x4
+   level 2 -> CRITICAL!! -> x8
+   multiplier = 2^(level+1)
+*/
+function critMultiplierForLevel(level){
+  if(level < 0) return 1;
+  return Math.pow(2, level + 1);
+}
 function critLevelDisplay(level){
   if(level < 0) return null;
-  let color = getComputedStyle(document.documentElement).getPropertyValue('--crit-yellow').trim();
-  if(level === 0) color = getComputedStyle(document.documentElement).getPropertyValue('--crit-yellow').trim();
-  else if(level === 1) color = getComputedStyle(document.documentElement).getPropertyValue('--crit-orange').trim();
-  else color = getComputedStyle(document.documentElement).getPropertyValue('--crit-red').trim();
-  const scale = 1 + Math.min(level * 0.08, 0.5);
-  // text label
+  const color = level === 0 ? getComputedStyle(document.documentElement).getPropertyValue('--crit-yellow').trim()
+               : level === 1 ? getComputedStyle(document.documentElement).getPropertyValue('--crit-orange').trim()
+               : getComputedStyle(document.documentElement).getPropertyValue('--crit-red').trim();
+  const scale = 1 + Math.min(level * 0.08, 0.6);
   const text = 'CRITICAL' + (level > 0 ? '!'.repeat(level) : '');
   return { color, scale, text, level };
 }
 
-/* show floating element; critInfo optional */
+/* --------------------
+   Store & Buy Max
+   -------------------- */
+const ITEMS = [
+  { key:'follower', label:'신도', desc:'+0.5 SPS + 크리티컬 확률 +1%', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'altar', label:'제단', desc:'+2 SPS + 크리티컬 보상 +2%/제단', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'temple', label:'사원', desc:'+12 SPS + 피버 확률 +0.5%/사원', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'devotion', label:'헌신 강화', desc:'매 레벨 클릭 보상 ×2, 전체 SPS ×2^level', costFn: (u)=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)) }
+];
+
+function renderStore(){
+  storeEl.innerHTML = '';
+  ITEMS.forEach(item=>{
+    const container = document.createElement('div');
+    container.className = 'item';
+    const left = document.createElement('div'); left.className='item-left';
+    const right = document.createElement('div'); right.className='item-right';
+
+    if(item.key === 'devotion'){
+      const u = state.upgrades.devotion;
+      left.innerHTML = `<div style="font-weight:800">${item.label} (Lv ${u.level})</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
+      const cost = item.costFn(u);
+      const btnBuy = document.createElement('button'); btnBuy.textContent = cost.toLocaleString() + ' SP'; btnBuy.className='buy';
+      btnBuy.disabled = state.sp < cost;
+      btnBuy.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyItemDevotion(); });
+      right.appendChild(btnBuy);
+
+      const btnMax = document.createElement('button'); btnMax.textContent='BUY MAX'; btnMax.className='buy-max';
+      btnMax.disabled = state.sp < cost;
+      btnMax.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyMaxDevotion(); });
+      right.appendChild(btnMax);
+
+    } else {
+      const b = state.buildings[item.key];
+      left.innerHTML = `<div style="font-weight:800">${item.label} x${b.count}</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
+      const cost = item.costFn(b);
+      const btnBuy = document.createElement('button'); btnBuy.textContent = cost.toLocaleString() + ' SP'; btnBuy.className='buy';
+      btnBuy.disabled = state.sp < cost;
+      btnBuy.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyBuilding(item); });
+      right.appendChild(btnBuy);
+
+      const btnMax = document.createElement('button'); btnMax.textContent='BUY MAX'; btnMax.className='buy-max';
+      btnMax.disabled = state.sp < cost;
+      btnMax.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyMaxBuilding(item); });
+      right.appendChild(btnMax);
+    }
+
+    container.appendChild(left); container.appendChild(right); storeEl.appendChild(container);
+  });
+}
+
+/* buy single building */
+function buyBuilding(item){
+  const b = state.buildings[item.key];
+  const currentCost = Math.ceil(b.baseCost * Math.pow(1.15, b.count));
+  if(state.sp < currentCost) return;
+  state.sp = clampToMax(state.sp - currentCost);
+  b.count += 1;
+  saveState(); updateUI();
+}
+
+/* buy max building by solving geometric sum */
+function buyMaxBuilding(item){
+  const b = state.buildings[item.key];
+  const r = 1.15;
+  const base = b.baseCost;
+  const c = b.count;
+  const available = state.sp;
+  const denom = base * Math.pow(r, c);
+  if(denom <= 0) return;
+  const inside = 1 + (available * (r - 1)) / denom;
+  if(inside <= 1) return;
+  const n = Math.floor(Math.log(inside) / Math.log(r));
+  if(n <= 0) return;
+  const costSum = base * Math.pow(r, c) * (Math.pow(r, n) - 1) / (r - 1);
+  // safety clamp
+  const actualCost = Math.min(costSum, available);
+  state.sp = clampToMax(state.sp - actualCost);
+  b.count += n;
+  saveState(); updateUI();
+}
+
+/* buy single devotion */
+function buyItemDevotion(){
+  const u = state.upgrades.devotion;
+  const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
+  if(state.sp < cost) return;
+  state.sp = clampToMax(state.sp - cost);
+  u.level += 1;
+  // per requirement: each level doubles manual click reward as well
+  state.manualPower *= 2;
+  // SPS multiplier handled in calcSPS (2^level)
+  saveState(); updateUI();
+}
+
+/* buy max devotion (iterate; levels growth is exponential so loop is small) */
+function buyMaxDevotion(){
+  const u = state.upgrades.devotion;
+  let count = 0;
+  while(true){
+    const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
+    if(state.sp < cost) break;
+    state.sp = clampToMax(state.sp - cost);
+    u.level += 1;
+    state.manualPower *= 2;
+    count++;
+    if(count > 200) break; // safety
+  }
+  if(count > 0){ saveState(); updateUI(); }
+}
+
+/* --------------------
+   Worship / Click handling
+   -------------------- */
+/* pointerdown used for immediacy */
+worshipBtn.addEventListener('pointerdown', (ev)=>{
+  // Fever sampling: each temple adds 0.5% -> Ppercent
+  const templeCount = state.buildings.temple.count || 0;
+  const feverPercent = templeCount * 0.5;
+  const feverSample = sampleMultiLevel(feverPercent);
+  if(feverSample.level >= 0) triggerFever(feverSample.level);
+
+  // Critical sampling: base 2% + 1% per 신도
+  const baseCrit = 2;
+  const shindoCount = state.buildings.follower.count || 0;
+  const altarCount = state.buildings.altar.count || 0;
+  const critPercent = baseCrit + shindoCount * 1;
+  const critSample = sampleMultiLevel(critPercent);
+  const isCrit = critSample.level >= 0;
+  const critLevel = critSample.level;
+  // multiplier from crit level
+  let critMult = critMultiplierForLevel(critLevel); // 1 if no crit, or 2^(level+1)
+  // altar increases critical reward by +2% per altar -> multiply multiplier
+  if(isCrit && altarCount > 0) critMult *= (1 + altarCount * 0.02);
+
+  // fever (click) multiplier if active
+  const feverActiveNow = isFeverActive();
+  const feverClickMultiplier = feverActiveNow ? state._feverMultiplier || 1.5 : 1;
+
+  // final gain
+  const baseGain = state.manualPower;
+  const gain = clampToMax(baseGain * critMult * feverClickMultiplier);
+
+  state.sp = clampToMax(state.sp + gain);
+  state.totalClicks += 1;
+  saveState(); updateUI();
+
+  // floating (5px above pointer)
+  const x = ev.clientX + window.scrollX;
+  const y = ev.clientY + window.scrollY - 5;
+  if(isCrit){
+    const critInfo = critLevelDisplay(critLevel);
+    showFloatingAt(x, y, `🛐 +${formatFloatingAmount(gain)}`, critInfo);
+  } else {
+    showFloatingAt(x, y, `🛐 +${formatFloatingAmount(gain)}`, null);
+  }
+});
+
+/* floating UI */
 function showFloatingAt(x, y, text, critInfo){
   const el = document.createElement('div');
   el.className = 'float-elem';
   el.style.left = x + 'px';
   el.style.top = y + 'px';
   if(critInfo){
-    const t = document.createElement('span');
-    t.className = 'crit-text';
-    t.textContent = critInfo.text;
-    t.style.color = critInfo.color;
-    t.style.fontSize = (14 * critInfo.scale) + 'px';
+    const t = document.createElement('span'); t.className='crit-text'; t.textContent = critInfo.text;
+    t.style.color = critInfo.color; t.style.fontSize = (16 * critInfo.scale) + 'px';
     el.appendChild(t);
-    const v = document.createElement('span');
-    v.textContent = ' ' + text.replace(/^.*\+/, '+');
-    v.style.fontSize = (14 * critInfo.scale) + 'px';
+    const v = document.createElement('span'); v.textContent = ' ' + text.replace(/^.*\+/, '+');
+    v.style.fontSize = (16 * critInfo.scale) + 'px';
     el.appendChild(v);
   } else {
     el.textContent = text;
@@ -542,28 +492,9 @@ function showFloatingAt(x, y, text, critInfo){
   setTimeout(()=> el.remove(), 1000);
 }
 
-/* Fever trigger function with multiplier levels (called from sampleMultiLevel result) */
-function triggerFeverWithMultiplier(multiplier, durationMs){
-  // set fever expiry and set a multiplier override while active
-  feverExpire = Date.now() + durationMs;
-  // store current fever multiplier on state for UI use
-  state._feverMultiplier = multiplier;
-  updateUI();
-  setTimeout(()=> {
-    state._feverMultiplier = 1;
-    updateUI();
-  }, durationMs + 50);
-}
-
-/* Determine current fever active multiplier */
-function getCurrentFeverMultiplier(){
-  if(isFeverActive()){
-    return state._feverMultiplier || 1.5;
-  }
-  return 1;
-}
-
-/* ========== Play time functions (visible only) ========== */
+/* --------------------
+   Play time (visible only)
+   -------------------- */
 function updatePlayTimeDisplay(){
   const elapsed = getAccumulatedPlayMs();
   playTimeEl.textContent = formatMs(elapsed);
@@ -593,14 +524,15 @@ document.addEventListener('visibilitychange', ()=>{
   }
 });
 
-/* ========== Persistence & Init ========== */
+/* --------------------
+   Persistence / Tick / UI
+   -------------------- */
 function loadState(){
   try{
     const raw = localStorage.getItem(KEY);
     if(!raw){
       const s = jsonClone(DEFAULT);
       s.startTimestamp = document.visibilityState === 'visible' ? Date.now() : null;
-      s._feverMultiplier = 1;
       return s;
     }
     const parsed = JSON.parse(raw);
@@ -612,46 +544,38 @@ function loadState(){
     console.error('load failed', e);
     const s = jsonClone(DEFAULT);
     s.startTimestamp = document.visibilityState === 'visible' ? Date.now() : null;
-    s._feverMultiplier = 1;
     return s;
   }
 }
-
 function saveState(){
   state.lastSaved = Date.now();
-  // ensure cap
   state.sp = clampToMax(state.sp);
   localStorage.setItem(KEY, JSON.stringify(state));
-  // sync badge
   localStorage.setItem('zk_sp_v1', String(Math.floor(state.sp)));
 }
 
-/* ========== SPS tick & UI update loop ========== */
+/* tick: SPS application and UI update */
 let tickTimer = null;
 function startTick(){
   if(tickTimer) clearInterval(tickTimer);
   tickTimer = setInterval(()=>{
     const spsBase = calcSPS();
-    const feverMultiplier = getCurrentFeverMultiplier();
-    const sps = spsBase * feverMultiplier;
-    if(sps > 0) state.sp = clampToMax(state.sp + sps / 10); // per 0.1s
+    const feverMult = getCurrentFeverMultiplier();
+    const sps = spsBase * feverMult;
+    if(sps > 0) state.sp = clampToMax(state.sp + sps / 10);
     updateUI();
   }, 100);
 }
 setInterval(()=> saveState(), 5000);
 
-/* ========== UI rendering ========== */
+/* render/store/UI */
 function updateUI(){
-  // highlight worship button if fever active
-  if(isFeverActive()) {
-    worshipBtn.style.background = 'linear-gradient(90deg,#ff3b30,#ff6b6b)'; // red-ish
-    worshipBtn.style.color = '#fff';
+  // fever highlight
+  if(isFeverActive()){
+    worshipBtn.style.background = 'linear-gradient(90deg,#ff3b30,#ff6b6b)'; worshipBtn.style.color = '#fff';
   } else {
-    worshipBtn.style.background = 'linear-gradient(90deg,var(--accent),var(--accent-2))';
-    worshipBtn.style.color = '#071018';
+    worshipBtn.style.background = 'linear-gradient(90deg,var(--accent),var(--accent-2))'; worshipBtn.style.color = '#071018';
   }
-
-  // SP displays
   spBadge.textContent = Math.floor(state.sp).toLocaleString() + ' SP';
   totalSP.textContent = formatTotalSPValue(state.sp);
   totalClicks.textContent = state.totalClicks;
@@ -661,10 +585,40 @@ function updateUI(){
   updatePlayTimeDisplay();
 }
 
-/* ========== NAV active */
+/* nav active */
 (function(){ const el = document.getElementById('link-worship'); if(el) el.classList.add('active'); })();
 
-/* ========== Init ========= */
+/* theme toggle */
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  const apply = (t) => {
+    if(t === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+    toggle.checked = (t === 'dark');
+  };
+  const saved = localStorage.getItem('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  apply(initial);
+  toggle.addEventListener('change', () => {
+    const next = toggle.checked ? 'dark' : 'light';
+    localStorage.setItem('theme', next);
+    apply(next);
+  });
+})();
+
+/* storage sync */
+window.addEventListener('storage', (e)=>{
+  if(e.key === KEY || e.key === 'zk_sp_v1'){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(KEY) || '{}');
+      if(parsed && typeof parsed.sp !== 'undefined'){
+        state = Object.assign(jsonClone(DEFAULT), parsed);
+        updateUI();
+      }
+    }catch(err){ /* ignore */ }
+  }
+});
+
+/* init */
 (function init(){
   if(!state.startTimestamp && document.visibilityState === 'visible') state.startTimestamp = Date.now();
   state.sp = Number(state.sp) || 0;
