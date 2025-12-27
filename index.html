@@ -1,130 +1,133 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>자쿠드 숭배 - 메인</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자쿠드 숭배 시뮬레이터</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+
 <style>
-  html{font-size:100%;transition:background .18s,color .18s}
-  :root{
-    --bg:#f7fafc; --card-bg:#fff; --line:#e5e7eb; --accent:#2563eb;
-    --accent-2:#ffb86b; --text:#111827; --muted:#6b7280; --shadow:rgba(0,0,0,0.04);
-  }
-  html.dark{ --bg:#071018; --card-bg:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b; --text:#eaf6ff; --muted:#9aa0ab; --shadow:rgba(255,255,255,0.03); }
-  body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text)}
-  .header{position:sticky;top:0;background:var(--card-bg);box-shadow:0 1px 0 var(--shadow);z-index:1000}
-  .header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;gap:.75rem}
-  .brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;color:var(--text)}
-  .brand img{width:3rem;height:3rem;object-fit:cover;border-radius:6px;background:linear-gradient(90deg,#eee,#ddd)}
-  .brand .title{font-size:1.15rem;font-weight:900}
-  .user{display:flex;align-items:center;gap:.9rem;font-size:.92rem}
-  .user .sp{font-weight:800;color:var(--accent);padding:.2rem .45rem;border-radius:.45rem;border:1px solid rgba(0,0,0,.04)}
-  .header-nav{display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.25rem;border-top:1px solid var(--line)}
-  .nav-left{display:flex;gap:.9rem}
-  .nav-left a{color:var(--muted);text-decoration:none;font-weight:700;padding:.35rem .6rem;border-radius:.45rem}
-  .nav-left a.active{color:var(--accent);background:rgba(37,99,235,.06)}
-  .theme-wrap{display:flex;align-items:center;gap:.5rem}
-  .theme-switch{position:relative;width:44px;height:24px;display:inline-block}
-  .theme-switch input{opacity:0;width:0;height:0}
-  .slider{position:absolute;inset:0;background:#cbd5e1;border-radius:30px;transition:background .18s}
-  .slider:before{content:"";position:absolute;left:3px;top:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .18s}
-  input:checked + .slider{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
-  input:checked + .slider:before{transform:translateX(20px)}
-  main{max-width:960px;margin:1.75rem auto;padding:1rem}
-  h1{margin:0 0 .5rem 0;font-size:1.35rem;color:var(--accent)}
-  p{line-height:1.8;color:var(--text);margin:0 0 1rem 0}
-  .note{color:var(--muted);font-size:.95rem}
-  @media(max-width:720px){.brand .title{display:none}.user .role{display:none}}
+html{
+  font-size: 100%;
+}
+body{
+  margin:0;
+  font-family:"Noto Sans KR",system-ui;
+  background:#f6f8fb;
+  color:#0f172a;
+}
+
+/* ===== HEADER ===== */
+.header{
+  background:#ffffff;
+  border-bottom:1px solid #e5e7eb;
+}
+.header-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0.75rem 1.2rem;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:0.6rem;
+  text-decoration:none;
+  color:#0f172a;
+}
+.brand img{
+  width:40px;
+  height:40px;
+  object-fit:contain;
+}
+.brand span{
+  font-size:1.05rem;
+  font-weight:800;
+}
+
+/* My Home 버튼 */
+.myhome-btn{
+  padding:0.45rem 0.9rem;
+  border-radius:0.6rem;
+  border:1px solid #d1d5db;
+  background:#ffffff;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* ===== NAV ===== */
+.nav{
+  display:flex;
+  gap:0.5rem;
+  padding:0.5rem 1.2rem;
+}
+.nav a{
+  text-decoration:none;
+  padding:0.45rem 0.9rem;
+  border-radius:0.6rem;
+  font-weight:700;
+  font-size:0.9rem;
+  color:#475569;
+}
+.nav a.active{
+  background:#eef2ff;
+  color:#3730a3;
+}
+
+/* ===== MAIN ===== */
+main{
+  max-width:860px;
+  margin:2rem auto;
+  padding:0 1.2rem;
+}
+h1{
+  font-size:1.4rem;
+  font-weight:800;
+  margin-bottom:0.6rem;
+}
+p{
+  line-height:1.7;
+  font-size:0.95rem;
+}
+.card{
+  margin-top:1.5rem;
+  padding:1.4rem;
+  border-radius:0.9rem;
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+}
 </style>
 </head>
+
 <body>
+
 <header class="header">
   <div class="header-top">
-    <a class="brand" href="worship.html">
-      <img id="siteLogo" alt="로고" data-ibb="https://ibb.co/ZrgK1DJ">
-      <span class="title">자쿠드</span>
+    <a class="brand" href="index.html">
+      <img src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고">
+      <span>자쿠드 숭배 시뮬레이터</span>
     </a>
-    <div class="user">
-      <span class="role">칭호</span>
-      <span class="name" id="userName">닉네임</span>
-      <span class="sp" id="spDisplay">0 SP</span>
-      <button id="logoutBtn">로그아웃</button>
-    </div>
+    <button class="myhome-btn">My Home</button>
   </div>
 
-  <div class="header-nav">
-    <div class="nav-left">
-      <a href="worship.html" class="active">자쿠드 숭배하기</a>
-      <a href="bible.html">자쿠드 성경</a>
-      <a href="generator.html">자쿠드 제네레이터</a>
-    </div>
-
-    <div>
-      <div class="theme-wrap">
-        <span class="theme-label">다크</span>
-        <label class="theme-switch" title="다크 모드 토글">
-          <input id="themeToggle" type="checkbox"><span class="slider"></span>
-        </label>
-      </div>
-    </div>
-  </div>
+  <nav class="nav">
+    <a href="index.html" class="active">자쿠드 숭배하기</a>
+    <a href="bible.html">자쿠드 성경</a>
+    <a href="gacha.html">자쿠드 제네레이터</a>
+  </nav>
 </header>
 
 <main>
-  <h1>왜 자쿠드를 숭배해야 하는가</h1>
-  <p>여기에 숭배글을 넣어라. 기본 SP는 저장되어 유지된다.</p>
-  <p class="note">로고가 보이지 않으면 리포지토리에 이미지를 업로드하고 <code>assets/logo.png</code>로 교체해.</p>
+  <h1>자쿠드를 숭배해야 하는 이유</h1>
+  <div class="card">
+    <p>
+      이곳은 자쿠드를 숭배하는 공식 시뮬레이션 공간이다.<br>
+      모든 숭배는 의미를 가지며, 모든 클릭은 신성하다.<br><br>
+      상단 네비게이션을 통해 숭배, 성경, 제네레이터로 이동할 수 있다.
+    </p>
+  </div>
 </main>
 
-<script>
-/* --- 로고: 여러 후보 시도하고 실패하면 assets/logo.png 권장 --- */
-(function(){
-  const img = document.getElementById('siteLogo');
-  const basePage = img.dataset.ibb; // https://ibb.co/....
-  const candidates = [
-    // common direct patterns
-    basePage.replace('ibb.co','i.ibb.co') + '.png',
-    basePage.replace('ibb.co','i.ibb.co') + '.jpg',
-    basePage.replace('ibb.co','i.ibb.co') + '.webp',
-    basePage.replace('ibb.co','i.ibb.co') + '/image.png',
-    '/assets/logo.png'
-  ];
-  let idx = 0;
-  function tryNext(){
-    if(idx>=candidates.length) return;
-    img.src = candidates[idx++];
-  }
-  img.addEventListener('error', tryNext);
-  img.addEventListener('load', ()=>{/* ok */});
-  tryNext();
-})();
-
-/* --- 다크 모드 유지 --- */
-(function(){
-  const toggle = document.getElementById('themeToggle');
-  const apply = t => {
-    if(t==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
-    toggle.checked = (t==='dark');
-  };
-  const saved = localStorage.getItem('theme');
-  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark':'light');
-  apply(initial);
-  toggle.addEventListener('change', ()=>{
-    const next = toggle.checked ? 'dark':'light';
-    localStorage.setItem('theme', next);
-    apply(next);
-  });
-})();
-
-/* --- SP 표시 --- */
-(function(){
-  const key='zk_sp_v1';
-  const el=document.getElementById('spDisplay');
-  const get=()=>parseInt(localStorage.getItem(key)||'0',10);
-  const setv=v=>{ localStorage.setItem(key,String(v)); el.textContent = v + ' SP'; };
-  setv(get());
-})();
-</script>
 </body>
 </html>
