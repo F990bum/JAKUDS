@@ -12,10 +12,12 @@
   :root{
     --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
     --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
+    --crit-yellow:#ffd166; --crit-orange:#ff9f1c; --crit-red:#ff3b30;
   }
   html.dark{
     --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
     --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff; --shadow:rgba(0,0,0,0.45);
+    --crit-yellow:#ffd166; --crit-orange:#ff9f1c; --crit-red:#ff3b30;
   }
   html{font-size:100%}
   body{margin:0;font-family:"Noto Sans KR",system-ui; background:var(--bg); color:var(--text); overflow-x:hidden}
@@ -25,7 +27,7 @@
   .header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.8rem 1.2rem; }
   .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
   .brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
-  .brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); } /* 메인과 동일 */
+  .brand .title{ font-size:1.8rem; font-weight:900; color:var(--text-strong); } /* slightly larger to match main */
 
   .right-controls{ display:flex; align-items:center; gap:0.6rem; }
   .sp-badge{ padding:0.35rem 0.6rem; border-radius:0.6rem; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:90px; text-align:center; }
@@ -49,16 +51,16 @@
   /* main layout */
   main{ max-width:1100px; margin:1.5rem auto; padding:1rem; display:flex; gap:1rem; align-items:flex-start; }
   .left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1rem; align-items:center; }
-  .card-wrap{ width:360px; height:420px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; }
-  /* 버튼 크기 (1.3배 조정 값 유지) */
-  #worshipBtn{ width:88%; height:78%; border-radius:12px; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 14px 34px rgba(0,0,0,0.14); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0.4rem; line-height:1.05; }
-  .worship-line.big{ font-size:1.6rem; line-height:1; }
-  .worship-line.small{ font-size:0.85rem; opacity:0.95; margin-top:6px; }
+  .card-wrap{ width:380px; height:460px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; }
+  /* 버튼 크기 증가: both lines larger */
+  #worshipBtn{ width:90%; height:80%; border-radius:12px; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 18px 40px rgba(0,0,0,0.14); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0.4rem; line-height:1.05; }
+  .worship-line.big{ font-size:2.2rem; line-height:1; }       /* 한 단계 증가 */
+  .worship-line.small{ font-size:1.05rem; opacity:0.95; margin-top:6px; } /* 한 단계 증가 */
 
-  .right{ width:360px; display:flex; flex-direction:column; gap:0.9rem; }
+  .right{ width:380px; display:flex; flex-direction:column; gap:0.9rem; }
   .meta{ background:var(--card); border-radius:10px; padding:0.85rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
   .meta .row{ display:flex; justify-content:space-between; margin-bottom:0.4rem; }
-  .store-title{ margin-top:0.6rem;font-weight:800;color:var(--text-strong) }
+  .store-title{ margin-top:0.2rem;font-weight:800;color:var(--text-strong) }
   .store{ display:grid; grid-template-columns:1fr; gap:0.7rem; margin-top:0.4rem; }
   .item{ background:var(--card); border-radius:10px; padding:0.7rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); }
   .item button{ padding:0.45rem 0.7rem; border-radius:8px; border:0; font-weight:800; cursor:pointer; }
@@ -80,25 +82,27 @@
     display:inline-flex;
     gap:6px;
     align-items:center;
-    padding:2px 8px;
-    border-radius:12px;
-    background:linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+    padding:4px 10px;
+    border-radius:14px;
+    background:linear-gradient(90deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
     color:#071018;
     font-size:14px;
-    box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    box-shadow:0 8px 22px rgba(0,0,0,0.16);
     animation: floatUp 1000ms forwards;
   }
-  html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.9), rgba(10,10,20,0.85)); color:var(--text); }
+  html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.95), rgba(10,10,20,0.9)); color:var(--text); }
+
+  .float-crit{ font-weight:900; }
 
   @keyframes floatUp{
     0%{ transform:translate(-50%, -10% ) scale(1); opacity:1; }
-    100%{ transform:translate(-50%, -140% ) scale(1.05); opacity:0; }
+    100%{ transform:translate(-50%, -160% ) scale(1.05); opacity:0; }
   }
 
   @media(max-width:920px){
     main{ flex-direction:column; align-items:center; }
     .right{ width:100%; }
-    .card-wrap{ width:92%; height:380px; }
+    .card-wrap{ width:92%; height:420px; }
   }
 </style>
 </head>
@@ -143,7 +147,7 @@
       </button>
     </div>
 
-    <div style="width:360px;max-width:92%;display:flex;flex-direction:column;gap:6px;color:var(--muted);font-weight:800">
+    <div style="width:380px;max-width:92%;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-weight:800">
       <div style="display:flex;justify-content:space-between"><div>수동 파워</div><div><span id="manualPower">1</span></div></div>
       <div style="display:flex;justify-content:space-between"><div>자동 수입</div><div><span id="sps">0</span> SPS</div></div>
     </div>
@@ -155,7 +159,12 @@
       <div class="row"><div>총 숭배 횟수</div><div id="totalClicks">0</div></div>
       <div class="row"><div>플레이 시간</div><div id="playTime">00:00:00</div></div>
 
-      <div class="store-title">건물 및 업그레이드 설명</div>
+      <!-- 상점 먼저 (요청) -->
+      <div class="store-title">상점</div>
+      <div class="store" id="store"></div>
+
+      <!-- 건물 설명 아래로 -->
+      <div class="store-title" style="margin-top:0.6rem">건물 및 업그레이드 설명</div>
       <div class="building-desc">
         <strong>신도</strong> : 신도 1명당 크리티컬 확률 +1%. 크리티컬 레벨 시스템 적용(100% = 한 단계 상승).<br>
         <strong>제단</strong> : 모든 크리티컬의 보상 배율에 추가 비율 +2%/제단. (예: 기본 CRITICAL=×2, 제단이 있으면 추가 보정 적용).<br>
@@ -163,12 +172,6 @@
         <strong>헌신 강화</strong> : 짝수 레벨마다 전체 SPS가 2배가 됩니다(레벨 2 → ×2, 레벨 4 → ×4, ...).
       </div>
 
-      <div style="margin-top:0.6rem;font-weight:800;color:var(--text-strong)">상점</div>
-      <div class="store" id="store"></div>
-
-      <div class="controls-row">
-        <!-- 초기화 삭제 per request -->
-      </div>
     </div>
   </aside>
 </main>
@@ -182,7 +185,7 @@ const DEFAULT = {
   manualPower: 1,
   sps: 0,
   buildings: {
-    follower: {count:0, baseCost:10, sps:0.5}, // 신도(신도도 SPS 소량 제공)
+    follower: {count:0, baseCost:10, sps:0.5}, // 신도
     altar: {count:0, baseCost:100, sps:2},
     temple: {count:0, baseCost:1000, sps:12}
   },
@@ -271,9 +274,7 @@ function isFeverActive(){
 }
 function triggerFever(durationMs = 10000){
   feverExpire = Date.now() + durationMs;
-  // no extra UI beyond stats change; update UI to reflect SPS change
   updateUI();
-  // clear after expire
   setTimeout(()=> updateUI(), durationMs + 50);
 }
 
@@ -288,7 +289,7 @@ function updateUI(){
   updatePlayTimeDisplay();
 }
 
-/* store render (buttons immediately enabled/disabled) */
+/* store render: attach pointerdown for responsiveness */
 function renderStore(){
   storeEl.innerHTML = '';
   ITEMS.forEach(item=>{
@@ -305,7 +306,7 @@ function renderStore(){
       btn.textContent = cost.toLocaleString() + ' SP';
       btn.className = 'buy';
       btn.disabled = state.sp < cost;
-      btn.addEventListener('click', ()=> { buyItemDevotion(); });
+      btn.addEventListener('pointerdown', (e)=> { e.preventDefault(); buyItemDevotion(); });
       right.appendChild(btn);
     } else {
       const b = state.buildings[item.key];
@@ -315,7 +316,7 @@ function renderStore(){
       btn.textContent = cost.toLocaleString() + ' SP';
       btn.className = 'buy';
       btn.disabled = state.sp < cost;
-      btn.addEventListener('click', ()=> { buyBuilding(item); });
+      btn.addEventListener('pointerdown', (e)=> { e.preventDefault(); buyBuilding(item); });
       right.appendChild(btn);
     }
 
@@ -333,7 +334,6 @@ function buyBuilding(item){
   if(state.sp < currentCost) return;
   state.sp -= currentCost;
   b.count += 1;
-  // immediate save and UI update
   saveState();
   updateUI();
 }
@@ -345,13 +345,12 @@ function buyItemDevotion(){
   state.sp -= currentCost;
   u.level += 1;
   state.manualPower *= u.effect;
-  // immediate save and UI update (no visual effect)
   saveState();
   updateUI();
 }
 
 /* worship click logic with critical levels and fever */
-worshipBtn.addEventListener('click', (ev)=>{
+worshipBtn.addEventListener('pointerdown', (ev)=>{
   // determine fever trigger: each temple adds 0.5% to immediate trigger chance
   const templeCount = state.buildings.temple.count || 0;
   const feverChance = templeCount * 0.5; // percent
@@ -367,7 +366,7 @@ worshipBtn.addEventListener('click', (ev)=>{
   const remainder = totalCritPercent % 100;
   let extra = 0;
   if(Math.random()*100 < remainder) extra = 1;
-  const critLevel = fullLevels + extra; // 0 => CRITICAL (x2), 1 => CRITICAL! (x3), etc.
+  const critLevel = fullLevels + extra; // 0 => CRITICAL (x2), 1 => CRITICAL! (x3), ...
   // base multiplier
   let multiplier = critLevel + 2; // level0 -> 2x, level1 -> 3x, ...
   // altar increases critical reward by 2% per altar
@@ -375,7 +374,7 @@ worshipBtn.addEventListener('click', (ev)=>{
   if(altarCount > 0){
     multiplier *= (1 + altarCount * 0.02);
   }
-  // if fever active, clicking SP *1.5 and SPS *2 applied
+  // fever click multiplier
   const feverActiveNow = isFeverActive();
   const feverClickMultiplier = feverActiveNow ? 1.5 : 1.0;
   // final gain
@@ -389,20 +388,56 @@ worshipBtn.addEventListener('click', (ev)=>{
   // floating 5px above pointer
   const x = ev.clientX + window.scrollX;
   const y = ev.clientY + window.scrollY - 5;
+  // generate critical label and style
+  const critInfo = getCritDisplay(critLevel);
   const label = feverActiveNow ? '🛐⚡ +' : '🛐 +';
-  showFloatingAt(x, y, `${label}${formatFloatingAmount(gain)}`);
+  showFloatingAt(x, y, `${label}${formatFloatingAmount(gain)}`, critInfo);
 });
 
-/* floating helper */
+/* get crit display style & label */
+function getCritDisplay(level){
+  // level 0 => "CRITICAL" (×2) yellow
+  // level 1 => "CRITICAL!" orange
+  // level 2 => "CRITICAL!!" red
+  // level >=3 => "CRITICAL" with more exclamations, red
+  const exclamations = level === 0 ? '' : '!'.repeat(level);
+  let color = getComputedStyle(document.documentElement).getPropertyValue('--crit-yellow').trim();
+  if(level === 0) color = getComputedStyle(document.documentElement).getPropertyValue('--crit-yellow').trim();
+  else if(level === 1) color = getComputedStyle(document.documentElement).getPropertyValue('--crit-orange').trim();
+  else color = getComputedStyle(document.documentElement).getPropertyValue('--crit-red').trim();
+  const scale = 1 + Math.min(level * 0.06, 0.28); // slightly bigger per level, capped
+  const text = `CRITICAL${exclamations}`;
+  return { color, scale, text, level };
+}
+
+/* floating helper accepts critInfo (or null) */
 function formatFloatingAmount(n){
   return (Math.round((n + Number.EPSILON) * 100)/100);
 }
-function showFloatingAt(x, y, text){
+function showFloatingAt(x, y, text, critInfo){
   const el = document.createElement('div');
   el.className = 'float-elem';
   el.style.left = x + 'px';
   el.style.top = y + 'px';
-  el.innerText = text;
+  // if critical, decorate
+  if(critInfo && critInfo.level >= 0){
+    const labelSpan = document.createElement('span');
+    labelSpan.style.color = critInfo.color;
+    labelSpan.style.fontSize = (14 * critInfo.scale) + 'px';
+    labelSpan.style.fontWeight = '900';
+    labelSpan.style.marginRight = '8px';
+    labelSpan.textContent = critInfo.text;
+    el.appendChild(labelSpan);
+
+    const valueSpan = document.createElement('span');
+    valueSpan.textContent = text.replace(/^.*\+/, '+'); // show "+N" only after label
+    valueSpan.style.fontSize = (14 * critInfo.scale) + 'px';
+    valueSpan.style.fontWeight = '800';
+    el.appendChild(valueSpan);
+  } else {
+    el.textContent = text;
+  }
+
   document.body.appendChild(el);
   setTimeout(()=> { el.remove(); }, 1000);
 }
@@ -425,13 +460,12 @@ function getAccumulatedPlayMs(){
   return acc;
 }
 
-/* visibility handling: start/stop play timer */
+/* visibility handling */
 document.addEventListener('visibilitychange', ()=>{
   if(document.visibilityState === 'visible'){
     state.startTimestamp = Date.now();
     saveState();
   } else {
-    // pause accumulation
     if(state.startTimestamp){
       state.playAcc = Number(state.playAcc || 0) + (Date.now() - state.startTimestamp);
       state.startTimestamp = null;
@@ -491,6 +525,7 @@ setInterval(()=> saveState(), 5000);
   state.sp = Number(state.sp) || 0;
   state.totalClicks = Number(state.totalClicks) || 0;
   state.manualPower = Number(state.manualPower) || DEFAULT.manualPower;
+  if(!state.playAcc) state.playAcc = 0;
   calcSPS();
   updateUI();
   startTick();
