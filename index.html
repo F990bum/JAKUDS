@@ -4,110 +4,67 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>자쿠드 숭배 - 메인</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
-
 <style>
-  /* UI 크기: 100% (이전 150%의 2/3) */
-  html { font-size:100%; transition: background .18s, color .18s; }
+  html{font-size:100%;transition:background .18s,color .18s}
   :root{
-    --bg:#f7fafc;
-    --card-bg:#ffffff;
-    --line:#e5e7eb;
-    --accent:#2563eb;
-    --accent-2:#ffb86b;
-    --text:#111827;
-    --muted:#6b7280;
-    --header-shadow: rgba(0,0,0,0.04);
+    --bg:#f7fafc; --card-bg:#fff; --line:#e5e7eb; --accent:#2563eb;
+    --accent-2:#ffb86b; --text:#111827; --muted:#6b7280; --shadow:rgba(0,0,0,0.04);
   }
-  html.dark{
-    --bg:#071018;
-    --card-bg:#0b1724;
-    --line:#12202a;
-    --accent:#ffd166;
-    --accent-2:#ffb86b;
-    --text:#eaf6ff;
-    --muted:#9aa0ab;
-    --header-shadow: rgba(255,255,255,0.03);
-  }
-
-  body{
-    margin:0;
-    font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-    color:var(--text);
-    background:var(--bg);
-  }
-
-  /* 헤더: 2단, 상단 고정 */
-  .header{ position:sticky; top:0; z-index:1000; background:var(--card-bg); box-shadow:0 1px 0 var(--header-shadow); transition:background .18s; }
-  .header-top{ display:flex; align-items:center; justify-content:space-between; padding:0.9rem 1.25rem; gap:0.75rem; }
-  .brand{ display:flex; align-items:center; gap:0.65rem; text-decoration:none; color:var(--text); }
-  .brand img{ width:3rem; height:3rem; object-fit:contain; border-radius:6px; }
-  .brand .title{ font-size:1.15rem; font-weight:900; letter-spacing:-0.02em; }
-
-  .user{ display:flex; align-items:center; gap:0.9rem; font-size:0.92rem; }
-  .user .role{ color:var(--muted); font-weight:600; }
-  .user .name{ font-weight:800; }
-  .user .sp{ font-weight:800; color:var(--accent); padding:0.2rem 0.45rem; border-radius:0.45rem; border:1px solid rgba(0,0,0,0.04); background:transparent; }
-  html.dark .user .sp{ border:1px solid rgba(255,255,255,0.04); }
-
-  .user button{ padding:0.35rem 0.6rem; border:0; border-radius:0.45rem; background:var(--text); color:var(--card-bg); cursor:pointer; font-weight:700; }
-
-  /* 2번째 행: 네비 + 다크 스위치 (토글 이곳으로 이동) */
-  .header-nav{ display:flex; align-items:center; justify-content:space-between; gap:0.5rem; padding:0.5rem 1.25rem; border-top:1px solid var(--line); }
-  .nav-left{ display:flex; gap:0.9rem; align-items:center; }
-  .nav-left a{ text-decoration:none; color:var(--muted); font-weight:700; padding:0.35rem 0.6rem; border-radius:0.45rem; }
-  .nav-left a.active{ color:var(--accent); background: rgba(37,99,235,0.06); }
-
-  .theme-wrap{ display:flex; align-items:center; gap:0.5rem; }
-  .theme-label{ font-size:0.85rem; color:var(--muted); }
-  .theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
-  .theme-switch input{ opacity:0; width:0; height:0; }
-  .slider{ position:absolute; cursor:pointer; inset:0; background:#cbd5e1; border-radius:30px; transition:background .18s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.08); }
-  .slider:before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:white; border-radius:50%; transition:transform .18s; }
-  input:checked + .slider{ background: linear-gradient(90deg,var(--accent), var(--accent-2)); }
-  input:checked + .slider:before{ transform: translateX(20px); }
-
-  /* 본문 */
-  main{ max-width:960px; margin:1.75rem auto; padding:1rem; }
-  h1{ margin:0 0 0.5rem 0; font-size:1.35rem; color:var(--accent); }
-  p{ line-height:1.8; color:var(--text); margin:0 0 1rem 0; }
-
-  /* 반응형 숨김 */
-  @media(max-width:720px){
-    .brand .title{ display:none; }
-    .user .role{ display:none; }
-  }
+  html.dark{ --bg:#071018; --card-bg:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b; --text:#eaf6ff; --muted:#9aa0ab; --shadow:rgba(255,255,255,0.03); }
+  body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text)}
+  .header{position:sticky;top:0;background:var(--card-bg);box-shadow:0 1px 0 var(--shadow);z-index:1000}
+  .header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;gap:.75rem}
+  .brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;color:var(--text)}
+  .brand img{width:3rem;height:3rem;object-fit:cover;border-radius:6px;background:linear-gradient(90deg,#eee,#ddd)}
+  .brand .title{font-size:1.15rem;font-weight:900}
+  .user{display:flex;align-items:center;gap:.9rem;font-size:.92rem}
+  .user .sp{font-weight:800;color:var(--accent);padding:.2rem .45rem;border-radius:.45rem;border:1px solid rgba(0,0,0,.04)}
+  .header-nav{display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.25rem;border-top:1px solid var(--line)}
+  .nav-left{display:flex;gap:.9rem}
+  .nav-left a{color:var(--muted);text-decoration:none;font-weight:700;padding:.35rem .6rem;border-radius:.45rem}
+  .nav-left a.active{color:var(--accent);background:rgba(37,99,235,.06)}
+  .theme-wrap{display:flex;align-items:center;gap:.5rem}
+  .theme-switch{position:relative;width:44px;height:24px;display:inline-block}
+  .theme-switch input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:#cbd5e1;border-radius:30px;transition:background .18s}
+  .slider:before{content:"";position:absolute;left:3px;top:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .18s}
+  input:checked + .slider{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+  input:checked + .slider:before{transform:translateX(20px)}
+  main{max-width:960px;margin:1.75rem auto;padding:1rem}
+  h1{margin:0 0 .5rem 0;font-size:1.35rem;color:var(--accent)}
+  p{line-height:1.8;color:var(--text);margin:0 0 1rem 0}
+  .note{color:var(--muted);font-size:.95rem}
+  @media(max-width:720px){.brand .title{display:none}.user .role{display:none}}
 </style>
 </head>
 <body>
 <header class="header">
   <div class="header-top">
-    <a class="brand" href="index.html">
-      <img src="https://ibb.co/ZrgK1DJ" alt="사이트 로고">
+    <a class="brand" href="worship.html">
+      <img id="siteLogo" alt="로고" data-ibb="https://ibb.co/ZrgK1DJ">
       <span class="title">자쿠드</span>
     </a>
-
-    <div class="user" role="navigation" aria-label="유저 정보">
+    <div class="user">
       <span class="role">칭호</span>
-      <span class="name">닉네임</span>
-      <span class="sp">10,857 SP</span>
-      <button type="button">로그아웃</button>
+      <span class="name" id="userName">닉네임</span>
+      <span class="sp" id="spDisplay">0 SP</span>
+      <button id="logoutBtn">로그아웃</button>
     </div>
   </div>
 
   <div class="header-nav">
     <div class="nav-left">
-      <!-- 메인 링크 제거. 가챠만 노출 -->
-      <a href="gacha.html" class="active">가챠</a>
+      <a href="worship.html" class="active">자쿠드 숭배하기</a>
+      <a href="bible.html">자쿠드 성경</a>
+      <a href="generator.html">자쿠드 제네레이터</a>
     </div>
 
-    <div style="display:flex;align-items:center;gap:1rem;">
-      <div class="theme-wrap" aria-hidden="false">
+    <div>
+      <div class="theme-wrap">
         <span class="theme-label">다크</span>
-        <label class="theme-switch" title="다크 모드 토글" aria-label="다크 모드 토글">
-          <input id="themeToggle" type="checkbox" />
-          <span class="slider"></span>
+        <label class="theme-switch" title="다크 모드 토글">
+          <input id="themeToggle" type="checkbox"><span class="slider"></span>
         </label>
       </div>
     </div>
@@ -116,29 +73,58 @@
 
 <main>
   <h1>왜 자쿠드를 숭배해야 하는가</h1>
-  <p>여기에 숭배글을 적어라. UI가 적절한 크기로 줄어들고 다크 모드 토글이 두 번째 행에 있다.</p>
+  <p>여기에 숭배글을 넣어라. 기본 SP는 저장되어 유지된다.</p>
+  <p class="note">로고가 보이지 않으면 리포지토리에 이미지를 업로드하고 <code>assets/logo.png</code>로 교체해.</p>
 </main>
 
 <script>
-  // 테마 토글 로직: localStorage 사용
-  (function(){
-    const toggle = document.getElementById('themeToggle');
-    const apply = (t) => {
-      if(t === 'dark') document.documentElement.classList.add('dark');
-      else document.documentElement.classList.remove('dark');
-      toggle.checked = (t === 'dark');
-    };
+/* --- 로고: 여러 후보 시도하고 실패하면 assets/logo.png 권장 --- */
+(function(){
+  const img = document.getElementById('siteLogo');
+  const basePage = img.dataset.ibb; // https://ibb.co/....
+  const candidates = [
+    // common direct patterns
+    basePage.replace('ibb.co','i.ibb.co') + '.png',
+    basePage.replace('ibb.co','i.ibb.co') + '.jpg',
+    basePage.replace('ibb.co','i.ibb.co') + '.webp',
+    basePage.replace('ibb.co','i.ibb.co') + '/image.png',
+    '/assets/logo.png'
+  ];
+  let idx = 0;
+  function tryNext(){
+    if(idx>=candidates.length) return;
+    img.src = candidates[idx++];
+  }
+  img.addEventListener('error', tryNext);
+  img.addEventListener('load', ()=>{/* ok */});
+  tryNext();
+})();
 
-    const saved = localStorage.getItem('theme');
-    const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    apply(initial);
+/* --- 다크 모드 유지 --- */
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  const apply = t => {
+    if(t==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+    toggle.checked = (t==='dark');
+  };
+  const saved = localStorage.getItem('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark':'light');
+  apply(initial);
+  toggle.addEventListener('change', ()=>{
+    const next = toggle.checked ? 'dark':'light';
+    localStorage.setItem('theme', next);
+    apply(next);
+  });
+})();
 
-    toggle.addEventListener('change', () => {
-      const next = toggle.checked ? 'dark' : 'light';
-      localStorage.setItem('theme', next);
-      apply(next);
-    });
-  })();
+/* --- SP 표시 --- */
+(function(){
+  const key='zk_sp_v1';
+  const el=document.getElementById('spDisplay');
+  const get=()=>parseInt(localStorage.getItem(key)||'0',10);
+  const setv=v=>{ localStorage.setItem(key,String(v)); el.textContent = v + ' SP'; };
+  setv(get());
+})();
 </script>
 </body>
 </html>
