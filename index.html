@@ -8,26 +8,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
 
 <style>
-  html { font-size:150%; transition: background .18s, color .18s; }
+  /* UI 크기: 100% (이전 150%의 2/3) */
+  html { font-size:100%; transition: background .18s, color .18s; }
   :root{
-    /* 라이트 테마 변수 */
-    --bg: #f7fafc;
-    --card-bg: #ffffff;
-    --line: #e5e7eb;
-    --accent: #2563eb;
-    --text: #111827;
-    --muted: #6b7280;
+    --bg:#f7fafc;
+    --card-bg:#ffffff;
+    --line:#e5e7eb;
+    --accent:#2563eb;
+    --accent-2:#ffb86b;
+    --text:#111827;
+    --muted:#6b7280;
     --header-shadow: rgba(0,0,0,0.04);
   }
-
-  /* 다크 모드 변수 (html.dark 붙이면 사용) */
   html.dark{
-    --bg: #071018;
-    --card-bg: #0b1724;
-    --line: #12202a;
-    --accent: #ffd166;
-    --text: #eaf6ff;
-    --muted: #9aa0ab;
+    --bg:#071018;
+    --card-bg:#0b1724;
+    --line:#12202a;
+    --accent:#ffd166;
+    --accent-2:#ffb86b;
+    --text:#eaf6ff;
+    --muted:#9aa0ab;
     --header-shadow: rgba(255,255,255,0.03);
   }
 
@@ -38,50 +38,45 @@
     background:var(--bg);
   }
 
-  /* header */
-  .header{ position:sticky; top:0; z-index:1000; background:var(--card-bg); box-shadow:0 1px 0 var(--header-shadow); transition: background .18s, box-shadow .18s; }
-  .header-top{ display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; gap:1rem; }
-  .brand{ display:flex; align-items:center; gap:0.75rem; text-decoration:none; color:var(--text); }
-  .brand img{ width:3.375rem; height:3.375rem; object-fit:contain; border-radius:6px; }
-  .brand .title{ font-size:1.25rem; font-weight:900; letter-spacing:-0.02em; }
+  /* 헤더: 2단, 상단 고정 */
+  .header{ position:sticky; top:0; z-index:1000; background:var(--card-bg); box-shadow:0 1px 0 var(--header-shadow); transition:background .18s; }
+  .header-top{ display:flex; align-items:center; justify-content:space-between; padding:0.9rem 1.25rem; gap:0.75rem; }
+  .brand{ display:flex; align-items:center; gap:0.65rem; text-decoration:none; color:var(--text); }
+  .brand img{ width:3rem; height:3rem; object-fit:contain; border-radius:6px; }
+  .brand .title{ font-size:1.15rem; font-weight:900; letter-spacing:-0.02em; }
 
-  .user{ display:flex; align-items:center; gap:1rem; font-size:0.9375rem; }
-
+  .user{ display:flex; align-items:center; gap:0.9rem; font-size:0.92rem; }
   .user .role{ color:var(--muted); font-weight:600; }
   .user .name{ font-weight:800; }
-  .user .sp{ font-weight:800; color:var(--accent); padding:0.25rem 0.5rem; border-radius:0.5rem; background:transparent; border:1px solid rgba(0,0,0,0.04); }
+  .user .sp{ font-weight:800; color:var(--accent); padding:0.2rem 0.45rem; border-radius:0.45rem; border:1px solid rgba(0,0,0,0.04); background:transparent; }
   html.dark .user .sp{ border:1px solid rgba(255,255,255,0.04); }
 
-  .user button{ padding:0.4rem 0.75rem; border:0; border-radius:0.5rem; background:var(--text); color:var(--card-bg); cursor:pointer; font-weight:700; }
+  .user button{ padding:0.35rem 0.6rem; border:0; border-radius:0.45rem; background:var(--text); color:var(--card-bg); cursor:pointer; font-weight:700; }
 
-  /* theme switch */
-  .theme-wrap{ display:flex; align-items:center; gap:0.6rem; }
+  /* 2번째 행: 네비 + 다크 스위치 (토글 이곳으로 이동) */
+  .header-nav{ display:flex; align-items:center; justify-content:space-between; gap:0.5rem; padding:0.5rem 1.25rem; border-top:1px solid var(--line); }
+  .nav-left{ display:flex; gap:0.9rem; align-items:center; }
+  .nav-left a{ text-decoration:none; color:var(--muted); font-weight:700; padding:0.35rem 0.6rem; border-radius:0.45rem; }
+  .nav-left a.active{ color:var(--accent); background: rgba(37,99,235,0.06); }
+
+  .theme-wrap{ display:flex; align-items:center; gap:0.5rem; }
   .theme-label{ font-size:0.85rem; color:var(--muted); }
-  .theme-switch{ position:relative; width:46px; height:26px; display:inline-block; }
+  .theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
   .theme-switch input{ opacity:0; width:0; height:0; }
-  .slider{
-    position:absolute; cursor:pointer; inset:0; background:#cbd5e1; border-radius:30px; transition:background .18s;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.08);
-  }
-  .slider:before{
-    content:""; position:absolute; left:3px; top:3px; width:20px; height:20px; background:white; border-radius:50%; transition:transform .18s;
-  }
-  input:checked + .slider{ background:linear-gradient(90deg,var(--accent), #ffb86b); }
+  .slider{ position:absolute; cursor:pointer; inset:0; background:#cbd5e1; border-radius:30px; transition:background .18s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.08); }
+  .slider:before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:white; border-radius:50%; transition:transform .18s; }
+  input:checked + .slider{ background: linear-gradient(90deg,var(--accent), var(--accent-2)); }
   input:checked + .slider:before{ transform: translateX(20px); }
 
-  /* nav */
-  .header-nav{ display:flex; gap:1.25rem; padding:0.6rem 1.25rem; border-top:1px solid var(--line); }
-  .header-nav a{ text-decoration:none; color:var(--muted); font-weight:700; padding:0.35rem 0.5rem; border-radius:0.5rem; }
-  .header-nav a.active{ color:var(--accent); background: rgba(37,99,235,0.06); }
+  /* 본문 */
+  main{ max-width:960px; margin:1.75rem auto; padding:1rem; }
+  h1{ margin:0 0 0.5rem 0; font-size:1.35rem; color:var(--accent); }
+  p{ line-height:1.8; color:var(--text); margin:0 0 1rem 0; }
 
-  main{ max-width:960px; margin:2rem auto; padding:1.25rem; }
-  h1{ margin:0 0 0.5rem 0; font-size:1.625rem; color:var(--accent); }
-  p{ line-height:1.85; color:var(--text); margin:0 0 1rem 0; }
-
-  /* 작은 화면 조정 */
+  /* 반응형 숨김 */
   @media(max-width:720px){
-    .user{ gap:0.6rem; font-size:0.85rem; }
     .brand .title{ display:none; }
+    .user .role{ display:none; }
   }
 </style>
 </head>
@@ -93,6 +88,20 @@
       <span class="title">자쿠드</span>
     </a>
 
+    <div class="user" role="navigation" aria-label="유저 정보">
+      <span class="role">칭호</span>
+      <span class="name">닉네임</span>
+      <span class="sp">10,857 SP</span>
+      <button type="button">로그아웃</button>
+    </div>
+  </div>
+
+  <div class="header-nav">
+    <div class="nav-left">
+      <!-- 메인 링크 제거. 가챠만 노출 -->
+      <a href="gacha.html" class="active">가챠</a>
+    </div>
+
     <div style="display:flex;align-items:center;gap:1rem;">
       <div class="theme-wrap" aria-hidden="false">
         <span class="theme-label">다크</span>
@@ -101,30 +110,17 @@
           <span class="slider"></span>
         </label>
       </div>
-
-      <div class="user" role="navigation" aria-label="유저 정보">
-        <span class="role">칭호</span>
-        <span class="name">닉네임</span>
-        <span class="sp">10,857 SP</span>
-        <button type="button">로그아웃</button>
-      </div>
     </div>
   </div>
-
-  <nav class="header-nav" aria-label="주요 메뉴">
-    <a href="index.html" class="active">메인</a>
-    <a href="gacha.html">가챠</a>
-  </nav>
 </header>
 
 <main>
   <h1>왜 자쿠드를 숭배해야 하는가</h1>
-  <p>여기에 숭배글을 적어라. 다크 모드를 스위치로 켜고 끌 수 있다. 상태는 브라우저에 저장된다.</p>
-  <p>이미지·링크·긴 글 모두 넣어도 된다.</p>
+  <p>여기에 숭배글을 적어라. UI가 적절한 크기로 줄어들고 다크 모드 토글이 두 번째 행에 있다.</p>
 </main>
 
 <script>
-  // 테마 토글 로직: localStorage에 'theme' 저장 (값: 'dark'|'light')
+  // 테마 토글 로직: localStorage 사용
   (function(){
     const toggle = document.getElementById('themeToggle');
     const apply = (t) => {
