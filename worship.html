@@ -51,14 +51,15 @@
   .left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1rem; align-items:center; }
   .card-wrap{ width:360px; height:420px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; }
   /* 버튼 크기 (1.3배 조정 값 유지) */
-  #worshipBtn{ width:88%; height:78%; border-radius:12px; font-size:1.95rem; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 14px 34px rgba(0,0,0,0.14); display:flex; align-items:center; justify-content:center; text-align:center; padding:0.4rem; line-height:1.05; }
-  .worship-line{ display:block; line-height:1; }
-  .worship-line.small{ font-size:0.78em; opacity:0.95; }
+  #worshipBtn{ width:88%; height:78%; border-radius:12px; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 14px 34px rgba(0,0,0,0.14); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0.4rem; line-height:1.05; }
+  .worship-line.big{ font-size:1.6rem; line-height:1; }
+  .worship-line.small{ font-size:0.85rem; opacity:0.95; margin-top:6px; }
 
   .right{ width:360px; display:flex; flex-direction:column; gap:0.9rem; }
   .meta{ background:var(--card); border-radius:10px; padding:0.85rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
   .meta .row{ display:flex; justify-content:space-between; margin-bottom:0.4rem; }
-  .store{ display:grid; grid-template-columns:1fr; gap:0.7rem; margin-top:0.8rem; }
+  .store-title{ margin-top:0.6rem;font-weight:800;color:var(--text-strong) }
+  .store{ display:grid; grid-template-columns:1fr; gap:0.7rem; margin-top:0.4rem; }
   .item{ background:var(--card); border-radius:10px; padding:0.7rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); }
   .item button{ padding:0.45rem 0.7rem; border-radius:8px; border:0; font-weight:800; cursor:pointer; }
   .buy{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; }
@@ -66,8 +67,7 @@
 
   .controls-row{ display:flex; gap:0.6rem; margin-top:0.6rem; justify-content:flex-end; }
 
-  .ideas{ margin-top:0.8rem; background:linear-gradient(180deg,rgba(0,0,0,0.02),transparent); border-radius:8px; padding:0.6rem; font-size:0.9rem; color:var(--muted); }
-  .ideas h4{ margin:0 0 0.4rem 0; font-size:0.95rem; color:var(--text-strong); }
+  .building-desc{ font-size:0.92rem; color:var(--muted); margin-top:0.6rem; padding:0.5rem; border-radius:8px; background:linear-gradient(180deg,rgba(0,0,0,0.02),transparent); }
 
   /* floating effect (5px 위에서 시작) */
   .float-elem{
@@ -93,24 +93,6 @@
   @keyframes floatUp{
     0%{ transform:translate(-50%, -10% ) scale(1); opacity:1; }
     100%{ transform:translate(-50%, -140% ) scale(1.05); opacity:0; }
-  }
-
-  /* burst emoji for building buy (kept) */
-  .burst{
-    position:fixed;
-    left:50%;
-    top:40%;
-    transform:translate(-50%,-50%);
-    font-size:40px;
-    pointer-events:none;
-    opacity:0;
-    animation: burstAnim 700ms forwards;
-    z-index:2000;
-  }
-  @keyframes burstAnim{
-    0%{ transform:translate(-50%,-50%) scale(.6); opacity:0; }
-    30%{ transform:translate(-50%,-80%) scale(1.25); opacity:1; }
-    100%{ transform:translate(-50%,-180%) scale(1.1); opacity:0; }
   }
 
   @media(max-width:920px){
@@ -155,41 +137,37 @@
 <main>
   <div class="left">
     <div class="card-wrap">
-      <button id="worshipBtn" title="클릭하여 SP 얻기">
-        <span class="worship-line small">숭배하기</span>
-        <span class="worship-line">클릭하여 SP 얻기</span>
+      <button id="worshipBtn" title="숭배하기">
+        <span class="worship-line big">숭배하기</span>
+        <span class="worship-line small">클릭하여 SP 얻기</span>
       </button>
     </div>
 
     <div style="width:360px;max-width:92%;display:flex;flex-direction:column;gap:6px;color:var(--muted);font-weight:800">
       <div style="display:flex;justify-content:space-between"><div>수동 파워</div><div><span id="manualPower">1</span></div></div>
       <div style="display:flex;justify-content:space-between"><div>자동 수입</div><div><span id="sps">0</span> SPS</div></div>
-      <div style="display:flex;justify-content:space-between"><div>플레이 시간</div><div><span id="playTime">00:00:00</span></div></div>
     </div>
   </div>
 
   <aside class="right">
     <div class="meta">
-      <div class="row"><div>총 SP</div><div id="totalSP">0</div></div>
+      <div class="row"><div>총 SP</div><div id="totalSP">0 SP</div></div>
       <div class="row"><div>총 숭배 횟수</div><div id="totalClicks">0</div></div>
+      <div class="row"><div>플레이 시간</div><div id="playTime">00:00:00</div></div>
+
+      <div class="store-title">건물 및 업그레이드 설명</div>
+      <div class="building-desc">
+        <strong>신도</strong> : 신도 1명당 크리티컬 확률 +1%. 크리티컬 레벨 시스템 적용(100% = 한 단계 상승).<br>
+        <strong>제단</strong> : 모든 크리티컬의 보상 배율에 추가 비율 +2%/제단. (예: 기본 CRITICAL=×2, 제단이 있으면 추가 보정 적용).<br>
+        <strong>사원</strong> : 사원 1개당 피버 발동 확률 +0.5%. 피버 발동 시 클릭 보상 ×1.5, SPS ×2 (지속 시간 10초).<br>
+        <strong>헌신 강화</strong> : 짝수 레벨마다 전체 SPS가 2배가 됩니다(레벨 2 → ×2, 레벨 4 → ×4, ...).
+      </div>
 
       <div style="margin-top:0.6rem;font-weight:800;color:var(--text-strong)">상점</div>
       <div class="store" id="store"></div>
 
       <div class="controls-row">
-        <button id="resetBtn" class="reset">초기화</button>
-      </div>
-
-      <div class="ideas">
-        <h4>성장의 재미 아이디어</h4>
-        <ul style="margin:0 0 0.4rem 1rem;padding:0;color:var(--muted)">
-          <li>일일/주간 퀘스트 추가: 목표 달성 보상으로 대량 SP</li>
-          <li>픽업(확률) 시스템: 일정 확률로 보너스 보상 또는 이벤트 등장</li>
-          <li>건물 별 특수 효과: 제단은 크리티컬(보상 2배) 확률 상승</li>
-          <li>시간 기반 업적과 보존 요소: 오래 유지할수록 추가 보너스</li>
-          <li>시각적 성장(마을 확장): 건물 증가에 따라 배경 변화</li>
-        </ul>
-        <div style="font-size:0.85rem;color:var(--muted)">원하면 아이디어 중 한 가지를 바로 구현해 준다.</div>
+        <!-- 초기화 삭제 per request -->
       </div>
     </div>
   </aside>
@@ -204,14 +182,15 @@ const DEFAULT = {
   manualPower: 1,
   sps: 0,
   buildings: {
-    follower: {count:0, baseCost:10, sps:0.5},
+    follower: {count:0, baseCost:10, sps:0.5}, // 신도(신도도 SPS 소량 제공)
     altar: {count:0, baseCost:100, sps:2},
     temple: {count:0, baseCost:1000, sps:12}
   },
   upgrades: {
     devotion: {level:0, baseCost:50, effect:2}
   },
-  startTimestamp: Date.now(),
+  startTimestamp: null,
+  playAcc: 0, // ms accumulated when not active
   lastSaved: 0
 };
 let state = loadState();
@@ -224,78 +203,92 @@ const spsEl = document.getElementById('sps');
 const manualPowerEl = document.getElementById('manualPower');
 const worshipBtn = document.getElementById('worshipBtn');
 const storeEl = document.getElementById('store');
-const resetBtn = document.getElementById('resetBtn');
 const playTimeEl = document.getElementById('playTime');
 
-/* ITEMS + emoji */
+/* ITEMS */
 const ITEMS = [
-  { key:'follower', label:'추종자', desc:'+0.5 SPS', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)), emoji:'👤' },
-  { key:'altar', label:'제단', desc:'+2 SPS', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)), emoji:'🕯️' },
-  { key:'temple', label:'사원', desc:'+12 SPS', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)), emoji:'🏛️' },
-  { key:'devotion', label:'헌신 강화', desc:'수동 파워 2배', costFn: (u)=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)), emoji:'✨' }
+  { key:'follower', label:'신도', desc:'+0.5 SPS + 크리티컬 확률 +1%', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)), emoji:'' },
+  { key:'altar', label:'제단', desc:'+2 SPS + 크리티컬 보상 +2%/제단', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)), emoji:'' },
+  { key:'temple', label:'사원', desc:'+12 SPS + 피버 확률 +0.5%/사원', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)), emoji:'' },
+  { key:'devotion', label:'헌신 강화', desc:'수동 파워 2배, 짝수 레벨마다 SPS 배수', costFn: (u)=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)), emoji:'' }
 ];
 
-/* load/save */
+/* load/save with playAcc and startTimestamp handling */
 function loadState(){
   try{
     const raw = localStorage.getItem(KEY);
-    if(!raw) return jsonClone(DEFAULT);
+    if(!raw) {
+      const s = JSON.parse(JSON.stringify(DEFAULT));
+      s.startTimestamp = document.visibilityState === 'visible' ? Date.now() : null;
+      return s;
+    }
     const parsed = JSON.parse(raw);
-    // ensure startTimestamp exists
-    if(!parsed.startTimestamp) parsed.startTimestamp = DEFAULT.startTimestamp;
-    return Object.assign(jsonClone(DEFAULT), parsed);
+    if(!parsed.startTimestamp) parsed.startTimestamp = null;
+    if(!parsed.playAcc) parsed.playAcc = 0;
+    return Object.assign(JSON.parse(JSON.stringify(DEFAULT)), parsed);
   }catch(e){
     console.error('load failed', e);
-    return jsonClone(DEFAULT);
+    return JSON.parse(JSON.stringify(DEFAULT));
   }
 }
 function saveState(){
   state.lastSaved = Date.now();
   localStorage.setItem(KEY, JSON.stringify(state));
-  localStorage.setItem('zk_sp_v1', String(Math.floor(state.sp))); // My Home 옆 정수 표시
-  // UI 갱신은 호출 지점에서 처리 (we call updateUI after mutations)
+  // My Home badge integer sync
+  localStorage.setItem('zk_sp_v1', String(Math.floor(state.sp)));
 }
 
-/* util formatting */
+/* util */
 function jsonClone(o){ return JSON.parse(JSON.stringify(o)); }
-function formatNumberWithComma(n){
-  const intPart = Math.floor(n);
-  return intPart.toLocaleString();
-}
 function formatTotalSP(n){
-  // if fractional part > 0, show two decimals with comma in integer part
   const intPart = Math.floor(n);
   const frac = Math.round((n - intPart) * 100);
-  if(frac > 0) {
-    return intPart.toLocaleString() + '.' + String(frac).padStart(2,'0') + ' SP';
-  } else {
-    return intPart.toLocaleString() + ' SP';
-  }
+  const intStr = intPart.toLocaleString();
+  return frac > 0 ? `${intStr}.${String(frac).padStart(2,'0')} SP` : `${intStr} SP`;
 }
 
-/* calc & UI */
+/* calcSPS with devotion and fever multiplier */
 function calcSPS(){
   let total = 0;
   for(const k of ['follower','altar','temple']){
     const b = state.buildings[k];
     total += b.count * b.sps;
   }
+  // devotion: every even level doubles SPS multiplicatively
+  const devLevel = state.upgrades.devotion.level || 0;
+  const devMultiplier = Math.pow(2, Math.floor(devLevel / 2));
+  total *= devMultiplier;
+  // fever doubles SPS when active
+  if(isFeverActive()) total *= 2;
   state.sps = total;
   return total;
 }
 
+/* fever state */
+let feverExpire = null;
+function isFeverActive(){
+  return feverExpire && Date.now() < feverExpire;
+}
+function triggerFever(durationMs = 10000){
+  feverExpire = Date.now() + durationMs;
+  // no extra UI beyond stats change; update UI to reflect SPS change
+  updateUI();
+  // clear after expire
+  setTimeout(()=> updateUI(), durationMs + 50);
+}
+
+/* update UI */
 function updateUI(){
-  // show integer SP with comma in right badge
   spBadge.textContent = Math.floor(state.sp).toLocaleString() + ' SP';
   totalSP.textContent = formatTotalSP(state.sp);
   totalClicks.textContent = state.totalClicks;
   spsEl.textContent = (Math.round(calcSPS()*100)/100).toFixed(2);
   manualPowerEl.textContent = state.manualPower;
   renderStore();
-  updatePlayTime();
+  updatePlayTimeDisplay();
 }
 
-/* store rendering */
+/* store render (buttons immediately enabled/disabled) */
 function renderStore(){
   storeEl.innerHTML = '';
   ITEMS.forEach(item=>{
@@ -312,7 +305,7 @@ function renderStore(){
       btn.textContent = cost.toLocaleString() + ' SP';
       btn.className = 'buy';
       btn.disabled = state.sp < cost;
-      btn.addEventListener('click', ()=> { buyItemDevotion(item); });
+      btn.addEventListener('click', ()=> { buyItemDevotion(); });
       right.appendChild(btn);
     } else {
       const b = state.buildings[item.key];
@@ -332,7 +325,7 @@ function renderStore(){
   });
 }
 
-/* buy building: compute cost, deduct, increment, immediate UI+save, show emoji */
+/* buying functions: immediate effect, no animation */
 function buyBuilding(item){
   const key = item.key;
   const b = state.buildings[key];
@@ -340,48 +333,68 @@ function buyBuilding(item){
   if(state.sp < currentCost) return;
   state.sp -= currentCost;
   b.count += 1;
-  // immediate update
-  updateUI();
+  // immediate save and UI update
   saveState();
-  showEmojiEffect(item.emoji);
+  updateUI();
 }
 
-/* buy devotion upgrade: no effect animation per request */
-function buyItemDevotion(item){
+function buyItemDevotion(){
   const u = state.upgrades.devotion;
   const currentCost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
   if(state.sp < currentCost) return;
   state.sp -= currentCost;
   u.level += 1;
   state.manualPower *= u.effect;
-  // immediate update & save; NO visual emoji
-  updateUI();
+  // immediate save and UI update (no visual effect)
   saveState();
+  updateUI();
 }
 
-/* worship click: apply manualPower, apply critical if altar increases chance, immediate update & save, floating text */
+/* worship click logic with critical levels and fever */
 worshipBtn.addEventListener('click', (ev)=>{
-  // calculate crit chance: base 2% + 1% per altar
-  const baseCrit = 0.02;
+  // determine fever trigger: each temple adds 0.5% to immediate trigger chance
+  const templeCount = state.buildings.temple.count || 0;
+  const feverChance = templeCount * 0.5; // percent
+  const feverTriggered = Math.random()*100 < feverChance;
+  if(feverTriggered) triggerFever(10000); // 10s fever
+
+  // compute critical total percent: base 2% + 1% per 신도
+  const baseCrit = 2;
+  const shindoCount = state.buildings.follower.count || 0; // 신도
+  const totalCritPercent = baseCrit + shindoCount * 1;
+  // full levels and remainder
+  const fullLevels = Math.floor(totalCritPercent / 100);
+  const remainder = totalCritPercent % 100;
+  let extra = 0;
+  if(Math.random()*100 < remainder) extra = 1;
+  const critLevel = fullLevels + extra; // 0 => CRITICAL (x2), 1 => CRITICAL! (x3), etc.
+  // base multiplier
+  let multiplier = critLevel + 2; // level0 -> 2x, level1 -> 3x, ...
+  // altar increases critical reward by 2% per altar
   const altarCount = state.buildings.altar.count || 0;
-  const critChance = baseCrit + altarCount * 0.01;
-  let gain = state.manualPower;
-  const isCrit = Math.random() < critChance;
-  if(isCrit) gain = gain * 2;
+  if(altarCount > 0){
+    multiplier *= (1 + altarCount * 0.02);
+  }
+  // if fever active, clicking SP *1.5 and SPS *2 applied
+  const feverActiveNow = isFeverActive();
+  const feverClickMultiplier = feverActiveNow ? 1.5 : 1.0;
+  // final gain
+  const baseGain = state.manualPower;
+  const gain = baseGain * multiplier * feverClickMultiplier;
   state.sp += gain;
   state.totalClicks += 1;
-  // immediate UI update before save to avoid lag
+  // immediate UI and save
   updateUI();
   saveState();
-  // floating slightly above pointer (5px)
+  // floating 5px above pointer
   const x = ev.clientX + window.scrollX;
   const y = ev.clientY + window.scrollY - 5;
-  showFloatingAt(x, y, (isCrit? '🛐✨ +' : '🛐 +') + formatFloatingAmount(gain));
+  const label = feverActiveNow ? '🛐⚡ +' : '🛐 +';
+  showFloatingAt(x, y, `${label}${formatFloatingAmount(gain)}`);
 });
 
 /* floating helper */
 function formatFloatingAmount(n){
-  // if integer show integer, else 2 decimals
   return (Math.round((n + Number.EPSILON) * 100)/100);
 }
 function showFloatingAt(x, y, text){
@@ -394,19 +407,9 @@ function showFloatingAt(x, y, text){
   setTimeout(()=> { el.remove(); }, 1000);
 }
 
-/* emoji burst for building buys */
-function showEmojiEffect(emoji){
-  const el = document.createElement('div');
-  el.className = 'burst';
-  el.textContent = emoji;
-  document.body.appendChild(el);
-  setTimeout(()=> el.remove(), 800);
-}
-
-/* play time */
-function updatePlayTime(){
-  const start = state.startTimestamp || (state.startTimestamp = Date.now());
-  const elapsed = Math.max(0, Date.now() - start);
+/* play time: count only when visible */
+function updatePlayTimeDisplay(){
+  const elapsed = getAccumulatedPlayMs();
   playTimeEl.textContent = formatDurationMs(elapsed);
 }
 function formatDurationMs(ms){
@@ -416,8 +419,28 @@ function formatDurationMs(ms){
   const ss = String(s%60).padStart(2,'0');
   return `${hh}:${mm}:${ss}`;
 }
+function getAccumulatedPlayMs(){
+  let acc = Number(state.playAcc || 0);
+  if(state.startTimestamp) acc += (Date.now() - state.startTimestamp);
+  return acc;
+}
 
-/* storage sync */
+/* visibility handling: start/stop play timer */
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState === 'visible'){
+    state.startTimestamp = Date.now();
+    saveState();
+  } else {
+    // pause accumulation
+    if(state.startTimestamp){
+      state.playAcc = Number(state.playAcc || 0) + (Date.now() - state.startTimestamp);
+      state.startTimestamp = null;
+      saveState();
+    }
+  }
+});
+
+/* storage sync (other tabs) */
 window.addEventListener('storage', (e)=>{
   if(e.key === KEY || e.key === 'zk_sp_v1'){
     try{
@@ -450,22 +473,13 @@ window.addEventListener('storage', (e)=>{
   });
 })();
 
-/* reset */
-resetBtn.addEventListener('click', ()=>{
-  if(!confirm('게임을 초기화합니까? 저장된 모든 진행이 삭제됩니다.')) return;
-  state = jsonClone(DEFAULT);
-  state.startTimestamp = Date.now();
-  saveState();
-  updateUI();
-});
-
-/* tick and autosave */
+/* tick: apply SPS and update UI frequently */
 let tickTimer = null;
 function startTick(){
   if(tickTimer) clearInterval(tickTimer);
   tickTimer = setInterval(()=>{
     const sps = calcSPS();
-    if(sps > 0) state.sp += sps / 10; // 0.1s 분배
+    if(sps > 0) state.sp += sps / 10; // add per 0.1s
     updateUI();
   }, 100);
 }
@@ -473,15 +487,14 @@ setInterval(()=> saveState(), 5000);
 
 /* init */
 (function init(){
+  if(!state.startTimestamp && document.visibilityState === 'visible') state.startTimestamp = Date.now();
   state.sp = Number(state.sp) || 0;
   state.totalClicks = Number(state.totalClicks) || 0;
   state.manualPower = Number(state.manualPower) || DEFAULT.manualPower;
-  if(!state.startTimestamp) state.startTimestamp = Date.now();
   calcSPS();
   updateUI();
   startTick();
-  // play time timer to update every second display
-  setInterval(updatePlayTime, 1000);
+  setInterval(updatePlayTimeDisplay, 1000);
 })();
 </script>
 </body>
