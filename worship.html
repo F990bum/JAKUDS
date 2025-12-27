@@ -49,7 +49,8 @@
   main{ max-width:1100px; margin:1.5rem auto; padding:1rem; display:flex; gap:1rem; align-items:flex-start; }
   .left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1rem; align-items:center; }
   .card-wrap{ width:360px; height:420px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; }
-  #worshipBtn{ width:84%; height:72%; border-radius:10px; font-size:1.5rem; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 12px 30px rgba(0,0,0,0.12); }
+  /* 숭배 버튼 크기 1.3배: 폰트·패딩·높이 증가 */
+  #worshipBtn{ width:88%; height:78%; border-radius:12px; font-size:1.95rem; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 14px 34px rgba(0,0,0,0.14); display:flex; align-items:center; justify-content:center; text-align:center; padding:0.4rem; }
 
   .right{ width:360px; display:flex; flex-direction:column; gap:0.9rem; }
   .meta{ background:var(--card); border-radius:10px; padding:0.85rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
@@ -60,8 +61,7 @@
   .buy{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; }
   .reset{ background:transparent; border:1px solid var(--line); color:var(--muted); }
 
-  .log{ margin-top:0.6rem; max-height:220px; overflow:auto; font-size:0.9rem; color:var(--muted); }
-  .entry{ margin-bottom:0.5rem; padding:0.5rem; border-radius:8px; background:rgba(0,0,0,0.03); color:var(--muted); }
+  .controls-row{ display:flex; gap:0.6rem; margin-top:0.6rem; }
 
   @media(max-width:920px){
     main{ flex-direction:column; align-items:center; }
@@ -118,25 +118,22 @@
     <div class="meta">
       <div class="row"><div>총 SP</div><div id="totalSP">0</div></div>
       <div class="row"><div>총 횟수</div><div id="totalClicks">0</div></div>
-      <div class="row"><div>저장 상태</div><div id="savedAt">-</div></div>
+      <div class="row"><div>마지막 저장</div><div id="savedAt">-</div></div>
 
       <div style="margin-top:0.6rem;font-weight:800;color:var(--text-strong)">상점</div>
-      <div class="store" id="store">
-        <!-- items injected by JS -->
-      </div>
+      <div class="store" id="store"></div>
 
-      <div style="display:flex;gap:0.6rem;margin-top:0.8rem">
-        <button id="resetBtn" class="reset">초기화</button>
+      <div class="controls-row">
         <button id="exportBtn" class="reset">저장 내보내기</button>
+        <button id="deleteSaveBtn" class="reset">마지막 저장 삭제</button>
+        <button id="resetBtn" class="reset">초기화</button>
       </div>
-
-      <div class="log" id="log"></div>
     </div>
   </aside>
 </main>
 
 <script>
-/* 데이터 모델 및 로컬스토리지 */
+/* 저장 키 및 기본값 (history 제거) */
 const KEY = 'zk_tycoon_v1';
 const DEFAULT = {
   sp: 0,
@@ -149,9 +146,9 @@ const DEFAULT = {
     temple: {count:0, baseCost:1000, sps:12}
   },
   upgrades: {
-    devotion: {level:0, baseCost:50, effect:2} // multiplies manualPower
+    devotion: {level:0, baseCost:50, effect:2}
   },
-  lastSaved: Date.now()
+  lastSaved: 0
 };
 
 let state = loadState();
@@ -165,53 +162,44 @@ const spsEl = document.getElementById('sps');
 const manualPowerEl = document.getElementById('manualPower');
 const worshipBtn = document.getElementById('worshipBtn');
 const storeEl = document.getElementById('store');
-const logEl = document.getElementById('log');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
+const deleteSaveBtn = document.getElementById('deleteSaveBtn');
 
-/* 상점 정의 (순서 고정) */
+/* 상점 항목 정의 */
 const ITEMS = [
-  { key:'follower', label:'추종자', desc:'+0.5 SPS', cost: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'altar', label:'제단', desc:'+2 SPS', cost: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'temple', label:'사원', desc:'+12 SPS', cost: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'devotion', label:'헌신 강화', desc:'수동 파워 2배', cost: (u)=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)) }
+  { key:'follower', label:'추종자', desc:'+0.5 SPS', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'altar', label:'제단', desc:'+2 SPS', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'temple', label:'사원', desc:'+12 SPS', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'devotion', label:'헌신 강화', desc:'수동 파워 2배', costFn: (u)=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)) }
 ];
 
+/* 로드/저장 */
 function loadState(){
   try{
     const raw = localStorage.getItem(KEY);
-    if(!raw) return JSON.parse(JSON.stringify(DEFAULT));
+    if(!raw) return jsonClone(DEFAULT);
     const parsed = JSON.parse(raw);
-    // migrate: ensure fields exist
-    return Object.assign(JSON.parse(JSON.stringify(DEFAULT)), parsed);
+    return Object.assign(jsonClone(DEFAULT), parsed);
   }catch(e){
     console.error('load failed', e);
-    return JSON.parse(JSON.stringify(DEFAULT));
+    return jsonClone(DEFAULT);
   }
 }
 
 function saveState(){
   state.lastSaved = Date.now();
   localStorage.setItem(KEY, JSON.stringify(state));
+  // 외부 인덱스/탭 동기화용 스냅샷(간단)
+  localStorage.setItem('zk_sp_v1', String(Math.floor(state.sp)));
   updateUI();
 }
 
-/* UI 업데이트 */
-function updateUI(){
-  spBadge.textContent = formatNum(state.sp) + ' SP';
-  totalSP.textContent = formatNum(state.sp);
-  totalClicks.textContent = state.totalClicks;
-  savedAt.textContent = new Date(state.lastSaved).toLocaleTimeString();
-  spsEl.textContent = (Math.round(calcSPS()*100)/100).toFixed(2);
-  manualPowerEl.textContent = state.manualPower;
-  renderStore();
-  renderLog();
-  // notify index/main if open
-  try { localStorage.setItem('zk_sp_v1', String(state.sp)); } catch(e){}
-}
-
+/* 유틸 */
+function jsonClone(o){ return JSON.parse(JSON.stringify(o)); }
 function formatNum(n){ if(n>=1000000) return Math.floor(n).toLocaleString(); return Math.round((n + Number.EPSILON) * 100)/100; }
 
+/* 계산 및 UI 렌더 */
 function calcSPS(){
   let total = 0;
   for(const k of ['follower','altar','temple']){
@@ -222,138 +210,151 @@ function calcSPS(){
   return total;
 }
 
-/* 상점 렌더 */
+function updateUI(){
+  spBadge.textContent = formatNum(state.sp) + ' SP';
+  totalSP.textContent = formatNum(state.sp);
+  totalClicks.textContent = state.totalClicks;
+  savedAt.textContent = state.lastSaved ? new Date(state.lastSaved).toLocaleTimeString() : '-';
+  spsEl.textContent = (Math.round(calcSPS()*100)/100).toFixed(2);
+  manualPowerEl.textContent = state.manualPower;
+  renderStore();
+}
+
+/* 상점 렌더링 (구매 버튼은 항상 최신 비용을 계산) */
 function renderStore(){
   storeEl.innerHTML = '';
   ITEMS.forEach(item=>{
-    const div = document.createElement('div');
-    div.className='item';
+    const container = document.createElement('div');
+    container.className = 'item';
     const left = document.createElement('div');
+    const right = document.createElement('div');
+
     if(item.key === 'devotion'){
-      left.innerHTML = `<div style="font-weight:800">${item.label} (Lv ${state.upgrades.devotion.level})</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
+      const u = state.upgrades.devotion;
+      left.innerHTML = `<div style="font-weight:800">${item.label} (Lv ${u.level})</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
+      const cost = item.costFn(u);
+      const btn = document.createElement('button');
+      btn.textContent = formatNum(cost) + ' SP';
+      btn.className = 'buy';
+      btn.disabled = state.sp < cost;
+      btn.addEventListener('click', ()=> buyItemDevotion(cost));
+      right.appendChild(btn);
     } else {
       const b = state.buildings[item.key];
       left.innerHTML = `<div style="font-weight:800">${item.label} x${b.count}</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
+      const cost = item.costFn(b);
+      const btn = document.createElement('button');
+      btn.textContent = formatNum(cost) + ' SP';
+      btn.className = 'buy';
+      btn.disabled = state.sp < cost;
+      btn.addEventListener('click', ()=> buyBuilding(item.key, cost));
+      right.appendChild(btn);
     }
-    const right = document.createElement('div');
-    const cost = (item.key === 'devotion') ? item.cost(state.upgrades.devotion) : item.cost(state.buildings[item.key]);
-    const btn = document.createElement('button');
-    btn.textContent = formatNum(cost) + ' SP';
-    btn.className = 'buy';
-    btn.disabled = state.sp < cost;
-    btn.addEventListener('click', ()=> buyItem(item.key, cost));
-    right.appendChild(btn);
-    div.appendChild(left);
-    div.appendChild(right);
-    storeEl.appendChild(div);
+
+    container.appendChild(left);
+    container.appendChild(right);
+    storeEl.appendChild(container);
   });
 }
 
-/* 로그 렌더 (최근 6개) */
-function renderLog(){
-  logEl.innerHTML = '';
-  const hist = (state.history || []).slice(-6).reverse();
-  hist.forEach(h=>{
-    const d = document.createElement('div');
-    d.className = 'entry';
-    d.textContent = `[${new Date(h.ts).toLocaleTimeString()}] ${h.msg}`;
-    logEl.appendChild(d);
-  });
+/* 구매: 건물 */
+function buyBuilding(key, costAtClick){
+  // 재검증: 현재 비용 재계산 후 차감
+  const b = state.buildings[key];
+  const currentCost = Math.ceil(b.baseCost * Math.pow(1.15, b.count));
+  if(state.sp < currentCost) return; // 안전장치
+  state.sp -= currentCost;
+  b.count += 1;
+  calcSPS();
+  saveState();
 }
 
-/* 행동: 숭배 클릭 */
+/* 구매: 헌신 업그레이드 */
+function buyItemDevotion(costAtClick){
+  const u = state.upgrades.devotion;
+  const currentCost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
+  if(state.sp < currentCost) return;
+  state.sp -= currentCost;
+  u.level += 1;
+  state.manualPower *= u.effect;
+  saveState();
+}
+
+/* 숭배 버튼 (수동 수입) */
 worshipBtn.addEventListener('click', ()=>{
-  const gain = state.manualPower;
-  state.sp += gain;
+  state.sp += state.manualPower;
   state.totalClicks += 1;
-  pushHistory(`수동 숭배 +${gain} SP`);
-  updateUI();
   saveState();
 });
 
-/* 구매 처리 */
-function buyItem(key, cost){
-  if(state.sp < cost) return;
-  state.sp -= cost;
-  if(key === 'devotion'){
-    state.upgrades.devotion.level += 1;
-    state.manualPower *= state.upgrades.devotion.effect;
-    pushHistory(`헌신 강화 구매: 수동파워 x${state.upgrades.devotion.effect}`);
-  } else {
-    state.buildings[key].count += 1;
-    pushHistory(`${key} 구매: +${state.buildings[key].sps} SPS`);
-  }
-  updateUI();
-  saveState();
-}
-
-/* 로그 히스토리 저장 */
-function pushHistory(msg){
-  state.history = state.history || [];
-  state.history.push({ ts: Date.now(), msg });
-  if(state.history.length > 200) state.history.shift();
-}
-
-/* 자동 수입 처리 (tick) */
+/* 자동 수입 (tick) — 100ms 간격으로 부드럽게 증가 */
 let tickTimer = null;
 function startTick(){
   if(tickTimer) clearInterval(tickTimer);
   tickTimer = setInterval(()=>{
     const sps = calcSPS();
-    state.sp += sps / 10; // 0.1s 간격으로 분배
+    // 분배: 10번에 나눠서 0.1s마다 추가
+    const delta = sps / 10;
+    if(delta > 0) {
+      state.sp += delta;
+      // 소수 누적은 허용. UI 반올림으로 표시.
+    }
+    // update only UI frequently but persist periodically
     updateUI();
-  }, 100); // 100ms for 부드러운 증가
+  }, 100);
 }
 
-/* 저장 주기 */
-setInterval(()=> { saveState(); }, 5000);
+/* 자동 저장 */
+let saveTimer = null;
+function startAutoSave(){
+  if(saveTimer) clearInterval(saveTimer);
+  saveTimer = setInterval(()=> saveState(), 5000);
+}
 
-/* 초기화 / export */
-resetBtn.addEventListener('click', ()=>{
+/* 초기화 */
+document.getElementById('resetBtn').addEventListener('click', ()=>{
   if(!confirm('게임을 초기화합니까? 저장된 모든 진행이 삭제됩니다.')) return;
-  state = JSON.parse(JSON.stringify(DEFAULT));
+  state = jsonClone(DEFAULT);
   saveState();
-  pushHistory('게임 초기화됨');
   updateUI();
 });
 
+/* 저장 내보내기 */
 exportBtn.addEventListener('click', ()=>{
-  const data = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
-  prompt('저장된 데이터(base64). 백업용으로 보관하세요.', data);
+  const payload = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+  // prompt로 복사 용이하게 표시
+  prompt('저장된 데이터 (base64). 백업용으로 보관하세요.', payload);
 });
 
-/* load & start */
-(function init(){
-  // ensure history exists
-  state.history = state.history || [];
-  // derive manualPower if upgrades exist
-  if(state.upgrades && state.upgrades.devotion && state.upgrades.devotion.level){
-    // recalc manualPower: base 1 * effect^level. If manualPower already reflects that, keep it.
-    // this is safe because purchases multiply manualPower in buyItem.
-  } else {
-    state.upgrades = state.upgrades || DEFAULT.upgrades;
-    state.manualPower = state.manualPower || DEFAULT.manualPower;
-  }
+/* 마지막 저장 삭제: 로컬스토리지에서 삭제 (메모리 상태 유지) */
+deleteSaveBtn.addEventListener('click', ()=>{
+  if(!confirm('로컬에 저장된 최신 저장을 삭제합니다. 계속하시겠습니까?')) return;
+  localStorage.removeItem(KEY);
+  localStorage.removeItem('zk_sp_v1');
+  // do not overwrite in-memory state; mark lastSaved=0
+  state.lastSaved = 0;
   updateUI();
-  startTick();
-})();
+  alert('마지막 저장(로컬)이 삭제되었습니다. 페이지 새로고침 시 삭제된 상태가 반영됩니다.');
+});
 
-/* SP badge sync for other pages via localStorage key */
+/* storage 이벤트: 다른 탭에서 상태 변경 시 동기화 */
 window.addEventListener('storage', (e)=>{
-  if(e.key === 'zk_tycoon_v1' || e.key === 'zk_sp_v1'){
-    // reload from localStorage in case external change
-    const external = localStorage.getItem(KEY);
-    if(external) { state = JSON.parse(external); updateUI(); }
+  if(e.key === KEY){
+    // 새 값이 들어오면 재로딩
+    try{
+      const parsed = JSON.parse(localStorage.getItem(KEY) || '{}');
+      if(parsed && typeof parsed.sp !== 'undefined'){
+        state = Object.assign(jsonClone(DEFAULT), parsed);
+        updateUI();
+      }
+    }catch(err){ console.warn('storage sync parse failed', err); }
   }
 });
 
-/* nav active set */
-(function(){
-  const el = document.getElementById('link-worship');
-  if(el) el.classList.add('active');
-})();
+/* 네비 활성화 */
+(function(){ const el = document.getElementById('link-worship'); if(el) el.classList.add('active'); })();
 
-/* theme toggle */
+/* 테마 토글 */
 (function(){
   const toggle = document.getElementById('themeToggle');
   const apply = (t) => {
@@ -370,6 +371,17 @@ window.addEventListener('storage', (e)=>{
   });
 })();
 
+/* 시작 */
+(function init(){
+  // ensure numeric fields correct
+  state.sp = Number(state.sp) || 0;
+  state.totalClicks = Number(state.totalClicks) || 0;
+  state.manualPower = Number(state.manualPower) || DEFAULT.manualPower;
+  calcSPS();
+  updateUI();
+  startTick();
+  startAutoSave();
+})();
 </script>
 </body>
 </html>
