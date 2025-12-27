@@ -5,15 +5,38 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>자쿠드 숭배 시뮬레이터</title>
 
+<!-- 파비콘 (루트에 /favicon.png 업로드) -->
+<link rel="icon" href="favicon.png" type="image/png">
+
+<!-- 한글 폰트 -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
+  /* 색 변수 통일: 다크 모드에서 색이 자동으로 바뀜 */
   :root{
-    --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --muted:#475569; --text:#0f172a;
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --line: #e5e7eb;
+    --accent: #2563eb;
+    --accent-2: #ffb86b;
+    --muted: #475569;
+    --text: #0f172a;
+    --text-strong: #071035;
+    --shadow: rgba(10,20,40,0.06);
   }
+
   html.dark{
-    --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --muted:#9aa0ab; --text:#eaf6ff;
+    --bg: #071018;
+    --card: #0b1724;
+    --line: #12202a;
+    --accent: #ffd166;
+    --accent-2: #ffb86b;
+    --muted: #9aa0ab;
+    --text: #eaf6ff;
+    --text-strong: #ffffff;
+    --shadow: rgba(0,0,0,0.45);
   }
+
   html{font-size:100%}
   body{
     margin:0;
@@ -22,36 +45,92 @@
     color:var(--text);
   }
 
-  /* header */
-  .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
-  .header-top{ display:flex; align-items:center; justify-content:space-between; padding:0.8rem 1.2rem; gap:0.75rem; }
-  .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
-  .brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; }
+  /* Header / top row */
+  .header{
+    background:var(--card);
+    border-bottom:1px solid var(--line);
+    position:sticky;
+    top:0;
+    z-index:1000;
+  }
+  .header-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:0.75rem;
+    padding:0.8rem 1.2rem;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:0.7rem;
+    text-decoration:none;
+    color:var(--text);
+  }
+  .brand img{
+    width:46px;
+    height:46px;
+    object-fit:contain;
+    border-radius:6px;
+    background:transparent;
+  }
   .brand .title{
-    font-size:1.6rem; /* 페이지 이름 더 크게 */
+    font-size:1.6rem;
     font-weight:900;
+    color:var(--text-strong);
     line-height:1;
   }
 
   /* right controls (SP + My Home) */
-  .right-controls{ display:flex; align-items:center; gap:0.6rem; }
+  .right-controls{
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+  }
   .sp-badge{
-    padding:0.35rem 0.6rem; border-radius:0.6rem; background:transparent; border:1px solid rgba(0,0,0,0.06);
-    font-weight:800; color:var(--accent);
+    padding:0.35rem 0.6rem;
+    border-radius:0.6rem;
+    background:transparent;
+    border:1px solid var(--line);
+    font-weight:800;
+    color:var(--accent);
   }
   .myhome-btn{
-    padding:0.45rem 0.9rem; border-radius:0.6rem; border:1px solid var(--line); background:var(--card); font-weight:700; cursor:pointer;
+    padding:0.45rem 0.9rem;
+    border-radius:0.6rem;
+    border:1px solid var(--line);
+    background:var(--card);
+    font-weight:700;
+    color:var(--text);
+    cursor:pointer;
   }
 
-  /* nav (2nd row) */
-  .nav-row{ display:flex; align-items:center; justify-content:space-between; padding:0.45rem 1.2rem; border-top:1px solid var(--line); gap:0.5rem; }
-  .nav-left{ display:flex; gap:0.5rem; align-items:center; }
-  .nav-left a{
-    text-decoration:none; padding:0.4rem 0.8rem; border-radius:0.6rem; font-weight:700; font-size:0.95rem; color:var(--muted);
+  /* Nav (second row) */
+  .nav-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:0.5rem;
+    padding:0.45rem 1.2rem;
+    border-top:1px solid var(--line);
   }
-  /* 강조는 각 페이지에서 active를 붙여주면 된다. 기본(메인)에서는 강조 없음. */
+  .nav-left{
+    display:flex;
+    gap:0.5rem;
+    align-items:center;
+  }
+  .nav-left a{
+    text-decoration:none;
+    padding:0.4rem 0.8rem;
+    border-radius:0.6rem;
+    font-weight:700;
+    font-size:0.95rem;
+    color:var(--muted);
+    background:transparent;
+  }
   .nav-left a.active{
-    background:#eef2ff; color:#3730a3;
+    background: rgba(99,102,241,0.12);
+    color: var(--accent);
   }
 
   /* theme switch */
@@ -61,26 +140,33 @@
   .theme-switch input{ opacity:0; width:0; height:0; }
   .slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
   .slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
-  .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),#ffb86b); }
-  .theme-switch input:checked + .slider::before{ transform:translateX(20px); }
+  .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
+  .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
 
   /* main */
   main{ max-width:980px; margin:2rem auto; padding:0 1.2rem; }
-  h1{ font-size:1.5rem; margin:0 0 .6rem 0; color:var(--accent); font-weight:900; }
-  .card{ background:var(--card); border:1px solid var(--line); padding:1.2rem; border-radius:12px; box-shadow:0 8px 22px rgba(0,0,0,0.04); color:var(--muted) }
+  h1{ font-size:1.5rem; margin:0 0 0.6rem 0; color:var(--accent); font-weight:900; }
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    padding:1.2rem;
+    border-radius:12px;
+    box-shadow:0 8px 22px var(--shadow);
+    color:var(--muted);
+  }
 
   @media(max-width:720px){
-    .brand .title{ font-size:1.15rem }
-    .sp-badge{ display:none }
+    .brand .title{ font-size:1.15rem; }
+    .sp-badge{ display:none; }
   }
 </style>
 </head>
 <body>
-
 <header class="header">
   <div class="header-top">
-    <a class="brand" href="index.html">
-      <img src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고">
+    <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
+      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고"
+           onerror="this.onerror=null; this.src='/assets/logo.png'">
       <span class="title">자쿠드 숭배 시뮬레이터</span>
     </a>
 
@@ -112,23 +198,22 @@
 
   <div class="card">
     <p>
-      이곳은 자쿠드를 숭배하는 공식 시뮬레이션 공간입니다.<br>
+      이곳은 자쿠드를 숭배하는 시뮬레이터 메인 페이지입니다.
       상단 네비에서 숭배, 성경, 제네레이터로 이동하세요.
     </p>
   </div>
 </main>
 
 <script>
-/* SP 표시 유지 (localStorage) */
+/* SP 표시 (localStorage 기반). 다른 페이지가 변경하면 storage 이벤트로 갱신 */
 (function(){
   const KEY = 'zk_sp_v1';
   const el = document.getElementById('spBadge');
   const read = ()=> parseInt(localStorage.getItem(KEY) || '0', 10);
-  const writeUI = ()=> el.textContent = read() + ' SP';
+  const writeUI = ()=> { el.textContent = read() + ' SP'; };
   writeUI();
-  // 페이지만 여기서 유지. 실제 숭배 페이지에서 증가하면 해당 값이 갱신됨 on reload.
-  // Provide a small API to update from other pages if needed.
   window.__updateSP = writeUI;
+  window.addEventListener('storage', (e) => { if(e.key === KEY) writeUI(); });
 })();
 
 /* 다크 모드 토글 (localStorage 유지) */
@@ -149,10 +234,7 @@
   });
 })();
 
-/* 네비 강조 자동 처리: 각 페이지에서 pathname에 맞추어 active 클래스 부여.
-   여기(index.html)에서는 기본적으로 아무것도 강조하지 않음.
-   (worship.html 등 다른 파일에서 동일 스크립트 로드하면 자동으로 강조됨)
-*/
+/* 네비 자동 active 클래스 적용 (각 페이지에 동일 스크립트 포함하면 해당 페이지에서 강조됨) */
 (function(){
   const path = location.pathname.split('/').pop();
   const map = {
