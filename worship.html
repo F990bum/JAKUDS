@@ -4,80 +4,372 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>자쿠드 숭배하기</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+<link rel="icon" href="favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+
 <style>
+  :root{
+    --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
+    --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
+  }
+  html.dark{
+    --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
+    --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff; --shadow:rgba(0,0,0,0.45);
+  }
   html{font-size:100%}
-  :root{--bg:#f7fafc;--card:#fff;--accent:#2563eb;--muted:#6b7280}
-  html.dark{--bg:#071018;--card:#0b1724;--accent:#ffd166;--muted:#9aa0ab}
-  body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--muted)}
-  .header{position:sticky;top:0;background:var(--card);box-shadow:0 1px 0 rgba(0,0,0,0.04);z-index:1000}
-  .header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem}
-  .brand img{width:3rem;height:3rem;border-radius:6px}
-  main{max-width:960px;margin:1.5rem auto;padding:1rem;text-align:center}
-  .card{background:linear-gradient(180deg,#fff,#f1f5f9);padding:2rem;border-radius:12px;box-shadow:0 18px 36px rgba(10,20,40,0.08)}
-  .sp-large{font-weight:900;font-size:2rem;color:var(--accent);margin-bottom:1rem}
-  .worship-btn{padding:1rem 1.2rem;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),#ffb86b);font-weight:900;cursor:pointer}
-  .hint{color:var(--muted);margin-top:.8rem}
+  body{margin:0;font-family:"Noto Sans KR",system-ui; background:var(--bg); color:var(--text)}
+
+  /* header */
+  .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
+  .header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.8rem 1.2rem; }
+  .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
+  .brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
+  .brand .title{ font-size:1.4rem; font-weight:900; color:var(--text-strong); }
+  .right-controls{ display:flex; align-items:center; gap:0.6rem; }
+  .sp-badge{ padding:0.35rem 0.6rem; border-radius:0.6rem; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); }
+  .myhome-btn{ padding:0.45rem 0.9rem; border-radius:0.6rem; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; }
+
+  /* nav */
+  .nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.5rem; padding:0.45rem 1.2rem; border-top:1px solid var(--line); }
+  .nav-left{ display:flex; gap:0.5rem; align-items:center; }
+  .nav-left a{ text-decoration:none; padding:0.4rem 0.8rem; border-radius:0.6rem; font-weight:700; font-size:0.95rem; color:var(--muted); background:transparent; }
+  .nav-left a.active{ background: rgba(99,102,241,0.12); color: var(--accent); }
+
+  .theme-wrap{ display:flex; align-items:center; gap:0.5rem; }
+  .theme-label{ color:var(--muted); font-weight:700; font-size:0.9rem; }
+  .theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
+  .theme-switch input{ opacity:0; width:0; height:0; }
+  .slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
+  .slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
+  .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
+  .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
+
+  /* main layout */
+  main{ max-width:1100px; margin:1.5rem auto; padding:1rem; display:flex; gap:1rem; align-items:flex-start; }
+  .left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1rem; align-items:center; }
+  .card-wrap{ width:360px; height:420px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; }
+  #worshipBtn{ width:84%; height:72%; border-radius:10px; font-size:1.5rem; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 12px 30px rgba(0,0,0,0.12); }
+
+  .right{ width:360px; display:flex; flex-direction:column; gap:0.9rem; }
+  .meta{ background:var(--card); border-radius:10px; padding:0.85rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
+  .meta .row{ display:flex; justify-content:space-between; margin-bottom:0.4rem; }
+  .store{ display:grid; grid-template-columns:1fr; gap:0.7rem; margin-top:0.8rem; }
+  .item{ background:var(--card); border-radius:10px; padding:0.7rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); }
+  .item button{ padding:0.45rem 0.7rem; border-radius:8px; border:0; font-weight:800; cursor:pointer; }
+  .buy{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; }
+  .reset{ background:transparent; border:1px solid var(--line); color:var(--muted); }
+
+  .log{ margin-top:0.6rem; max-height:220px; overflow:auto; font-size:0.9rem; color:var(--muted); }
+  .entry{ margin-bottom:0.5rem; padding:0.5rem; border-radius:8px; background:rgba(0,0,0,0.03); color:var(--muted); }
+
+  @media(max-width:920px){
+    main{ flex-direction:column; align-items:center; }
+    .right{ width:100%; }
+    .card-wrap{ width:92%; height:380px; }
+  }
 </style>
 </head>
 <body>
+
 <header class="header">
   <div class="header-top">
-    <a class="brand" href="worship.html" style="display:flex;align-items:center;gap:.6rem;text-decoration:none;color:inherit">
-      <img id="siteLogo2" data-ibb="https://ibb.co/ZrgK1DJ" alt="logo">
-      <span style="font-weight:900">자쿠드</span>
+    <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
+      <img id="logo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="logo" onerror="this.onerror=null;this.src='/assets/logo.png'">
+      <span class="title">자쿠드 숭배 시뮬레이터</span>
     </a>
-    <div style="display:flex;align-items:center;gap:1rem">
-      <a href="bible.html">자쿠드 성경</a>
-      <a href="generator.html">자쿠드 제네레이터</a>
+
+    <div class="right-controls">
+      <div id="spBadge" class="sp-badge">0 SP</div>
+      <a href="home.html"><button class="myhome-btn" type="button">My Home</button></a>
     </div>
   </div>
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.25rem;border-top:1px solid #eee">
-    <div></div>
-    <label style="display:flex;align-items:center;gap:.5rem">
-      <span style="color:var(--muted)">다크</span>
-      <input id="themeToggle2" type="checkbox">
-    </label>
+
+  <div class="nav-row">
+    <div class="nav-left">
+      <a id="link-worship" href="worship.html">자쿠드 숭배하기</a>
+      <a id="link-bible" href="bible.html">자쿠드 성경</a>
+      <a id="link-generator" href="generator.html">자쿠드 제네레이터</a>
+    </div>
+
+    <div class="theme-wrap">
+      <span class="theme-label">다크</span>
+      <label class="theme-switch" title="다크 모드">
+        <input id="themeToggle" type="checkbox" />
+        <span class="slider"></span>
+      </label>
+    </div>
   </div>
 </header>
 
 <main>
-  <div class="card">
-    <div class="sp-large" id="spBig">0 SP</div>
-    <button id="worshipBtn" class="worship-btn">숭배하기 (+1 SP)</button>
-    <div class="hint">숭배 버튼 누를 때마다 SP가 1씩 증가하고 저장됩니다.</div>
+  <div class="left">
+    <div class="card-wrap">
+      <button id="worshipBtn" title="클릭하여 숭배하고 SP 획득">숭배하기<br><small style="font-size:0.6rem;opacity:0.8">(클릭으로 즉시 SP)</small></button>
+    </div>
+
+    <div style="width:360px;max-width:92%;display:flex;justify-content:space-between;color:var(--muted);font-weight:800">
+      <div>수동 파워: <span id="manualPower">1</span></div>
+      <div>자동 수입: <span id="sps">0</span> SPS</div>
+    </div>
   </div>
+
+  <aside class="right">
+    <div class="meta">
+      <div class="row"><div>총 SP</div><div id="totalSP">0</div></div>
+      <div class="row"><div>총 횟수</div><div id="totalClicks">0</div></div>
+      <div class="row"><div>저장 상태</div><div id="savedAt">-</div></div>
+
+      <div style="margin-top:0.6rem;font-weight:800;color:var(--text-strong)">상점</div>
+      <div class="store" id="store">
+        <!-- items injected by JS -->
+      </div>
+
+      <div style="display:flex;gap:0.6rem;margin-top:0.8rem">
+        <button id="resetBtn" class="reset">초기화</button>
+        <button id="exportBtn" class="reset">저장 내보내기</button>
+      </div>
+
+      <div class="log" id="log"></div>
+    </div>
+  </aside>
 </main>
 
 <script>
-/* logo try */
-(function(){
-  const img=document.getElementById('siteLogo2'); const base=img.dataset.ibb;
-  const cand=[base.replace('ibb.co','i.ibb.co')+'.png','/assets/logo.png']; let i=0;
-  function next(){ if(i>=cand.length) return; img.src=cand[i++]; }
-  img.addEventListener('error',next); next();
+/* 데이터 모델 및 로컬스토리지 */
+const KEY = 'zk_tycoon_v1';
+const DEFAULT = {
+  sp: 0,
+  totalClicks: 0,
+  manualPower: 1,
+  sps: 0,
+  buildings: {
+    follower: {count:0, baseCost:10, sps:0.5},
+    altar: {count:0, baseCost:100, sps:2},
+    temple: {count:0, baseCost:1000, sps:12}
+  },
+  upgrades: {
+    devotion: {level:0, baseCost:50, effect:2} // multiplies manualPower
+  },
+  lastSaved: Date.now()
+};
+
+let state = loadState();
+
+/* DOM */
+const spBadge = document.getElementById('spBadge');
+const totalSP = document.getElementById('totalSP');
+const totalClicks = document.getElementById('totalClicks');
+const savedAt = document.getElementById('savedAt');
+const spsEl = document.getElementById('sps');
+const manualPowerEl = document.getElementById('manualPower');
+const worshipBtn = document.getElementById('worshipBtn');
+const storeEl = document.getElementById('store');
+const logEl = document.getElementById('log');
+const resetBtn = document.getElementById('resetBtn');
+const exportBtn = document.getElementById('exportBtn');
+
+/* 상점 정의 (순서 고정) */
+const ITEMS = [
+  { key:'follower', label:'추종자', desc:'+0.5 SPS', cost: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'altar', label:'제단', desc:'+2 SPS', cost: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'temple', label:'사원', desc:'+12 SPS', cost: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'devotion', label:'헌신 강화', desc:'수동 파워 2배', cost: (u)=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)) }
+];
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return JSON.parse(JSON.stringify(DEFAULT));
+    const parsed = JSON.parse(raw);
+    // migrate: ensure fields exist
+    return Object.assign(JSON.parse(JSON.stringify(DEFAULT)), parsed);
+  }catch(e){
+    console.error('load failed', e);
+    return JSON.parse(JSON.stringify(DEFAULT));
+  }
+}
+
+function saveState(){
+  state.lastSaved = Date.now();
+  localStorage.setItem(KEY, JSON.stringify(state));
+  updateUI();
+}
+
+/* UI 업데이트 */
+function updateUI(){
+  spBadge.textContent = formatNum(state.sp) + ' SP';
+  totalSP.textContent = formatNum(state.sp);
+  totalClicks.textContent = state.totalClicks;
+  savedAt.textContent = new Date(state.lastSaved).toLocaleTimeString();
+  spsEl.textContent = (Math.round(calcSPS()*100)/100).toFixed(2);
+  manualPowerEl.textContent = state.manualPower;
+  renderStore();
+  renderLog();
+  // notify index/main if open
+  try { localStorage.setItem('zk_sp_v1', String(state.sp)); } catch(e){}
+}
+
+function formatNum(n){ if(n>=1000000) return Math.floor(n).toLocaleString(); return Math.round((n + Number.EPSILON) * 100)/100; }
+
+function calcSPS(){
+  let total = 0;
+  for(const k of ['follower','altar','temple']){
+    const b = state.buildings[k];
+    total += b.count * b.sps;
+  }
+  state.sps = total;
+  return total;
+}
+
+/* 상점 렌더 */
+function renderStore(){
+  storeEl.innerHTML = '';
+  ITEMS.forEach(item=>{
+    const div = document.createElement('div');
+    div.className='item';
+    const left = document.createElement('div');
+    if(item.key === 'devotion'){
+      left.innerHTML = `<div style="font-weight:800">${item.label} (Lv ${state.upgrades.devotion.level})</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
+    } else {
+      const b = state.buildings[item.key];
+      left.innerHTML = `<div style="font-weight:800">${item.label} x${b.count}</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
+    }
+    const right = document.createElement('div');
+    const cost = (item.key === 'devotion') ? item.cost(state.upgrades.devotion) : item.cost(state.buildings[item.key]);
+    const btn = document.createElement('button');
+    btn.textContent = formatNum(cost) + ' SP';
+    btn.className = 'buy';
+    btn.disabled = state.sp < cost;
+    btn.addEventListener('click', ()=> buyItem(item.key, cost));
+    right.appendChild(btn);
+    div.appendChild(left);
+    div.appendChild(right);
+    storeEl.appendChild(div);
+  });
+}
+
+/* 로그 렌더 (최근 6개) */
+function renderLog(){
+  logEl.innerHTML = '';
+  const hist = (state.history || []).slice(-6).reverse();
+  hist.forEach(h=>{
+    const d = document.createElement('div');
+    d.className = 'entry';
+    d.textContent = `[${new Date(h.ts).toLocaleTimeString()}] ${h.msg}`;
+    logEl.appendChild(d);
+  });
+}
+
+/* 행동: 숭배 클릭 */
+worshipBtn.addEventListener('click', ()=>{
+  const gain = state.manualPower;
+  state.sp += gain;
+  state.totalClicks += 1;
+  pushHistory(`수동 숭배 +${gain} SP`);
+  updateUI();
+  saveState();
+});
+
+/* 구매 처리 */
+function buyItem(key, cost){
+  if(state.sp < cost) return;
+  state.sp -= cost;
+  if(key === 'devotion'){
+    state.upgrades.devotion.level += 1;
+    state.manualPower *= state.upgrades.devotion.effect;
+    pushHistory(`헌신 강화 구매: 수동파워 x${state.upgrades.devotion.effect}`);
+  } else {
+    state.buildings[key].count += 1;
+    pushHistory(`${key} 구매: +${state.buildings[key].sps} SPS`);
+  }
+  updateUI();
+  saveState();
+}
+
+/* 로그 히스토리 저장 */
+function pushHistory(msg){
+  state.history = state.history || [];
+  state.history.push({ ts: Date.now(), msg });
+  if(state.history.length > 200) state.history.shift();
+}
+
+/* 자동 수입 처리 (tick) */
+let tickTimer = null;
+function startTick(){
+  if(tickTimer) clearInterval(tickTimer);
+  tickTimer = setInterval(()=>{
+    const sps = calcSPS();
+    state.sp += sps / 10; // 0.1s 간격으로 분배
+    updateUI();
+  }, 100); // 100ms for 부드러운 증가
+}
+
+/* 저장 주기 */
+setInterval(()=> { saveState(); }, 5000);
+
+/* 초기화 / export */
+resetBtn.addEventListener('click', ()=>{
+  if(!confirm('게임을 초기화합니까? 저장된 모든 진행이 삭제됩니다.')) return;
+  state = JSON.parse(JSON.stringify(DEFAULT));
+  saveState();
+  pushHistory('게임 초기화됨');
+  updateUI();
+});
+
+exportBtn.addEventListener('click', ()=>{
+  const data = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+  prompt('저장된 데이터(base64). 백업용으로 보관하세요.', data);
+});
+
+/* load & start */
+(function init(){
+  // ensure history exists
+  state.history = state.history || [];
+  // derive manualPower if upgrades exist
+  if(state.upgrades && state.upgrades.devotion && state.upgrades.devotion.level){
+    // recalc manualPower: base 1 * effect^level. If manualPower already reflects that, keep it.
+    // this is safe because purchases multiply manualPower in buyItem.
+  } else {
+    state.upgrades = state.upgrades || DEFAULT.upgrades;
+    state.manualPower = state.manualPower || DEFAULT.manualPower;
+  }
+  updateUI();
+  startTick();
 })();
 
-/* theme */
+/* SP badge sync for other pages via localStorage key */
+window.addEventListener('storage', (e)=>{
+  if(e.key === 'zk_tycoon_v1' || e.key === 'zk_sp_v1'){
+    // reload from localStorage in case external change
+    const external = localStorage.getItem(KEY);
+    if(external) { state = JSON.parse(external); updateUI(); }
+  }
+});
+
+/* nav active set */
 (function(){
-  const t=document.getElementById('themeToggle2');
-  const apply=(v)=>{ if(v==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); t.checked=(v==='dark'); };
-  const s=localStorage.getItem('theme')|| (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark':'light');
-  apply(s); t.addEventListener('change',()=>{ const n=t.checked?'dark':'light'; localStorage.setItem('theme',n); apply(n); });
+  const el = document.getElementById('link-worship');
+  if(el) el.classList.add('active');
 })();
 
-/* SP logic */
+/* theme toggle */
 (function(){
-  const KEY='zk_sp_v1'; const disp=document.getElementById('spBig'); const btn=document.getElementById('worshipBtn');
-  const get=()=>parseInt(localStorage.getItem(KEY)||'0',10);
-  const setv=v=>{ localStorage.setItem(KEY,String(v)); disp.textContent = v + ' SP'; document.getElementById('spDisplay') && (document.getElementById('spDisplay').textContent = v + ' SP'); };
-  setv(get());
-  btn.addEventListener('click', ()=>{
-    btn.disabled = true;
-    btn.textContent = '숭배 중...';
-    setTimeout(()=>{ const v=get()+1; setv(v); btn.disabled=false; btn.textContent='숭배하기 (+1 SP)'; }, 420);
+  const toggle = document.getElementById('themeToggle');
+  const apply = (t) => {
+    if(t === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+    toggle.checked = (t === 'dark');
+  };
+  const saved = localStorage.getItem('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  apply(initial);
+  toggle.addEventListener('change', () => {
+    const next = toggle.checked ? 'dark' : 'light';
+    localStorage.setItem('theme', next);
+    apply(next);
   });
 })();
+
 </script>
 </body>
 </html>
