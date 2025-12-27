@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>자쿠드 숭배하기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  html{font-size:100%}
+  :root{--bg:#f7fafc;--card:#fff;--accent:#2563eb;--muted:#6b7280}
+  html.dark{--bg:#071018;--card:#0b1724;--accent:#ffd166;--muted:#9aa0ab}
+  body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--muted)}
+  .header{position:sticky;top:0;background:var(--card);box-shadow:0 1px 0 rgba(0,0,0,0.04);z-index:1000}
+  .header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem}
+  .brand img{width:3rem;height:3rem;border-radius:6px}
+  main{max-width:960px;margin:1.5rem auto;padding:1rem;text-align:center}
+  .card{background:linear-gradient(180deg,#fff,#f1f5f9);padding:2rem;border-radius:12px;box-shadow:0 18px 36px rgba(10,20,40,0.08)}
+  .sp-large{font-weight:900;font-size:2rem;color:var(--accent);margin-bottom:1rem}
+  .worship-btn{padding:1rem 1.2rem;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),#ffb86b);font-weight:900;cursor:pointer}
+  .hint{color:var(--muted);margin-top:.8rem}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a class="brand" href="worship.html" style="display:flex;align-items:center;gap:.6rem;text-decoration:none;color:inherit">
+      <img id="siteLogo2" data-ibb="https://ibb.co/ZrgK1DJ" alt="logo">
+      <span style="font-weight:900">자쿠드</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:1rem">
+      <a href="bible.html">자쿠드 성경</a>
+      <a href="generator.html">자쿠드 제네레이터</a>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.25rem;border-top:1px solid #eee">
+    <div></div>
+    <label style="display:flex;align-items:center;gap:.5rem">
+      <span style="color:var(--muted)">다크</span>
+      <input id="themeToggle2" type="checkbox">
+    </label>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="sp-large" id="spBig">0 SP</div>
+    <button id="worshipBtn" class="worship-btn">숭배하기 (+1 SP)</button>
+    <div class="hint">숭배 버튼 누를 때마다 SP가 1씩 증가하고 저장됩니다.</div>
+  </div>
+</main>
+
+<script>
+/* logo try */
+(function(){
+  const img=document.getElementById('siteLogo2'); const base=img.dataset.ibb;
+  const cand=[base.replace('ibb.co','i.ibb.co')+'.png','/assets/logo.png']; let i=0;
+  function next(){ if(i>=cand.length) return; img.src=cand[i++]; }
+  img.addEventListener('error',next); next();
+})();
+
+/* theme */
+(function(){
+  const t=document.getElementById('themeToggle2');
+  const apply=(v)=>{ if(v==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); t.checked=(v==='dark'); };
+  const s=localStorage.getItem('theme')|| (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark':'light');
+  apply(s); t.addEventListener('change',()=>{ const n=t.checked?'dark':'light'; localStorage.setItem('theme',n); apply(n); });
+})();
+
+/* SP logic */
+(function(){
+  const KEY='zk_sp_v1'; const disp=document.getElementById('spBig'); const btn=document.getElementById('worshipBtn');
+  const get=()=>parseInt(localStorage.getItem(KEY)||'0',10);
+  const setv=v=>{ localStorage.setItem(KEY,String(v)); disp.textContent = v + ' SP'; document.getElementById('spDisplay') && (document.getElementById('spDisplay').textContent = v + ' SP'); };
+  setv(get());
+  btn.addEventListener('click', ()=>{
+    btn.disabled = true;
+    btn.textContent = '숭배 중...';
+    setTimeout(()=>{ const v=get()+1; setv(v); btn.disabled=false; btn.textContent='숭배하기 (+1 SP)'; }, 420);
+  });
+})();
+</script>
+</body>
+</html>
