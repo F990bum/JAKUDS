@@ -58,41 +58,31 @@
   .right{ width:520px; display:flex; flex-direction:column; gap:0.9rem; } /* widened */
   .meta{ background:var(--card); border-radius:10px; padding:0.85rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
   .meta .row{ display:flex; justify-content:space-between; margin-bottom:0.4rem; }
+  .section-title{ font-weight:800; color:var(--text-strong); } /* default */
+  html.dark .section-title{ color:#fff; } /* requested: white in dark */
+  .thin-hr{ border:0; border-top:1px solid var(--line); margin:8px 0; }
+
   .store-title{ margin-top:0.2rem;font-weight:800;color:var(--text-strong) }
   .store{ display:grid; grid-template-columns:1fr; gap:0.7rem; margin-top:0.4rem; }
   .item{ background:var(--card); border-radius:10px; padding:0.7rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); gap:8px; }
-  .item-left{ display:flex; flex-direction:column; gap:4px; }
+  .item-left{ display:flex; flex-direction:column; gap:6px; }
   .item-right{ display:flex; gap:8px; align-items:center; }
-  .item-right button{ min-width:120px; } /* equal width for BUY and BUY MAX */
+  .item-right button{ min-width:130px; } /* equal width for BUY and BUY MAX */
   .item button{ padding:0.45rem 0.9rem; border-radius:8px; border:0; font-weight:800; cursor:pointer; }
   .buy{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; }
-  .buy-max{ background:transparent; border:1px solid var(--line); color:var(--muted); padding:0.35rem 0.6rem; border-radius:8px; font-weight:800; cursor:pointer; }
+  .buy-max{ background:transparent; border:2px solid var(--line); color:var(--muted); padding:0.35rem 0.6rem; border-radius:8px; font-weight:800; cursor:pointer; } /* stronger border */
 
-  .building-desc{ font-size:0.92rem; color:var(--muted); margin-top:0.6rem; padding:0.5rem; border-radius:8px; background:linear-gradient(180deg,rgba(0,0,0,0.02),transparent); }
+  .building-desc{ display:none; } /* removed per request */
 
-  /* floating effect (5px 위에서 시작) */
+  /* floating */
   .float-elem{
-    position:absolute;
-    pointer-events:none;
-    transform:translate(-50%, -50%);
-    font-weight:900;
-    opacity:1;
-    white-space:nowrap;
-    display:inline-flex;
-    gap:8px;
-    align-items:center;
-    padding:6px 12px;
-    border-radius:16px;
-    background:linear-gradient(90deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
-    color:#071018;
-    font-size:16px;
-    box-shadow:0 10px 28px rgba(0,0,0,0.18);
+    position:absolute; pointer-events:none; transform:translate(-50%, -50%); font-weight:900; opacity:1; white-space:nowrap;
+    display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border-radius:16px;
+    background:linear-gradient(90deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95)); color:#071018; font-size:16px; box-shadow:0 10px 28px rgba(0,0,0,0.18);
     animation: floatUp 1000ms forwards;
   }
   html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rgba(10,10,20,0.92)); color:var(--text); }
-
   @keyframes floatUp{ 0%{ transform:translate(-50%, -10% ) scale(1); opacity:1; } 100%{ transform:translate(-50%, -180% ) scale(1.04); opacity:0; } }
-
   .crit-text { font-weight:900; margin-right:8px; }
 
   @media(max-width:920px){
@@ -154,52 +144,141 @@
 
   <aside class="right">
     <div class="meta">
-      <div class="row"><div style="font-weight:800">통계</div><div></div></div>
+      <div class="row"><div class="section-title">통계</div><div></div></div>
       <div class="row"><div>총 SP</div><div id="totalSP">0 SP</div></div>
       <div class="row"><div>총 숭배 횟수</div><div id="totalClicks">0</div></div>
       <div class="row"><div>플레이 시간</div><div id="playTime">00:00:00</div></div>
 
+      <div class="thin-hr" aria-hidden="true"></div>
+
       <div class="store-title">상점</div>
       <div class="store" id="store"></div>
 
-      <div class="store-title" style="margin-top:0.6rem">건물 및 업그레이드 설명</div>
-      <div class="building-desc" id="buildingDesc">
-        <strong>신도</strong> : 신도 1명당 크리티컬 확률 +1%. 크리티컬 레벨 시스템 적용(100% = 한 단계 상승).<br>
-        <strong>제단</strong> : 모든 크리티컬의 보상 배율에 추가 비율 +2%/제단.<br>
-        <strong>사원</strong> : 사원 1개당 피버 발동 확률 +0.1%. 피버 발동 시 클릭 보상 ×1.5, SPS ×2 (지속 시간 10초).<br>
-        <strong>헌신 강화</strong> : 매 레벨마다 클릭 보상 ×2, 전체 SPS ×2^level.
-      </div>
+      <!-- 건물 및 업그레이드 설명 섹션 제거 (per request) -->
     </div>
   </aside>
 </main>
 
 <script>
-/* ---------- Config & Units ---------- */
+/* ------------------------
+   Units + big-number (base1000) implementation
+   ------------------------ */
 const KEY = 'zk_tycoon_v1';
 const UNITS = ['M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','KU'];
 const MAX_UNIT_INDEX = UNITS.length - 1;
-const MAX_KU_COUNT = 550_000_000;
-let NUMERIC_MAX = Number.MAX_SAFE_INTEGER;
-try {
-  const exp = MAX_UNIT_INDEX + 2;
-  const val = MAX_KU_COUNT * Math.pow(1000, exp);
-  if(Number.isFinite(val) && val < Number.MAX_SAFE_INTEGER) NUMERIC_MAX = Math.floor(val);
-} catch(e){}
 
-/* ---------- Default state ---------- */
+/* BN representation:
+   { m: Number(mantissa, >=0), e: Integer(exponent base1000) }
+   value = m * 1000^e
+*/
+function bn_fromNumber(n){
+  let m = Number(n);
+  let e = 0;
+  if(!isFinite(m) || m === 0) return {m:0,e:0};
+  while(m >= 1000){ m /= 1000; e += 1; }
+  while(m > 0 && m < 1 && e > -1000){ m *= 1000; e -= 1; } // guard
+  return {m, e};
+}
+function bn_normalize(b){
+  if(!b || !isFinite(b.m)) return {m:0,e:0};
+  let m = b.m, e = b.e;
+  if(m === 0) return {m:0,e:0};
+  while(m >= 1000){ m /= 1000; e += 1; }
+  while(m > 0 && m < 1 && e > -1000){ m *= 1000; e -= 1; }
+  return {m,e};
+}
+function bn_toStringUnit(b){
+  if(!b || b.m === 0) return '0 SP';
+  const e = b.e;
+  // units start at e=2 -> M (1000^2)
+  if(e < 2){
+    // convert to plain number (may be safe)
+    const val = b.m * Math.pow(1000, e);
+    return Math.floor(val).toLocaleString() + ' SP';
+  }
+  const unitIndex = e - 2;
+  const capped = Math.min(unitIndex, MAX_UNIT_INDEX);
+  const displayVal = b.m * Math.pow(1000, e - (capped + 2));
+  return displayVal.toFixed(2) + ' ' + UNITS[capped];
+}
+function bn_toNumberIfSafe(b){
+  try{
+    const val = b.m * Math.pow(1000, b.e);
+    if(Number.isFinite(val) && Math.abs(val) <= Number.MAX_SAFE_INTEGER) return val;
+    return null;
+  }catch(e){ return null; }
+}
+function bn_addNumber(b, num){
+  // add num (Number) to big number b
+  const b2 = bn_fromNumber(num);
+  return bn_add(b, b2);
+}
+function bn_add(a,b){
+  a = bn_normalize(a); b = bn_normalize(b);
+  if(a.m === 0) return {m:b.m, e:b.e};
+  if(b.m === 0) return {m:a.m, e:a.e};
+  if(a.e === b.e) return bn_normalize({m: a.m + b.m, e: a.e});
+  // align exponents: make 'a' the larger exponent
+  if(a.e < b.e){ // swap so a.e > b.e
+    const tmp = a; a = b; b = tmp;
+  }
+  const diff = a.e - b.e;
+  const factor = Math.pow(1000, diff);
+  const m = a.m + b.m / factor;
+  return bn_normalize({m, e: a.e});
+}
+function bn_subNumber(a, num){
+  const b = bn_fromNumber(num);
+  return bn_sub(a, b);
+}
+function bn_sub(a,b){
+  a = bn_normalize(a); b = bn_normalize(b);
+  // if b > a return {m:0,e:0}
+  if(bn_compare(a,b) <= 0) return {m:0,e:0};
+  if(a.e === b.e) return bn_normalize({m: a.m - b.m, e: a.e});
+  // ensure a.e > b.e
+  if(a.e < b.e){ return bn_normalize({m: -(b.m - a.m * Math.pow(1000, b.e - a.e)), e: b.e}); }
+  const diff = a.e - b.e;
+  const m = a.m - b.m / Math.pow(1000, diff);
+  return bn_normalize({m, e: a.e});
+}
+function bn_compare(a,b){
+  a = bn_normalize(a); b = bn_normalize(b);
+  if(a.e !== b.e) return a.e > b.e ? 1 : -1;
+  if(Math.abs(a.m - b.m) < 1e-12) return 0;
+  return a.m > b.m ? 1 : -1;
+}
+function bn_gte_number(a, num){
+  const b = bn_fromNumber(num);
+  return bn_compare(a,b) >= 0;
+}
+function bn_lte_number(a, num){
+  const b = bn_fromNumber(num);
+  return bn_compare(a,b) <= 0;
+}
+function bn_mulNumber(a, num){
+  const m = a.m * num;
+  return bn_normalize({m, e: a.e});
+}
+
+/* ------------------------
+   Defaults + state
+   ------------------------ */
 const DEFAULT = {
-  sp: 0, totalClicks: 0, manualPower: 1, sps: 0,
+  sp: {m:0,e:0}, totalClicks:0, manualPower:1, sps:0,
   buildings: {
-    follower: {count:0, baseCost:10, sps:0.5},
-    altar: {count:0, baseCost:100, sps:2},
-    temple: {count:0, baseCost:1000, sps:12}
+    follower:{count:0, baseCost:10, sps:0.5},
+    altar:{count:0, baseCost:100, sps:2},
+    temple:{count:0, baseCost:1000, sps:12}
   },
-  upgrades: { devotion: {level:0, baseCost:50, effect:2} },
-  startTimestamp: null, playAcc: 0, lastSaved: 0, _feverMultiplier: 1
+  upgrades:{ devotion:{level:0, baseCost:50, effect:2} },
+  startTimestamp:null, playAcc:0, lastSaved:0, _feverMultiplier:1
 };
 let state = loadState();
 
-/* ---------- DOM ---------- */
+/* ------------------------
+   DOM refs
+   ------------------------ */
 const spBadge = document.getElementById('spBadge');
 const totalSP = document.getElementById('totalSP');
 const totalClicks = document.getElementById('totalClicks');
@@ -213,33 +292,18 @@ const feverPctEl = document.getElementById('feverPct');
 
 /* ---------- Helpers ---------- */
 function jsonClone(o){ return JSON.parse(JSON.stringify(o)); }
-function clampToMax(n){ return Math.min(n, NUMERIC_MAX); }
 function formatFloatingAmount(n){
   const rounded = Math.round((n + Number.EPSILON) * 100) / 100;
   if(Math.abs(rounded - Math.round(rounded)) < 1e-9) return Math.round(rounded);
   return rounded.toFixed(2);
 }
-function formatTotalSPValue(n){
-  n = Math.floor(n);
-  if(n < 1_000_000) return n.toLocaleString() + ' SP';
-  const exp = Math.floor(Math.log10(n) / 3);
-  const useExp = Math.max(exp, 2);
-  const unitIndex = useExp - 2;
-  const value = n / Math.pow(1000, useExp);
-  if(unitIndex > MAX_UNIT_INDEX) return value.toFixed(2) + ' ' + UNITS[MAX_UNIT_INDEX];
-  return value.toFixed(2) + ' ' + UNITS[unitIndex];
-}
-function formatCompactNumber(n){
-  if(Math.abs(n) >= 1000) return Math.floor(n).toLocaleString();
-  const r = Math.round((n + Number.EPSILON) * 100) / 100;
-  if(Math.abs(r - Math.round(r)) < 1e-9) return Math.round(r).toString();
-  return r.toFixed(2);
-}
 
-/* ---------- Mechanics: SPS, fever, crit ---------- */
+/* ---------- Mechanics ---------- */
 function calcSPS(){
   let total = 0;
-  for(const k of ['follower','altar','temple']) total += state.buildings[k].count * state.buildings[k].sps;
+  for(const k of ['follower','altar','temple']){
+    total += (state.buildings[k].count || 0) * state.buildings[k].sps;
+  }
   const devLevel = state.upgrades.devotion.level || 0;
   const devMultiplier = Math.pow(2, devLevel);
   total *= devMultiplier;
@@ -248,7 +312,7 @@ function calcSPS(){
   return total;
 }
 
-/* Fever: temple 0.1% per temple now */
+/* Fever: temple 0.1% per temple */
 let feverExpire = null;
 function isFeverActive(){ return feverExpire && Date.now() < feverExpire; }
 function getCurrentFeverMultiplier(){ return isFeverActive() ? (state._feverMultiplier || 1.5) : 1; }
@@ -260,7 +324,6 @@ function triggerFever(level){
   setTimeout(()=> { state._feverMultiplier = 1; feverExpire = null; updateUI(); }, duration + 50);
 }
 
-/* sample multi-level */
 function sampleMultiLevel(Ppercent){
   if(Ppercent <= 0) return { level: -1, n:0, r:0 };
   const n = Math.floor(Ppercent / 100);
@@ -285,13 +348,21 @@ function critLevelDisplay(level){
   return { color, scale, text, level };
 }
 
-/* ---------- Store & Buy Max ---------- */
+/* ------------------------
+   Store & buy functions
+   ------------------------ */
 const ITEMS = [
-  { key:'follower', label:'신도', desc:'+0.5 SPS + 크리티컬 확률 +1%', costFn: s=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'altar', label:'제단', desc:'+2 SPS + 크리티컬 보상 +2%/제단', costFn: s=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'temple', label:'사원', desc:'+12 SPS + 피버 확률 +0.1%/사원', costFn: s=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'devotion', label:'헌신 강화', desc:'매 레벨 클릭 보상 ×2, 전체 SPS ×2^level', costFn: u=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)) }
+  { key:'follower', label:'신도', descLine1:'+0.5 SPS', descLine2:'크리티컬 확률 +1%', costFn: s=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'altar', label:'제단', descLine1:'+2 SPS', descLine2:'크리티컬 보상 +2%', costFn: s=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'temple', label:'사원', descLine1:'+12 SPS', descLine2:'피버 확률 +0.1%', costFn: s=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
+  { key:'devotion', label:'헌신 강화', descLine1:'수입 ×2', descLine2:'(클릭 보상 ×2, SPS ×2^level)', costFn: u=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)) }
 ];
+
+function formatCostForDisplay(costNum){
+  // if >=1,000,000 use bn_fromNumber + bn_toStringUnit
+  if(costNum >= 1_000_000) return bn_toStringUnit(bn_fromNumber(costNum));
+  return Math.floor(costNum).toLocaleString() + ' SP';
+}
 
 function renderStore(){
   storeEl.innerHTML = '';
@@ -302,23 +373,23 @@ function renderStore(){
 
     if(item.key === 'devotion'){
       const u = state.upgrades.devotion;
-      left.innerHTML = `<div style="font-weight:800">${item.label} (Lv ${u.level})</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
+      left.innerHTML = `<div style="font-weight:800">${item.label} (Lv ${u.level})</div><div style="font-size:0.85rem;color:var(--muted)">${item.descLine1}<br>${item.descLine2}</div>`;
       const cost = item.costFn(u);
-      const btnBuy = document.createElement('button'); btnBuy.textContent = (cost>=1000? Math.floor(cost).toLocaleString(): cost.toString()) + ' SP'; btnBuy.className='buy';
-      btnBuy.disabled = state.sp < cost; btnBuy.addEventListener('pointerdown', e=>{ e.preventDefault(); buyItemDevotion(); });
+      const btnBuy = document.createElement('button'); btnBuy.textContent = formatCostForDisplay(cost); btnBuy.className='buy';
+      btnBuy.disabled = !bn_gte_number(state.sp, cost); btnBuy.addEventListener('pointerdown', e=>{ e.preventDefault(); buyItemDevotion(); });
       right.appendChild(btnBuy);
       const btnMax = document.createElement('button'); btnMax.textContent='BUY MAX'; btnMax.className='buy-max';
-      btnMax.disabled = state.sp < cost; btnMax.addEventListener('pointerdown', e=>{ e.preventDefault(); buyMaxDevotion(); });
+      btnMax.disabled = !bn_gte_number(state.sp, cost); btnMax.addEventListener('pointerdown', e=>{ e.preventDefault(); buyMaxDevotion(); });
       right.appendChild(btnMax);
     } else {
       const b = state.buildings[item.key];
-      left.innerHTML = `<div style="font-weight:800">${item.label} x${b.count}</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
+      left.innerHTML = `<div style="font-weight:800">${item.label} x${b.count}</div><div style="font-size:0.85rem;color:var(--muted)">${item.descLine1}<br>${item.descLine2}</div>`;
       const cost = item.costFn(b);
-      const btnBuy = document.createElement('button'); btnBuy.textContent = (cost>=1000? Math.floor(cost).toLocaleString(): cost.toString()) + ' SP'; btnBuy.className='buy';
-      btnBuy.disabled = state.sp < cost; btnBuy.addEventListener('pointerdown', e=>{ e.preventDefault(); buyBuilding(item); });
+      const btnBuy = document.createElement('button'); btnBuy.textContent = formatCostForDisplay(cost); btnBuy.className='buy';
+      btnBuy.disabled = !bn_gte_number(state.sp, cost); btnBuy.addEventListener('pointerdown', e=>{ e.preventDefault(); buyBuilding(item); });
       right.appendChild(btnBuy);
       const btnMax = document.createElement('button'); btnMax.textContent='BUY MAX'; btnMax.className='buy-max';
-      btnMax.disabled = state.sp < cost; btnMax.addEventListener('pointerdown', e=>{ e.preventDefault(); buyMaxBuilding(item); });
+      btnMax.disabled = !bn_gte_number(state.sp, cost); btnMax.addEventListener('pointerdown', e=>{ e.preventDefault(); buyMaxBuilding(item); });
       right.appendChild(btnMax);
     }
 
@@ -329,40 +400,56 @@ function renderStore(){
 function buyBuilding(item){
   const b = state.buildings[item.key];
   const cost = Math.ceil(b.baseCost * Math.pow(1.15, b.count));
-  if(state.sp < cost) return;
-  state.sp = clampToMax(state.sp - cost); b.count += 1; saveState(); updateUI();
+  if(!bn_gte_number(state.sp, cost)) return;
+  state.sp = bn_subNumber(state.sp, cost);
+  b.count += 1; saveState(); updateUI();
 }
 
 function buyMaxBuilding(item){
   const b = state.buildings[item.key];
-  const r = 1.15; const base = b.baseCost; const c = b.count; const available = state.sp;
+  const r = 1.15, base = b.baseCost, c = b.count;
   const denom = base * Math.pow(r, c); if(denom <= 0) return;
-  const inside = 1 + (available * (r - 1)) / denom; if(inside <= 1) return;
+  const availableNum = bn_toNumberIfSafe(state.sp);
+  if(availableNum === null){
+    // if SP is huge (beyond safe), do greedy loop but limited iterations
+    let iterations = 0;
+    while(true){
+      const cost = Math.ceil(base * Math.pow(r, b.count));
+      if(!bn_gte_number(state.sp, cost)) break;
+      buyBuilding(item);
+      iterations++;
+      if(iterations > 2000) break;
+    }
+    return;
+  }
+  const inside = 1 + (availableNum * (r - 1)) / denom; if(inside <= 1) return;
   const n = Math.floor(Math.log(inside) / Math.log(r)); if(n <= 0) return;
   const costSum = base * Math.pow(r, c) * (Math.pow(r, n) - 1) / (r - 1);
-  const actualCost = Math.min(costSum, available);
-  state.sp = clampToMax(state.sp - actualCost); b.count += n; saveState(); updateUI();
+  const actualCost = Math.min(costSum, availableNum);
+  state.sp = bn_subNumber(state.sp, actualCost);
+  b.count += n; saveState(); updateUI();
 }
 
 function buyItemDevotion(){
   const u = state.upgrades.devotion; const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
-  if(state.sp < cost) return;
-  state.sp = clampToMax(state.sp - cost); u.level += 1; state.manualPower *= 2; saveState(); updateUI();
+  if(!bn_gte_number(state.sp, cost)) return;
+  state.sp = bn_subNumber(state.sp, cost);
+  u.level += 1; state.manualPower *= 2; saveState(); updateUI();
 }
 function buyMaxDevotion(){
   const u = state.upgrades.devotion; let count=0;
   while(true){
-    const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level)); if(state.sp < cost) break;
-    state.sp = clampToMax(state.sp - cost); u.level += 1; state.manualPower *= 2; count++; if(count>200) break;
+    const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
+    if(!bn_gte_number(state.sp, cost)) break;
+    state.sp = bn_subNumber(state.sp, cost); u.level += 1; state.manualPower *= 2; count++; if(count>200) break;
   }
   if(count>0){ saveState(); updateUI(); }
 }
 
 /* ---------- Worship handler ---------- */
-/* pointerdown for immediacy */
 worshipBtn.addEventListener('pointerdown', (ev)=>{
   const templeCount = state.buildings.temple.count || 0;
-  const feverPercent = templeCount * 0.1; // changed to 0.1% per temple
+  const feverPercent = templeCount * 0.1; // 0.1% per temple
   const feverSample = sampleMultiLevel(feverPercent);
   if(feverSample.level >= 0) triggerFever(feverSample.level);
 
@@ -377,16 +464,16 @@ worshipBtn.addEventListener('pointerdown', (ev)=>{
   const feverClickMultiplier = feverActiveNow ? state._feverMultiplier || 1.5 : 1;
 
   const baseGain = state.manualPower;
-  const gain = clampToMax(baseGain * critMult * feverClickMultiplier);
+  const gain = baseGain * critMult * feverClickMultiplier;
 
-  state.sp = clampToMax(state.sp + gain); state.totalClicks += 1; saveState(); updateUI();
+  state.sp = bn_addNumber(state.sp, gain);
+  state.totalClicks += 1; saveState(); updateUI();
 
   const x = ev.clientX + window.scrollX; const y = ev.clientY + window.scrollY - 5;
   if(isCrit){ const critInfo = critLevelDisplay(critLevel); showFloatingAt(x, y, `🛐 +${formatFloatingAmount(gain)}`, critInfo); }
   else showFloatingAt(x, y, `🛐 +${formatFloatingAmount(gain)}`, null);
 });
 
-/* floating */
 function showFloatingAt(x, y, text, critInfo){
   const el = document.createElement('div'); el.className='float-elem'; el.style.left = x + 'px'; el.style.top = y + 'px';
   if(critInfo){
@@ -412,32 +499,59 @@ document.addEventListener('visibilitychange', ()=>{
 function loadState(){
   try{
     const raw = localStorage.getItem(KEY);
-    if(!raw){ const s=jsonClone(DEFAULT); s.startTimestamp = document.visibilityState==='visible'?Date.now():null; return s; }
+    if(!raw){ const s = jsonClone(DEFAULT); s.startTimestamp = document.visibilityState==='visible'?Date.now():null; return s; }
     const parsed = JSON.parse(raw);
-    if(!parsed.startTimestamp) parsed.startTimestamp = null;
-    if(!parsed.playAcc) parsed.playAcc = 0;
-    parsed._feverMultiplier = parsed._feverMultiplier || 1;
-    return Object.assign(jsonClone(DEFAULT), parsed);
+    // sp might be saved as {m,e} or old number
+    const out = Object.assign(jsonClone(DEFAULT), parsed);
+    if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined){
+      out.sp = bn_normalize(parsed.sp);
+    } else {
+      out.sp = bn_fromNumber(Number(parsed.sp || 0));
+    }
+    out._feverMultiplier = parsed._feverMultiplier || 1;
+    if(!out.startTimestamp) out.startTimestamp = null;
+    if(!out.playAcc) out.playAcc = 0;
+    return out;
   }catch(e){ console.error('load failed', e); const s=jsonClone(DEFAULT); s.startTimestamp=document.visibilityState==='visible'?Date.now():null; return s; }
 }
-function saveState(){ state.lastSaved = Date.now(); state.sp = clampToMax(state.sp); localStorage.setItem(KEY, JSON.stringify(state)); localStorage.setItem('zk_sp_v1', String(Math.floor(state.sp))); }
+function saveState(){
+  state.lastSaved = Date.now();
+  // clamp sp mantissa/exponent normalized already
+  const copy = jsonClone(state);
+  // convert sp to plain object
+  copy.sp = bn_normalize(state.sp);
+  localStorage.setItem(KEY, JSON.stringify(copy));
+  // sync top badge as human readable
+  localStorage.setItem('zk_sp_v1', bn_toStringUnit(state.sp));
+}
 
+/* tick */
 let tickTimer = null;
-function startTick(){ if(tickTimer) clearInterval(tickTimer); tickTimer = setInterval(()=>{ const spsBase = calcSPS(); const feverMult = getCurrentFeverMultiplier(); const sps = spsBase * feverMult; if(sps>0) state.sp = clampToMax(state.sp + sps/10); updateUI(); }, 100); }
+function startTick(){
+  if(tickTimer) clearInterval(tickTimer);
+  tickTimer = setInterval(()=>{
+    const spsBase = calcSPS();
+    const feverMult = getCurrentFeverMultiplier();
+    const sps = spsBase * feverMult;
+    if(sps > 0) state.sp = bn_addNumber(state.sp, sps / 10);
+    updateUI();
+  }, 100);
+}
 setInterval(()=> saveState(), 5000);
 
+/* Update UI */
 function updateUI(){
   if(isFeverActive()){ worshipBtn.style.background = 'linear-gradient(90deg,#ff3b30,#ff6b6b)'; worshipBtn.style.color = '#fff'; } else {
     worshipBtn.style.background = 'linear-gradient(90deg,var(--accent),var(--accent-2))'; worshipBtn.style.color = '#071018';
   }
-  // top badge uses unit formatting
-  spBadge.textContent = formatTotalSPValue(state.sp);
-  totalSP.textContent = formatTotalSPValue(state.sp);
+  spBadge.textContent = bn_toStringUnit(state.sp);
+  totalSP.textContent = bn_toStringUnit(state.sp);
   totalClicks.textContent = state.totalClicks;
-  // display manual and sps with compact formatting (drop decimals if 4+ digits)
-  manualPowerEl.textContent = formatCompactNumber(state.manualPower);
-  spsEl.textContent = formatCompactNumber(Math.round(calcSPS()*100)/100);
-  // crit & fever percentages for display
+  // manualPower & sps: if >=1,000,000 use bn formatting
+  if(state.manualPower >= 1_000_000) manualPowerEl.textContent = bn_toStringUnit(bn_fromNumber(state.manualPower)); else manualPowerEl.textContent = formatFloatingAmount(state.manualPower);
+  const spsVal = Math.round(calcSPS()*100)/100;
+  if(spsVal >= 1_000_000) spsEl.textContent = bn_toStringUnit(bn_fromNumber(spsVal)); else spsEl.textContent = formatFloatingAmount(spsVal);
+  // crit & fever display
   const critPercent = 2 + (state.buildings.follower.count || 0) * 1;
   critPctEl.textContent = (Math.round((critPercent + Number.EPSILON) * 10)/10) + '%';
   const feverPercent = (state.buildings.temple.count || 0) * 0.1;
@@ -445,13 +559,24 @@ function updateUI(){
   renderStore(); updatePlayTimeDisplay();
 }
 
-/* nav theme & storage sync */
+/* theme & nav & storage sync */
 (function(){ const el=document.getElementById('link-worship'); if(el) el.classList.add('active'); })();
 (function(){ const toggle=document.getElementById('themeToggle'); const apply=(t)=>{ if(t==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); toggle.checked=(t==='dark'); }; const saved=localStorage.getItem('theme'); const initial=saved||(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); apply(initial); toggle.addEventListener('change', ()=>{ const next=toggle.checked?'dark':'light'; localStorage.setItem('theme', next); apply(next); }); })();
-window.addEventListener('storage', (e)=>{ if(e.key===KEY || e.key==='zk_sp_v1'){ try{ const parsed=JSON.parse(localStorage.getItem(KEY)||'{}'); if(parsed && typeof parsed.sp!=='undefined'){ state = Object.assign(jsonClone(DEFAULT), parsed); updateUI(); } }catch(err){} } });
+window.addEventListener('storage', (e)=>{ if(e.key===KEY || e.key==='zk_sp_v1'){ try{ const parsed=JSON.parse(localStorage.getItem(KEY)||'{}'); if(parsed && parsed.sp){ state = Object.assign(jsonClone(DEFAULT), parsed); if(parsed.sp.m !== undefined) state.sp = bn_normalize(parsed.sp); else state.sp = bn_fromNumber(Number(parsed.sp||0)); updateUI(); } }catch(err){} } });
 
 /* init */
-(function init(){ if(!state.startTimestamp && document.visibilityState==='visible') state.startTimestamp=Date.now(); state.sp=Number(state.sp)||0; state.totalClicks=Number(state.totalClicks)||0; state.manualPower=Number(state.manualPower)||DEFAULT.manualPower; if(!state.playAcc) state.playAcc=0; if(!state._feverMultiplier) state._feverMultiplier=1; calcSPS(); updateUI(); startTick(); setInterval(updatePlayTimeDisplay, 1000); })();
+(function init(){
+  if(!state.startTimestamp && document.visibilityState === 'visible') state.startTimestamp = Date.now();
+  if(!state.sp) state.sp = bn_fromNumber(0);
+  state.totalClicks = Number(state.totalClicks) || 0;
+  state.manualPower = Number(state.manualPower) || DEFAULT.manualPower;
+  if(!state.playAcc) state.playAcc = 0;
+  if(!state._feverMultiplier) state._feverMultiplier = 1;
+  calcSPS();
+  updateUI();
+  startTick();
+  setInterval(updatePlayTimeDisplay, 1000);
+})();
 </script>
 </body>
 </html>
