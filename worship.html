@@ -25,11 +25,10 @@
   .header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.8rem 1.2rem; }
   .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
   .brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
-  /* 제목을 메인과 동일 크기로(일관성) */
-  .brand .title{ font-size:1.5rem; font-weight:900; color:var(--text-strong); }
+  .brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); } /* 메인과 동일 */
 
   .right-controls{ display:flex; align-items:center; gap:0.6rem; }
-  .sp-badge{ padding:0.35rem 0.6rem; border-radius:0.6rem; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:76px; text-align:center; }
+  .sp-badge{ padding:0.35rem 0.6rem; border-radius:0.6rem; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:90px; text-align:center; }
   .myhome-btn{ padding:0.45rem 0.9rem; border-radius:0.6rem; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; }
 
   /* nav */
@@ -51,11 +50,10 @@
   main{ max-width:1100px; margin:1.5rem auto; padding:1rem; display:flex; gap:1rem; align-items:flex-start; }
   .left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1rem; align-items:center; }
   .card-wrap{ width:360px; height:420px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; }
-  /* 버튼 크기 1.3배 적용 (조정된 값) */
+  /* 버튼 크기 (1.3배 조정 값 유지) */
   #worshipBtn{ width:88%; height:78%; border-radius:12px; font-size:1.95rem; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 14px 34px rgba(0,0,0,0.14); display:flex; align-items:center; justify-content:center; text-align:center; padding:0.4rem; line-height:1.05; }
-
-  /* 줄넘김 텍스트 스타일 내부에서 제어 */
   .worship-line{ display:block; line-height:1; }
+  .worship-line.small{ font-size:0.78em; opacity:0.95; }
 
   .right{ width:360px; display:flex; flex-direction:column; gap:0.9rem; }
   .meta{ background:var(--card); border-radius:10px; padding:0.85rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
@@ -68,11 +66,10 @@
 
   .controls-row{ display:flex; gap:0.6rem; margin-top:0.6rem; justify-content:flex-end; }
 
-  /* 성장 아이디어 영역 */
   .ideas{ margin-top:0.8rem; background:linear-gradient(180deg,rgba(0,0,0,0.02),transparent); border-radius:8px; padding:0.6rem; font-size:0.9rem; color:var(--muted); }
   .ideas h4{ margin:0 0 0.4rem 0; font-size:0.95rem; color:var(--text-strong); }
 
-  /* floating effect */
+  /* floating effect (5px 위에서 시작) */
   .float-elem{
     position:absolute;
     pointer-events:none;
@@ -98,7 +95,7 @@
     100%{ transform:translate(-50%, -140% ) scale(1.05); opacity:0; }
   }
 
-  /* 이모지 burst (작게 중앙 표시) */
+  /* burst emoji for building buy (kept) */
   .burst{
     position:fixed;
     left:50%;
@@ -159,14 +156,15 @@
   <div class="left">
     <div class="card-wrap">
       <button id="worshipBtn" title="클릭하여 SP 얻기">
-        <span class="worship-line">클릭하여 SP</span>
-        <span class="worship-line">얻기</span>
+        <span class="worship-line small">숭배하기</span>
+        <span class="worship-line">클릭하여 SP 얻기</span>
       </button>
     </div>
 
-    <div style="width:360px;max-width:92%;display:flex;justify-content:space-between;color:var(--muted);font-weight:800">
-      <div>수동 파워: <span id="manualPower">1</span></div>
-      <div>자동 수입: <span id="sps">0</span> SPS</div>
+    <div style="width:360px;max-width:92%;display:flex;flex-direction:column;gap:6px;color:var(--muted);font-weight:800">
+      <div style="display:flex;justify-content:space-between"><div>수동 파워</div><div><span id="manualPower">1</span></div></div>
+      <div style="display:flex;justify-content:space-between"><div>자동 수입</div><div><span id="sps">0</span> SPS</div></div>
+      <div style="display:flex;justify-content:space-between"><div>플레이 시간</div><div><span id="playTime">00:00:00</span></div></div>
     </div>
   </div>
 
@@ -187,7 +185,7 @@
         <ul style="margin:0 0 0.4rem 1rem;padding:0;color:var(--muted)">
           <li>일일/주간 퀘스트 추가: 목표 달성 보상으로 대량 SP</li>
           <li>픽업(확률) 시스템: 일정 확률로 보너스 보상 또는 이벤트 등장</li>
-          <li>건물 별 특수 효과: 예) 제단은 크리티컬(더블 클릭 보상) 확률 상승</li>
+          <li>건물 별 특수 효과: 제단은 크리티컬(보상 2배) 확률 상승</li>
           <li>시간 기반 업적과 보존 요소: 오래 유지할수록 추가 보너스</li>
           <li>시각적 성장(마을 확장): 건물 증가에 따라 배경 변화</li>
         </ul>
@@ -198,7 +196,7 @@
 </main>
 
 <script>
-/* 상태 및 기본값 (history 제거) */
+/* 상태 및 기본값 */
 const KEY = 'zk_tycoon_v1';
 const DEFAULT = {
   sp: 0,
@@ -213,6 +211,7 @@ const DEFAULT = {
   upgrades: {
     devotion: {level:0, baseCost:50, effect:2}
   },
+  startTimestamp: Date.now(),
   lastSaved: 0
 };
 let state = loadState();
@@ -226,8 +225,9 @@ const manualPowerEl = document.getElementById('manualPower');
 const worshipBtn = document.getElementById('worshipBtn');
 const storeEl = document.getElementById('store');
 const resetBtn = document.getElementById('resetBtn');
+const playTimeEl = document.getElementById('playTime');
 
-/* 상점 항목 정의 및 이모지 매핑 */
+/* ITEMS + emoji */
 const ITEMS = [
   { key:'follower', label:'추종자', desc:'+0.5 SPS', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)), emoji:'👤' },
   { key:'altar', label:'제단', desc:'+2 SPS', costFn: (s)=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)), emoji:'🕯️' },
@@ -235,12 +235,14 @@ const ITEMS = [
   { key:'devotion', label:'헌신 강화', desc:'수동 파워 2배', costFn: (u)=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)), emoji:'✨' }
 ];
 
-/* 로드/저장 */
+/* load/save */
 function loadState(){
   try{
     const raw = localStorage.getItem(KEY);
     if(!raw) return jsonClone(DEFAULT);
     const parsed = JSON.parse(raw);
+    // ensure startTimestamp exists
+    if(!parsed.startTimestamp) parsed.startTimestamp = DEFAULT.startTimestamp;
     return Object.assign(jsonClone(DEFAULT), parsed);
   }catch(e){
     console.error('load failed', e);
@@ -250,16 +252,28 @@ function loadState(){
 function saveState(){
   state.lastSaved = Date.now();
   localStorage.setItem(KEY, JSON.stringify(state));
-  // My Home 옆 SP는 소수점 없이 정수로 표시
-  localStorage.setItem('zk_sp_v1', String(Math.floor(state.sp)));
-  updateUI();
+  localStorage.setItem('zk_sp_v1', String(Math.floor(state.sp))); // My Home 옆 정수 표시
+  // UI 갱신은 호출 지점에서 처리 (we call updateUI after mutations)
 }
 
-/* 유틸 */
+/* util formatting */
 function jsonClone(o){ return JSON.parse(JSON.stringify(o)); }
-function formatNum(n){ if(n>=1000000) return Math.floor(n).toLocaleString(); return Math.round((n + Number.EPSILON) * 100)/100; }
+function formatNumberWithComma(n){
+  const intPart = Math.floor(n);
+  return intPart.toLocaleString();
+}
+function formatTotalSP(n){
+  // if fractional part > 0, show two decimals with comma in integer part
+  const intPart = Math.floor(n);
+  const frac = Math.round((n - intPart) * 100);
+  if(frac > 0) {
+    return intPart.toLocaleString() + '.' + String(frac).padStart(2,'0') + ' SP';
+  } else {
+    return intPart.toLocaleString() + ' SP';
+  }
+}
 
-/* 계산 및 UI */
+/* calc & UI */
 function calcSPS(){
   let total = 0;
   for(const k of ['follower','altar','temple']){
@@ -271,15 +285,17 @@ function calcSPS(){
 }
 
 function updateUI(){
-  spBadge.textContent = Math.floor(state.sp) + ' SP';      // 정수 표시
-  totalSP.textContent = formatNum(state.sp);
+  // show integer SP with comma in right badge
+  spBadge.textContent = Math.floor(state.sp).toLocaleString() + ' SP';
+  totalSP.textContent = formatTotalSP(state.sp);
   totalClicks.textContent = state.totalClicks;
   spsEl.textContent = (Math.round(calcSPS()*100)/100).toFixed(2);
   manualPowerEl.textContent = state.manualPower;
   renderStore();
+  updatePlayTime();
 }
 
-/* 상점 렌더: 최신 비용으로 즉시 버튼 상태 갱신 */
+/* store rendering */
 function renderStore(){
   storeEl.innerHTML = '';
   ITEMS.forEach(item=>{
@@ -293,20 +309,20 @@ function renderStore(){
       left.innerHTML = `<div style="font-weight:800">${item.label} (Lv ${u.level})</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
       const cost = item.costFn(u);
       const btn = document.createElement('button');
-      btn.textContent = formatNum(cost) + ' SP';
+      btn.textContent = cost.toLocaleString() + ' SP';
       btn.className = 'buy';
       btn.disabled = state.sp < cost;
-      btn.addEventListener('click', ()=> { buyItemDevotion(item, cost); });
+      btn.addEventListener('click', ()=> { buyItemDevotion(item); });
       right.appendChild(btn);
     } else {
       const b = state.buildings[item.key];
       left.innerHTML = `<div style="font-weight:800">${item.label} x${b.count}</div><div style="font-size:0.85rem;color:var(--muted)">${item.desc}</div>`;
       const cost = item.costFn(b);
       const btn = document.createElement('button');
-      btn.textContent = formatNum(cost) + ' SP';
+      btn.textContent = cost.toLocaleString() + ' SP';
       btn.className = 'buy';
       btn.disabled = state.sp < cost;
-      btn.addEventListener('click', ()=> { buyBuilding(item, cost); });
+      btn.addEventListener('click', ()=> { buyBuilding(item); });
       right.appendChild(btn);
     }
 
@@ -316,44 +332,58 @@ function renderStore(){
   });
 }
 
-/* 구매: 건물 (cost 재계산 및 즉시 반영) */
-function buyBuilding(item, costAtClick){
+/* buy building: compute cost, deduct, increment, immediate UI+save, show emoji */
+function buyBuilding(item){
   const key = item.key;
   const b = state.buildings[key];
   const currentCost = Math.ceil(b.baseCost * Math.pow(1.15, b.count));
   if(state.sp < currentCost) return;
   state.sp -= currentCost;
   b.count += 1;
-  // 즉시 UI 갱신 + 저장
-  showEmojiEffect(item.emoji);
+  // immediate update
+  updateUI();
   saveState();
+  showEmojiEffect(item.emoji);
 }
 
-/* 구매: 헌신 업그레이드 */
-function buyItemDevotion(item, costAtClick){
+/* buy devotion upgrade: no effect animation per request */
+function buyItemDevotion(item){
   const u = state.upgrades.devotion;
   const currentCost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
   if(state.sp < currentCost) return;
   state.sp -= currentCost;
   u.level += 1;
   state.manualPower *= u.effect;
-  showEmojiEffect(item.emoji);
+  // immediate update & save; NO visual emoji
+  updateUI();
   saveState();
 }
 
-/* 숭배 클릭: 수동 보상 + 플로팅 이펙트, 즉시 저장 및 UI 갱신 */
+/* worship click: apply manualPower, apply critical if altar increases chance, immediate update & save, floating text */
 worshipBtn.addEventListener('click', (ev)=>{
-  const gain = state.manualPower;
+  // calculate crit chance: base 2% + 1% per altar
+  const baseCrit = 0.02;
+  const altarCount = state.buildings.altar.count || 0;
+  const critChance = baseCrit + altarCount * 0.01;
+  let gain = state.manualPower;
+  const isCrit = Math.random() < critChance;
+  if(isCrit) gain = gain * 2;
   state.sp += gain;
   state.totalClicks += 1;
+  // immediate UI update before save to avoid lag
+  updateUI();
   saveState();
-  // 플로팅 텍스트 (마우스 위치)
+  // floating slightly above pointer (5px)
   const x = ev.clientX + window.scrollX;
-  const y = ev.clientY + window.scrollY;
-  showFloatingAt(x, y, `🛐 +${gain} SP`);
+  const y = ev.clientY + window.scrollY - 5;
+  showFloatingAt(x, y, (isCrit? '🛐✨ +' : '🛐 +') + formatFloatingAmount(gain));
 });
 
-/* floating text 생성 */
+/* floating helper */
+function formatFloatingAmount(n){
+  // if integer show integer, else 2 decimals
+  return (Math.round((n + Number.EPSILON) * 100)/100);
+}
 function showFloatingAt(x, y, text){
   const el = document.createElement('div');
   el.className = 'float-elem';
@@ -361,11 +391,10 @@ function showFloatingAt(x, y, text){
   el.style.top = y + 'px';
   el.innerText = text;
   document.body.appendChild(el);
-  // 제거: 애니메이션 길이와 동일
   setTimeout(()=> { el.remove(); }, 1000);
 }
 
-/* 이모지 burst 중앙 이펙트 */
+/* emoji burst for building buys */
 function showEmojiEffect(emoji){
   const el = document.createElement('div');
   el.className = 'burst';
@@ -374,29 +403,21 @@ function showEmojiEffect(emoji){
   setTimeout(()=> el.remove(), 800);
 }
 
-/* 자동 수입 (tick) — 100ms 간격, 즉시 UI 반영 */
-let tickTimer = null;
-function startTick(){
-  if(tickTimer) clearInterval(tickTimer);
-  tickTimer = setInterval(()=>{
-    const sps = calcSPS();
-    if(sps > 0){
-      state.sp += sps / 10; // 0.1s 단위 분배
-    }
-    // UI는 매 tick에서 갱신 (버튼 활성/비활성 즉시 반영)
-    updateUI();
-  }, 100);
+/* play time */
+function updatePlayTime(){
+  const start = state.startTimestamp || (state.startTimestamp = Date.now());
+  const elapsed = Math.max(0, Date.now() - start);
+  playTimeEl.textContent = formatDurationMs(elapsed);
+}
+function formatDurationMs(ms){
+  const s = Math.floor(ms/1000);
+  const hh = String(Math.floor(s/3600)).padStart(2,'0');
+  const mm = String(Math.floor((s%3600)/60)).padStart(2,'0');
+  const ss = String(s%60).padStart(2,'0');
+  return `${hh}:${mm}:${ss}`;
 }
 
-/* 초기화 버튼 */
-resetBtn.addEventListener('click', ()=>{
-  if(!confirm('게임을 초기화합니까? 저장된 모든 진행이 삭제됩니다.')) return;
-  state = jsonClone(DEFAULT);
-  saveState();
-  updateUI();
-});
-
-/* storage 이벤트: 다른 탭에서 키 변경 시 동기화 */
+/* storage sync */
 window.addEventListener('storage', (e)=>{
   if(e.key === KEY || e.key === 'zk_sp_v1'){
     try{
@@ -409,10 +430,10 @@ window.addEventListener('storage', (e)=>{
   }
 });
 
-/* NAV active */
+/* nav active */
 (function(){ const el = document.getElementById('link-worship'); if(el) el.classList.add('active'); })();
 
-/* 테마 토글 (동일 코드) */
+/* theme toggle */
 (function(){
   const toggle = document.getElementById('themeToggle');
   const apply = (t) => {
@@ -429,16 +450,38 @@ window.addEventListener('storage', (e)=>{
   });
 })();
 
-/* 시작: 유효성 보정, UI 업데이트, tick, autosave */
+/* reset */
+resetBtn.addEventListener('click', ()=>{
+  if(!confirm('게임을 초기화합니까? 저장된 모든 진행이 삭제됩니다.')) return;
+  state = jsonClone(DEFAULT);
+  state.startTimestamp = Date.now();
+  saveState();
+  updateUI();
+});
+
+/* tick and autosave */
+let tickTimer = null;
+function startTick(){
+  if(tickTimer) clearInterval(tickTimer);
+  tickTimer = setInterval(()=>{
+    const sps = calcSPS();
+    if(sps > 0) state.sp += sps / 10; // 0.1s 분배
+    updateUI();
+  }, 100);
+}
+setInterval(()=> saveState(), 5000);
+
+/* init */
 (function init(){
   state.sp = Number(state.sp) || 0;
   state.totalClicks = Number(state.totalClicks) || 0;
   state.manualPower = Number(state.manualPower) || DEFAULT.manualPower;
+  if(!state.startTimestamp) state.startTimestamp = Date.now();
   calcSPS();
   updateUI();
   startTick();
-  // autosave frequently but not UI exposed
-  setInterval(()=> saveState(), 5000);
+  // play time timer to update every second display
+  setInterval(updatePlayTime, 1000);
 })();
 </script>
 </body>
