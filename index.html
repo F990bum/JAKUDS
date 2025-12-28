@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>자쿠드 숭배 시뮬레이터 — 메인</title>
+<title>자쿠드 숭배 시뮬레이터</title>
 
 <link rel="icon" href="favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@ html.dark{
 *{box-sizing:border-box}
 body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 
-/* Header full-width top bar: brand flush left, controls flush right */
+/* Header full-width top bar: brand left, controls right */
 .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
 .header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; }
 .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
@@ -111,15 +111,20 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 </main>
 
 <script>
-/* 사용자 정의 단위 규칙 적용
-   순서: 1,000,000 -> 1M -> 1B -> 1T -> 1Qu -> 1Qi -> Sx -> Sp -> Oc -> No -> Dc
-   그 다음 단계(1000 Dc) 가 KU. KU는 SP 접미사 없음. KU는 한글 단위(만/억)로 표기.
-   KU 최대치: 550,000,000 KU (이상일 경우에도 5억 5000만 KU로 표기).
+/*
+  최종 단위 포맷 구현.
+  규칙 요약:
+  - 1,000,000 SP 이상부터 단위 적용: M, B, T, Qu, Qi, Sx, Sp, Oc, No, Dc
+  - 1,000 Dc -> 1 KU. KU는 "12,345 KU" 같은 수치(단위화: 만/억 표기). KU는 SP 접미사 없음.
+  - KU 상한 550,000,000 KU. 상한 초과시에도 "5억 5000만 KU"로 표기(별도 접미사 없음).
+  - 1,000,000 미만은 항상 "nn SP" 형식으로 표시.
 */
 
-const UNIT_LIST = ['M','B','T','Qu','Qi','Sx','Sp','Oc','No','Dc']; // indices 0..9 correspond to e = 2..11
-const KU_MAX = 550_000_000; // KU cap
+const UNIT_LIST = ['M','B','T','Qu','Qi','Sx','Sp','Oc','No','Dc']; // e=2..11
+const KU_MAX = 550_000_000; // KU cap (display only)
+const E_KU = 2 + UNIT_LIST.length; // exponent index for KU (e_KU)
 
+/* BN helpers (used to read stored BN sp) */
 function bn_fromNumber(n){
   let m = Number(n), e = 0;
   if(!isFinite(m) || m === 0) return {m:0,e:0};
@@ -128,7 +133,7 @@ function bn_fromNumber(n){
   return {m,e};
 }
 function bn_normalize(b){
-  if(!b || !isFinite(b.m)) return {m:0,e:0};
+  if(!b || typeof b.m !== 'number' || typeof b.e !== 'number') return {m:0,e:0};
   let m = b.m, e = b.e;
   if(m === 0) return {m:0,e:0};
   while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
@@ -143,78 +148,108 @@ function bn_toNumberIfSafe(b){
   }catch(e){ return null; }
 }
 
-/* KU formatting: Korean unit grouping (억, 만)
-   Examples:
-   - 12,345 KU -> "1만 2345 KU"
-   - 12,345,678 KU -> "1234만 5678 KU"
-   - 123,456,789 KU -> "1억 2345만 KU"
+/* KU formatting in Korean grouping (억, 만)
+   Accepts integer KU count (number).
+   Returns strings like:
+     12345 -> "1만 2345 KU"
+     12345678 -> "1234만 5678 KU"
+     123456789 -> "1억 2345만 KU"
 */
 function formatKUInteger(n){
-  // clamp to KU_MAX for display
+  if(n <= 0) return '0 KU';
   if(n > KU_MAX) n = KU_MAX;
   if(n < 10000) return `${n.toLocaleString()} KU`;
-  const man = Math.floor(n / 10000); // 만
+  const man = Math.floor(n / 10000);
   const rest = n % 10000;
   if(man < 10000){
     if(rest === 0) return `${man.toLocaleString()}만 KU`;
     return `${man.toLocaleString()}만 ${rest.toString()} KU`;
   }
-  const uk = Math.floor(man / 10000); // 억
+  const uk = Math.floor(man / 10000);
   const manRem = man % 10000;
   if(manRem === 0) return `${uk.toLocaleString()}억 KU`;
   return `${uk.toLocaleString()}억 ${manRem.toLocaleString()}만 KU`;
 }
 
-/* main formatting function */
-function bn_toDisplayString(b){
-  b = bn_normalize(b);
-  if(!b || b.m === 0) return '0 SP';
-  const e = b.e;
-  const unitIndex = e - 2; // 0 -> M
-  if(unitIndex < 0){
-    // below 1M: show integer with commas + " SP"
-    const num = b.m * Math.pow(1000, e);
-    return `${Math.floor(num).toLocaleString()} SP`;
+/* main display formatter.
+   Accepts either:
+     - number (plain SP count)
+     - BN-like object {m,e}
+   Returns final display string (with SP suffix except KU).
+*/
+function formatSPDisplay(value){
+  // If BN-like
+  if(value && typeof value === 'object' && value.m !== undefined && value.e !== undefined){
+    const b = bn_normalize(value);
+    // try to convert to safe number
+    const maybe = bn_toNumberIfSafe(b);
+    if(maybe !== null) return formatSPDisplay(maybe); // delegate to number path
+    // too big => compute KU count if exponent >= E_KU
+    if(b.e < E_KU){
+      // large but still below KU, fallback to Dc-level unit
+      const idx = UNIT_LIST.length - 1; // Dc index
+      const displayVal = b.m * Math.pow(1000, b.e - (idx + 2));
+      const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
+      return `${s} Dc SP`;
+    }
+    // compute KU count approx: KU = floor(b.m * 1000^(e - E_KU))
+    const expDiff = b.e - E_KU;
+    // if expDiff too large, clamp to KU_MAX
+    if(expDiff > 6){
+      return formatKUInteger(KU_MAX);
+    }
+    const kuCount = Math.floor(b.m * Math.pow(1000, expDiff));
+    return formatKUInteger(kuCount);
   }
-  if(unitIndex <= UNIT_LIST.length - 1){
-    // show with unit label
-    const unit = UNIT_LIST[unitIndex];
-    const displayVal = b.m * Math.pow(1000, e - (unitIndex + 2));
-    const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
-    return `${s} ${unit} SP`;
+
+  // Number path
+  const n = Number(value || 0);
+  if(!isFinite(n) || n === 0) return '0 SP';
+
+  // Below 1,000,000 -> always show integer with SP suffix
+  if(n < 1_000_000){
+    return `${Math.floor(n).toLocaleString()} SP`;
   }
-  // beyond Dc -> KU handling
-  const e_KU = 2 + UNIT_LIST.length; // exponent for KU (1 KU == 1000^e_KU)
-  const maybe = bn_toNumberIfSafe(b);
-  let KU_count;
-  if(maybe !== null){
-    KU_count = Math.floor(maybe / Math.pow(1000, e_KU));
-  } else {
-    // too big to represent precisely: clamp to KU_MAX
-    KU_count = KU_MAX;
+
+  // Determine unit index (M=1e6 -> index 0)
+  // for unit index i => corresponding exponent e = i + 2 (1000^(i+2))
+  // display value = n / 1000^(unitExp)
+  let e = 2; // exponent for M
+  for(let i = 0; i < UNIT_LIST.length; i++, e++){
+    const unitExp = Math.pow(1000, e); // 1000^(i+2)
+    if(n < unitExp * 1000 || i === UNIT_LIST.length - 1){
+      // use this unit
+      const displayVal = n / unitExp;
+      const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
+      // if we're at Dc (last in list) and n >= 1000 * Dc => KU
+      if(i === UNIT_LIST.length - 1 && n >= unitExp * 1000){
+        // compute KU_count
+        const kuCount = Math.floor(n / (unitExp * 1000));
+        return formatKUInteger(kuCount);
+      }
+      return `${s} ${UNIT_LIST[i]} SP`;
+    }
   }
-  if(KU_count <= 0) return `0 KU`;
-  return formatKUInteger(KU_count);
+
+  // fallback (shouldn't reach)
+  return `${Math.floor(n).toLocaleString()} SP`;
 }
 
-/* Load SP from storage and apply to header badge */
+/* Read stored state and produce display string */
 const KEY = 'zk_tycoon_v_final_v2';
-function loadTopSPDisplay(){
+function readStoredSPDisplay(){
   try{
     const raw = localStorage.getItem(KEY);
     if(!raw){
       const alt = localStorage.getItem('zk_sp_v1');
-      if(alt) return alt.endsWith('SP') ? alt : `${alt}`;
-      return '0 SP';
+      return alt ? alt : '0 SP';
     }
     const parsed = JSON.parse(raw);
-    let spBN = {m:0,e:0};
     if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined){
-      spBN = bn_normalize(parsed.sp);
+      return formatSPDisplay(parsed.sp);
     } else {
-      spBN = bn_fromNumber(Number(parsed.sp || 0));
+      return formatSPDisplay(Number(parsed.sp || 0));
     }
-    return bn_toDisplayString(spBN);
   }catch(e){
     const alt = localStorage.getItem('zk_sp_v1');
     return alt ? alt : '0 SP';
@@ -225,10 +260,10 @@ function loadTopSPDisplay(){
 function applyTopState(){
   const badge = document.getElementById('spBadge');
   if(!badge) return;
-  badge.textContent = loadTopSPDisplay();
+  badge.textContent = readStoredSPDisplay();
 }
 
-/* nav active highlighting */
+/* nav active highlight */
 (function setActiveNav(){
   const path = location.pathname.split('/').pop() || 'index.html';
   const map = { 'index.html':'nav-index', '':'nav-index', 'worship.html':'nav-worship', 'bible.html':'nav-bible', 'generator.html':'nav-generator' };
@@ -239,7 +274,7 @@ function applyTopState(){
   }
 })();
 
-/* Theme toggle */
+/* theme toggle */
 (function(){
   const toggle = document.getElementById('themeToggle');
   const saved = localStorage.getItem('theme');
@@ -250,6 +285,8 @@ function applyTopState(){
     const next = toggle.checked ? 'dark' : 'light';
     localStorage.setItem('theme', next);
     if(next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+    // update in case display color dependent
+    applyTopState();
   });
 })();
 
