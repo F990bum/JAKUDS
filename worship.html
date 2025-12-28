@@ -4,10 +4,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>자쿠드 숭배 시뮬레이터 — 숭배하기</title>
-
 <link rel="icon" href="favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
-
 <style>
 :root{
   --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
@@ -22,7 +20,7 @@ html.dark{
 html{font-size:100%}
 body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 
-/* header - identical to index.html */
+/* header (index.html 스타일과 동일) */
 .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
 .header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; }
 .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
@@ -52,7 +50,7 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 main{ max-width:1180px; margin:2rem auto; padding:1.2rem; display:flex; gap:2rem; align-items:flex-start; min-height:640px; }
 .left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1rem; align-items:flex-start; }
 
-/* worship card moved left for space */
+/* worship card moved left */
 .card-wrap{ width:420px; height:520px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; margin-left:-160px; }
 #worshipBtn{ width:92%; height:84%; border-radius:14px; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 18px 40px rgba(0,0,0,0.14); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0.6rem; line-height:1.05; position:relative; z-index:2; }
 .worship-line.big{ font-size:2.8rem; line-height:1; }
@@ -62,19 +60,19 @@ main{ max-width:1180px; margin:2rem auto; padding:1.2rem; display:flex; gap:2rem
 .info-row{ width:420px; max-width:92%; display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
 .info-btn{ padding:6px 10px; border-radius:8px; border:1px solid var(--line); background:var(--card); cursor:pointer; font-weight:800; color:var(--muted); }
 
-/* stats info moved into modal; placeholder areas removed from page per request */
-
 /* right area */
 .right{ display:flex; gap:1.2rem; align-items:flex-start; width:100%; max-width:880px; }
 .right .content { width:480px; display:flex; flex-direction:column; gap:1rem; }
-.meta{ background:var(--card); border-radius:10px; padding:1rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); min-height:620px; }
+
+/* set equal heights: controlled by JS on load/resize */
+.meta{ background:var(--card); border-radius:10px; padding:1rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); min-height:640px; }
 .meta .row{ display:flex; justify-content:space-between; margin-bottom:0.6rem; }
 .section-title{ font-weight:900; color:var(--text-strong); }
 html.dark .section-title{ color:#fff; }
 .thin-hr{ border:0; border-top:1px solid var(--line); margin:20px 0; }
 
 .store-title{ margin-top:0.2rem;font-weight:800;color:var(--text-strong); margin-bottom:8px; }
-.store{ display:grid; grid-template-columns:1fr; gap:0.9rem; margin-top:0.4rem; max-height:540px; overflow:auto; padding-right:6px; }
+.store{ display:grid; grid-template-columns:1fr; gap:0.9rem; margin-top:0.4rem; max-height:520px; overflow:auto; padding-right:6px; }
 .item{ background:var(--card); border-radius:10px; padding:0.9rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); gap:8px; }
 .item-left{ display:flex; flex-direction:column; gap:6px; max-width:70%; }
 .item-left .sps-each{ font-size:0.9rem; color:var(--muted); font-weight:700;}
@@ -86,14 +84,17 @@ html.dark .section-title{ color:#fff; }
 .buy{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; }
 .buy-max{ background:transparent; border:2px solid var(--line); color:var(--muted); padding:0.35rem 0.6rem; border-radius:8px; font-weight:800; cursor:pointer; white-space:normal; text-align:center; line-height:1; }
 
-/* upgrades panel taller & wider */
-.upgrades{ width:360px; background:var(--card); border-radius:10px; padding:12px; box-shadow:0 8px 22px var(--shadow); max-height:760px; overflow:auto; display:block; }
-.upgrades .title{ font-weight:900; color:var(--text-strong); margin-bottom:10px; }
+/* upgrades panel */
+.upgrades{ width:360px; background:var(--card); border-radius:10px; padding:12px; box-shadow:0 8px 22px var(--shadow); max-height:760px; overflow:auto; display:block; min-height:640px; }
+.upgrades .title{ font-weight:900; color:var(--text-strong); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
 .upgrade-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; padding:8px; border-radius:8px; border:1px solid var(--line); background:transparent; }
 .upgrade-left{ font-weight:800; }
 .upgrade-right button{ padding:6px 8px; border-radius:8px; border:0; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; font-weight:800; cursor:pointer; }
 
-/* modal overlay & dialog */
+/* buy-all button style (like reset) */
+.small-btn{ background:transparent; border:1px solid var(--line); padding:6px 8px; border-radius:8px; cursor:pointer; font-weight:800; color:var(--muted); }
+
+/* modal overlay & dialog (overlay darkens but content is not blurred) */
 .overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.45); display:none; align-items:center; justify-content:center; z-index:10000; }
 .dialog{ width:420px; max-width:92%; background:var(--card); border-radius:12px; padding:18px; box-shadow:0 20px 60px rgba(0,0,0,0.6); color:var(--text-strong); }
 .dialog h3{ margin:0 0 8px 0; font-size:1.2rem; }
@@ -160,13 +161,12 @@ html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rg
     <div class="info-row">
       <button id="infoBtn" class="info-btn">ⓘ 정보</button>
     </div>
-
   </div>
 
   <div class="right">
     <div class="content">
-      <div class="meta">
-        <div class="row"><div class="section-title">통계</div><div><button id="resetBtn" class="reset-btn" title="초기화">초기화</button></div></div>
+      <div class="meta" id="metaPanel">
+        <div class="row"><div class="section-title">통계</div><div><!-- reset moved to modal --></div></div>
         <div class="row"><div>총 SP</div><div id="totalSP">0 SP</div></div>
         <div class="row"><div>총 숭배 횟수</div><div id="totalClicks">0</div></div>
         <div class="row"><div>플레이 시간</div><div id="playTime">00:00:00</div></div>
@@ -180,13 +180,18 @@ html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rg
     </div>
 
     <aside class="upgrades" id="upgradesPanel">
-      <div class="title">업그레이드</div>
+      <div class="title">
+        <div>업그레이드</div>
+        <div>
+          <button id="buyAllBtn" class="small-btn" title="모두 구매">BUY ALL</button>
+        </div>
+      </div>
       <div id="upgradesList"></div>
     </aside>
   </div>
 </main>
 
-<!-- info modal -->
+<!-- info modal (reset moved here) -->
 <div id="overlay" class="overlay" aria-hidden="true">
   <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
     <h3 id="infoTitle">숭배 정보</h3>
@@ -198,18 +203,22 @@ html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rg
     <div class="row"><div>신도 1명당 크리티컬</div><div id="infoPerFollower">-</div></div>
     <div class="row"><div>제단 1개당 피버</div><div id="infoPerAltar">-</div></div>
     <div class="row"><div>사원 1개당 수동</div><div id="infoPerTemple">-</div></div>
-    <div style="text-align:right;margin-top:12px"><button id="closeInfo" class="reset-btn">닫기</button></div>
+
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+      <button id="resetBtn" class="reset-btn">초기화</button>
+      <button id="closeInfo" class="reset-btn">닫기</button>
+    </div>
   </div>
 </div>
 
 <script>
 /* -----------------------
-   Units / BN helpers - robust for very large exponents
+   Helpers: BN and formatting
    ----------------------- */
-const UNIT_LIST = ['M','B','T','Qu','Qi','Sx','Sp','Oc','No','Dc']; // e index: 2..11
-const E_KU = 2 + UNIT_LIST.length; // exponent index where KU begins
-const KU_DISPLAY_MAX = 550_000_000; // 5억 5천만 KU 표시 한도
-const KU_INTERNAL_MAX = 1_000_000_000; // 10억 KU 내부 clamp
+const UNIT_LIST = ['M','B','T','Qu','Qi','Sx','Sp','Oc','No','Dc'];
+const E_KU = 2 + UNIT_LIST.length;
+const KU_DISPLAY_MAX = 550_000_000;
+const KU_INTERNAL_MAX = 1_000_000_000;
 
 function bn_fromNumber(n){
   let m = Number(n), e = 0;
@@ -240,7 +249,6 @@ function bn_subNumber(a,num){ return bn_sub(a, bn_fromNumber(num)); }
 function bn_sub(a,b){ a = bn_normalize(a); b = bn_normalize(b); if(bn_compare(a,b) <= 0) return {m:0,e:0}; if(a.e === b.e) return bn_normalize({m: a.m - b.m, e: a.e}); if(a.e < b.e){ return bn_normalize({m: -(b.m - a.m * Math.pow(1000, b.e - a.e)), e: b.e}); } const diff = a.e - b.e; const m = a.m - b.m / Math.pow(1000, diff); return bn_normalize({m,e: a.e}); }
 function bn_mulNumber(a,num){ return bn_normalize({m: a.m * num, e: a.e}); }
 
-/* KU formatting (no commas inside KU) */
 function formatKUInteger(n){
   if(!isFinite(n) || n <= 0) return '0 KU';
   if(n > KU_DISPLAY_MAX) n = KU_DISPLAY_MAX;
@@ -257,45 +265,37 @@ function formatKUInteger(n){
   return `${uk}억 ${manRem}만 KU`;
 }
 
-/* formatSPDisplay - robustized to avoid NaN and <0.01 Dc issues */
 function formatSPDisplay(value){
   if(value && typeof value === 'object' && value.m !== undefined && value.e !== undefined){
     const b = bn_normalize(value);
     const maybe = bn_toNumberIfSafe(b);
     if(maybe !== null) return formatSPDisplay(maybe);
 
-    // if exponent indicates KU region or beyond => KU handling
-    const unitIndexCandidate = b.e - 2; // e-2 => index into UNIT_LIST
+    const unitIndexCandidate = b.e - 2;
     if(unitIndexCandidate >= UNIT_LIST.length){
       const expDiff = b.e - E_KU;
       if(!isFinite(expDiff) || expDiff < 0) return '0 SP';
-      // clamp extreme exponents
       if(expDiff > 9) return formatKUInteger(KU_DISPLAY_MAX);
-      // compute kuCount safely: floor(b.m * 1000^expDiff)
       let kuCount = Math.floor(b.m * Math.pow(1000, expDiff));
       if(!isFinite(kuCount) || kuCount < 0) kuCount = KU_DISPLAY_MAX;
       return formatKUInteger(kuCount);
     }
 
-    // below 1e6 (e < 2)
     if(b.e < 2){
       const val = b.m * Math.pow(1000, b.e);
       return Math.floor(val).toLocaleString() + ' SP';
     }
 
-    // unit within UNIT_LIST
-    const unitIndex = unitIndexCandidate; // 0..UNIT_LIST.length-1
-    const displayVal = b.m; // normalized mantissa
+    const unitIndex = unitIndexCandidate;
+    const displayVal = b.m;
     if(displayVal > 0 && displayVal < 0.01) return `<0.01 ${UNIT_LIST[unitIndex]} SP`;
     const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
     return `${s} ${UNIT_LIST[unitIndex]} SP`;
   }
 
-  // number path
   const n = Number(value || 0);
   if(!isFinite(n) || n === 0) return '0 SP';
   if(n < 1_000_000) return `${Math.floor(n).toLocaleString()} SP`;
-
   for(let i=0;i<UNIT_LIST.length;i++){
     const unitExp = Math.pow(1000, i+2);
     if(n < unitExp * 1000 || i === UNIT_LIST.length - 1){
@@ -322,20 +322,13 @@ function formatSmallNumber(n){
    ----------------------- */
 const KEY = 'zk_tycoon_v_final_v2';
 const DEFAULT = {
-  sp: {m:0,e:0},
-  totalClicks:0,
-  manualBase:1,
-  sps:0,
+  sp:{m:0,e:0}, totalClicks:0, manualBase:1, sps:0,
   buildings:{
     follower:{count:0, baseCost:10, sps:0.5},
     altar:{count:0, baseCost:100, sps:2},
     temple:{count:0, baseCost:1000, sps:10}
   },
-  upgrades:{},
-  startTimestamp:null,
-  playAcc:0,
-  lastSaved:0,
-  _feverMultiplier:1
+  upgrades:{}, startTimestamp:null, playAcc:0, lastSaved:0, _feverMultiplier:1
 };
 let state = loadState();
 
@@ -357,20 +350,18 @@ const infoFever = document.getElementById('infoFever');
 const infoPerFollower = document.getElementById('infoPerFollower');
 const infoPerAltar = document.getElementById('infoPerAltar');
 const infoPerTemple = document.getElementById('infoPerTemple');
+const buyAllBtn = document.getElementById('buyAllBtn');
 const resetBtn = document.getElementById('resetBtn');
+const metaPanel = document.getElementById('metaPanel');
+const upgradesPanel = document.getElementById('upgradesPanel');
 
 /* -----------------------
-   Mechanics & helpers
+   Mechanics & upgrades
    ----------------------- */
 function jsonClone(o){ return JSON.parse(JSON.stringify(o)); }
+function getDevotionMultiplier(){ const lv = state.upgrades.devotion || 0; return Math.pow(1.9, lv); }
 
-/* devotion multiplier (gentle) */
-function getDevotionMultiplier(){
-  const lv = state.upgrades.devotion || 0;
-  return Math.pow(1.9, lv);
-}
-
-/* Effects from upgrades */
+/* upgraded effect calculations */
 function getCritPercent(){
   let base = 2;
   const lvl = state.upgrades.groupWorship || 0;
@@ -380,23 +371,16 @@ function getCritPercent(){
 function getFeverPercent(){
   let base = 0;
   const lvl = state.upgrades.godBless || 0;
-  if(lvl > 0) base += (state.buildings.altar.count || 0) * (0.1 * lvl); // now per altar 0.1% * lv (was per 10 earlier) to show per-altar effects
+  if(lvl > 0) base += (state.buildings.altar.count || 0) * (0.1 * lvl);
   return base;
 }
 function getManualBonusFromTemple(){
   const lvl = state.upgrades.faithMiracle || 0;
-  if(lvl > 0){
-    return Math.floor((state.buildings.temple.count || 0) * (0.2 * lvl)); // 0.2 * lv per temple then floored => approximates earlier "5개당" but now per temple fractional
-  }
+  if(lvl > 0) return Math.floor((state.buildings.temple.count || 0) * (0.2 * lvl));
   return 0;
 }
-function getEffectiveManualBase(){
-  const base = Number(state.manualBase || 0);
-  const templeBonus = getManualBonusFromTemple();
-  return (base + templeBonus) * getDevotionMultiplier();
-}
+function getEffectiveManualBase(){ const base = Number(state.manualBase || 0); const templeBonus = getManualBonusFromTemple(); return (base + templeBonus) * getDevotionMultiplier(); }
 
-/* building SPS effective including boost upgrades (each level doubles building's SPS) */
 function buildingSpsEffective(key){
   const b = state.buildings[key];
   if(!b) return 0;
@@ -406,31 +390,16 @@ function buildingSpsEffective(key){
   if(key === 'temple' && (state.upgrades.templeBoost || 0) > 0) s *= Math.pow(2, state.upgrades.templeBoost);
   return s;
 }
+function calcSPS(){ let total = 0; for(const k of ['follower','altar','temple']){ const b = state.buildings[k]; total += (b.count || 0) * buildingSpsEffective(k); } total *= getDevotionMultiplier(); total *= getCurrentFeverMultiplier(); state.sps = total; return total; }
 
-function calcSPS(){
-  let total = 0;
-  for(const k of ['follower','altar','temple']){
-    const b = state.buildings[k];
-    total += (b.count || 0) * buildingSpsEffective(k);
-  }
-  total *= getDevotionMultiplier();
-  total *= getCurrentFeverMultiplier();
-  state.sps = total;
-  return total;
-}
-
-/* Fever/Crit sampling: crit uses sampleMultiLevel (as before),
-   fever uses sampleMultiLevelFever implementing requested behaviour */
+/* Fever/Crit sampling and trigger */
 let feverExpire = null;
 function isFeverActive(){ return feverExpire && Date.now() < feverExpire; }
 function getCurrentFeverMultiplier(){ return isFeverActive() ? (state._feverMultiplier || 1.5) : 1; }
 
-/* triggerFever: base multiplier and duration can be increased by upgrades 'godBlessEnhance' */
 function triggerFever(level){
-  // base multiplier scales as 1.5 * 2^level
   const baseMult = 1.5 + (state.upgrades.godBlessEnhance ? 0.1 * (state.upgrades.godBlessEnhance) : 0);
   const mult = baseMult * Math.pow(2, Math.max(0, level));
-  // duration base 10s, increased by 2s per level of godBlessEnhance
   const baseDuration = 10000;
   const extraDur = (state.upgrades.godBlessEnhance || 0) * 2000;
   const duration = baseDuration + extraDur;
@@ -440,56 +409,50 @@ function triggerFever(level){
   setTimeout(()=>{ state._feverMultiplier = 1; feverExpire = null; updateUI(); }, duration + 50);
 }
 
-/* sampleMultiLevel same as crit previously */
 function sampleMultiLevel(Ppercent){
   if(Ppercent <= 0) return {level:-1,n:0,r:0};
   const n = Math.floor(Ppercent / 100);
   const r = Ppercent % 100;
   const rnd = Math.random() * 100;
-  if(n === 0){
-    if(rnd < r) return {level:0,n,r};
-    return {level:-1,n,r};
-  } else {
-    if(rnd < r) return {level:n,n,r};
-    return {level:n-1,n,r};
-  }
+  if(n === 0){ if(rnd < r) return {level:0,n,r}; return {level:-1,n,r}; }
+  if(rnd < r) return {level:n,n,r};
+  return {level:n-1,n,r};
 }
-
-/* fever sampling implementing requested rule:
-   - if feverPercent > 100, there's chance for higher lv
-   - returns level >=0 if any fever triggers
-*/
 function sampleMultiLevelFever(Ppercent){
-  if(Ppercent <= 0) return {level:-1,n:0,r:0};
-  const n = Math.floor(Ppercent / 100);
-  const r = Ppercent % 100;
-  const rnd = Math.random() * 100;
-  if(n === 0){
-    if(rnd < r) return {level:0,n,r};
-    return {level:-1,n,r};
-  } else {
-    // n >= 1: there are at least level1 potential; sample for top
-    if(rnd < r) return {level:n,n,r};
-    return {level:n-1,n,r};
-  }
+  // behaves like crit sampling but allows multi-level fever
+  return sampleMultiLevel(Ppercent);
 }
 
+/* CRITICAL label rules */
 function critMultiplierForLevel(level){
   if(level < 0) return 1;
   return Math.pow(2, level + 1);
 }
+function critLabelForLevel(level){
+  // exclamation count = level + 1
+  const exCount = Math.max(0, level + 1);
+  if(exCount < 6){
+    return 'CRITICAL' + '!'.repeat(exCount);
+  }
+  if(exCount === 6) return 'S-CRITICAL';
+  if(exCount === 7) return 'S-S-CRITICAL';
+  if(exCount === 8) return 'S-S-S-CRITICAL';
+  if(exCount === 9) return 'J-CRITICAL';
+  // exCount >= 10 -> KU-CRITICAL with numeric prefix (display exCountKU-CRITICAL plus 5 exclamation marks)
+  return `${exCount}KU-CRITICAL` + '!'.repeat(5);
+}
 function critLevelDisplay(level){
   if(level < 0) return null;
-  const color = level === 0 ? getComputedStyle(document.documentElement).getPropertyValue('--crit-yellow').trim()
-              : level === 1 ? getComputedStyle(document.documentElement).getPropertyValue('--crit-orange').trim()
+  const label = critLabelForLevel(level);
+  const color = level < 1 ? getComputedStyle(document.documentElement).getPropertyValue('--crit-yellow').trim()
+              : level < 2 ? getComputedStyle(document.documentElement).getPropertyValue('--crit-orange').trim()
               : getComputedStyle(document.documentElement).getPropertyValue('--crit-red').trim();
-  const scale = 1 + Math.min(level * 0.08, 0.6);
-  const text = 'CRITICAL' + (level > 0 ? '!'.repeat(level) : '');
-  return {color,scale,text,level};
+  const scale = 1 + Math.min((level+1) * 0.06, 1.4);
+  return {color, scale, text: label, level};
 }
 
 /* -----------------------
-   Store with Korean 설명 and per-item SPS 표시
+   Store - 한국어 설명, per-SPS 표시
    ----------------------- */
 const ITEMS = [
   { key:'follower', label:'신도', baseCost:10, baseSps:0.5 },
@@ -501,7 +464,6 @@ function formatCostForDisplay(costNum){
   if(costNum >= 1_000_000) return formatSPDisplay(bn_fromNumber(costNum));
   return Math.floor(costNum).toLocaleString() + ' SP';
 }
-
 function renderStore(){
   storeEl.innerHTML = '';
   ITEMS.forEach(item=>{
@@ -510,7 +472,7 @@ function renderStore(){
     const left = document.createElement('div'); left.className='item-left';
     const right = document.createElement('div'); right.className='item-right';
     const perSps = buildingSpsEffective(item.key);
-    left.innerHTML = `<div style="font-weight:900">${item.label} x${b.count}</div><div class="sps-each">하나당 +${perSps} SPS</div>`;
+    left.innerHTML = `<div style="font-weight:900">${item.label} x${b.count}</div><div class="sps-each">하나당 +${formatSmallNumber(perSps)} SPS</div>`;
     const cost = Math.ceil(item.baseCost * Math.pow(1.15, b.count));
     const buyBtn = document.createElement('button'); buyBtn.className='buy'; buyBtn.textContent = formatCostForDisplay(cost);
     buyBtn.disabled = !bn_gte_number(state.sp, cost);
@@ -559,57 +521,49 @@ function buyMaxBuilding(key){
 }
 
 /* -----------------------
-   Upgrades - extended to 50 levels, increased growth
-   Includes new boost upgrades and godBlessEnhance (further fever power/duration)
-   Descriptions adjusted per request
+   Upgrades (50 levels, higher growth). descriptions include formatted numbers.
    ----------------------- */
 const UPGRADE_TEMPLATES = [
-  { key:'groupWorship', name:'단체 숭배', req:{building:'follower',count:10}, basePrice:1000, mult:1.9, descMaker:(lv)=>`신도 1명당 크리티컬 확률 +${(0.5*lv).toFixed(2).replace(/\.00$/,'')}%` },
-  { key:'godBless', name:'신의 축복', req:{building:'altar',count:10}, basePrice:10000, mult:2.0, descMaker:(lv)=>`제단 1개당 피버 확률 +${(0.1*lv).toFixed(2).replace(/\.00$/,'')}%` },
-  { key:'faithMiracle', name:'신앙심의 기적', req:{building:'temple',count:10}, basePrice:100000, mult:2.05, descMaker:(lv)=>`사원 1개당 수동 숭배력 +${(0.2*lv).toFixed(2).replace(/\.00$/,'')}` },
+  { key:'groupWorship', name:'단체 숭배', req:{building:'follower',count:10}, basePrice:1000, mult:1.9, descMaker:(lv)=>`신도 1명당 크리티컬 확률 +${(0.5*lv).toFixed(2)}%` },
+  { key:'godBless', name:'신의 축복', req:{building:'altar',count:10}, basePrice:10000, mult:2.0, descMaker:(lv)=>`제단 1개당 피버 확률 +${(0.1*lv).toFixed(2)}%` },
+  { key:'faithMiracle', name:'신앙심의 기적', req:{building:'temple',count:10}, basePrice:100000, mult:2.05, descMaker:(lv)=>`사원 1개당 수동 숭배력 +${(0.2*lv).toFixed(2)}` },
   { key:'devotion', name:'헌신 강화', req:{building:'follower',count:30}, basePrice:150000, mult:2.4, descMaker:(lv)=>`수입 ×${Math.pow(1.9,lv).toFixed(2)}` },
-
-  // boosts (각 레벨마다 SPS 두 배 증가 효과 누적)
   { key:'followerBoost', name:'신도 강화', req:{building:'follower',count:5}, basePrice:5000, mult:2.2, descMaker:(lv)=>`신도 SPS ×${Math.pow(2,lv).toFixed(0)}` },
   { key:'altarBoost', name:'제단 강화', req:{building:'altar',count:5}, basePrice:20000, mult:2.2, descMaker:(lv)=>`제단 SPS ×${Math.pow(2,lv).toFixed(0)}` },
   { key:'templeBoost', name:'사원 강화', req:{building:'temple',count:2}, basePrice:100000, mult:2.3, descMaker:(lv)=>`사원 SPS ×${Math.pow(2,lv).toFixed(0)}` },
-
-  // new upgrade: godBlessEnhance - increases fever duration and effect
-  { key:'godBlessEnhance', name:'신의 축복 강화', req:{building:'altar',count:20}, basePrice:250000, mult:2.5, descMaker:(lv)=>`피버 지속시간 +${(2*lv)}s, 피버 효과 +${(0.1*lv).toFixed(2)}` }
+  { key:'godBlessEnhance', name:'신의 축복 강화', req:{building:'altar',count:20}, basePrice:250000, mult:2.5, descMaker:(lv)=>`피버 지속시간 +${2*lv}s, 피버 효과 +${(0.1*lv).toFixed(2)}` }
 ];
 
 const UPGRADE_DEFS = UPGRADE_TEMPLATES.map(def=>{
-  const levels = [];
-  for(let lv=1; lv<=50; lv++){
-    // price may grow large; use Math.pow but clamp display later
+  const levels=[];
+  for(let lv=1;lv<=50;lv++){
     const price = Math.round(def.basePrice * Math.pow(def.mult, lv-1));
-    levels.push({ lv, price, desc: def.descMaker(lv) });
+    levels.push({lv, price, desc: def.descMaker(lv)});
   }
-  return Object.assign({}, def, { levels });
+  return Object.assign({}, def, {levels});
 });
 
 function renderUpgrades(){
-  const rows = [];
+  const rows=[];
   for(const u of UPGRADE_DEFS){
     const cur = state.upgrades[u.key] || 0;
     const next = u.levels[cur];
     if(!next) continue;
     rows.push({def:u,cur,next});
   }
-  rows.sort((a,b)=> a.next.price - b.next.price);
-  upgradesListEl.innerHTML = '';
+  rows.sort((a,b)=>a.next.price - b.next.price);
+  upgradesListEl.innerHTML='';
   rows.forEach(r=>{
     const canUnlock = (state.buildings[r.def.req.building].count || 0) >= r.def.req.count;
-    const el = document.createElement('div'); el.className='upgrade-row';
-    const left = document.createElement('div'); left.className='upgrade-left';
+    const el=document.createElement('div'); el.className='upgrade-row';
+    const left=document.createElement('div'); left.className='upgrade-left';
     left.innerHTML = `<div>${r.def.name} Lv ${r.cur} → ${r.next.lv}</div><div style="font-size:0.85rem;color:var(--muted)">${r.next.desc}</div>`;
-    const right = document.createElement('div'); right.className='upgrade-right';
-    const btn = document.createElement('button'); btn.textContent = formatCostForDisplay(r.next.price);
+    const right=document.createElement('div'); right.className='upgrade-right';
+    const btn=document.createElement('button'); btn.textContent = formatCostForDisplay(r.next.price);
     btn.disabled = !canUnlock || !bn_gte_number(state.sp, r.next.price);
-    btn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyUpgrade(r.def.key); });
+    btn.addEventListener('pointerdown',(e)=>{ e.preventDefault(); buyUpgrade(r.def.key); });
     right.appendChild(btn);
-    el.appendChild(left); el.appendChild(right);
-    upgradesListEl.appendChild(el);
+    el.appendChild(left); el.appendChild(right); upgradesListEl.appendChild(el);
   });
 }
 
@@ -626,8 +580,38 @@ function buyUpgrade(key){
   saveState(); updateUI(); renderUpgrades();
 }
 
+/* BUY ALL implementation: attempt to buy next level for all upgrades in ascending price repeatedly */
+function buyAllUpgrades(){
+  // attempt rounds until no purchase possible
+  let boughtAny = false;
+  // limit loops to avoid hang
+  for(let round=0; round<200; round++){
+    let boughtThisRound = false;
+    const rows=[];
+    for(const u of UPGRADE_DEFS){
+      const cur = state.upgrades[u.key] || 0;
+      const next = u.levels[cur];
+      if(next) rows.push({def:u, cur, next});
+    }
+    rows.sort((a,b)=>a.next.price - b.next.price);
+    for(const r of rows){
+      const canUnlock = (state.buildings[r.def.req.building].count || 0) >= r.def.req.count;
+      if(!canUnlock) continue;
+      if(bn_gte_number(state.sp, r.next.price)){
+        // buy one level
+        state.sp = bn_subNumber(state.sp, r.next.price);
+        state.upgrades[r.def.key] = (state.upgrades[r.def.key] || 0) + 1;
+        boughtThisRound = true;
+        boughtAny = true;
+      }
+    }
+    if(!boughtThisRound) break;
+  }
+  if(boughtAny){ saveState(); updateUI(); renderUpgrades(); }
+}
+
 /* -----------------------
-   Worship click handling (uses fever sampling function)
+   Worship click handling
    ----------------------- */
 worshipBtn.addEventListener('pointerdown', (ev)=>{
   const feverPercent = getFeverPercent();
@@ -644,9 +628,12 @@ worshipBtn.addEventListener('pointerdown', (ev)=>{
   const feverClickMult = feverActiveNow ? state._feverMultiplier || 1.5 : 1;
 
   const finalManual = getEffectiveManualBase();
-  const gain = finalManual * critMult * feverClickMult;
+  const gain = Number.isFinite(finalManual) ? finalManual * critMult * feverClickMult : 0;
 
-  state.sp = bn_addNumber(state.sp, gain);
+  // guard against NaN
+  const safeGain = (typeof gain === 'number' && isFinite(gain)) ? gain : 0;
+
+  state.sp = bn_addNumber(state.sp, safeGain);
   state.totalClicks = (state.totalClicks || 0) + 1;
   saveState(); updateUI();
 
@@ -654,14 +641,15 @@ worshipBtn.addEventListener('pointerdown', (ev)=>{
   const y = ev.clientY + window.scrollY - 5;
   if(isCrit){
     const info = critLevelDisplay(critLevel);
-    showFloatingAt(x, y, info.text + ' 🛐 +' + displayNumberForFloat(gain), info);
+    showFloatingAt(x, y, info.text + ' 🛐 +' + displayNumberForFloat(safeGain), info);
   } else {
-    showFloatingAt(x, y, '🛐 +' + displayNumberForFloat(gain), null);
+    showFloatingAt(x, y, '🛐 +' + displayNumberForFloat(safeGain), null);
   }
 });
 
-/* floating and helpers */
+/* floating & safe formatting */
 function displayNumberForFloat(n){
+  if(!isFinite(n)) return '0';
   if(Math.abs(n) >= 1_000_000) return formatSPDisplay(bn_fromNumber(n)).replace(/ SP$/,'');
   return formatFloatingAmount(n);
 }
@@ -697,7 +685,7 @@ function getAccumulatedPlayMs(){ let acc = Number(state.playAcc || 0); if(state.
 document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible'){ state.startTimestamp = Date.now(); saveState(); } else { if(state.startTimestamp){ state.playAcc = (Number(state.playAcc||0) + (Date.now() - state.startTimestamp)); state.startTimestamp = null; saveState(); } } });
 
 /* -----------------------
-   Persistence load/save
+   Persistence
    ----------------------- */
 function loadState(){
   try{
@@ -750,9 +738,10 @@ function updateUI(){
   totalSPEl.textContent = formatSPDisplay(state.sp);
   totalClicksEl.textContent = (state.totalClicks || 0).toLocaleString();
 
-  // Info modal content values
+  // info modal values updated so user sees converted per-building numbers
   infoManual.textContent = formatSPDisplay(bn_fromNumber(getEffectiveManualBase())).replace(/ SP$/,'');
-  infoAuto.textContent = (calcSPS() < 1_000_000 ? formatSmallNumber(Math.round(calcSPS()*100)/100).replace(/\.00$/,'') : formatSPDisplay(bn_fromNumber(Math.round(calcSPS()*100)/100))).toString() + ' SPS';
+  const spsVal = calcSPS();
+  infoAuto.textContent = (spsVal < 1_000_000 ? formatSmallNumber(Math.round(spsVal * 100)/100).replace(/\.00$/,'') : formatSPDisplay(bn_fromNumber(Math.round(spsVal * 100)/100))).toString() + ' SPS';
   infoCrit.textContent = (Math.round(getCritPercent()*10)/10) + '%';
   infoFever.textContent = (Math.round(getFeverPercent()*10)/10) + '%';
   infoPerFollower.textContent = (state.upgrades.groupWorship ? (0.5 * state.upgrades.groupWorship).toFixed(2) : '0') + '%';
@@ -762,6 +751,7 @@ function updateUI(){
   renderStore();
   renderUpgrades();
   updatePlayTimeDisplay();
+  syncSectionHeights(); // make meta and upgrades equal height
 }
 
 /* storage sync */
@@ -772,24 +762,35 @@ window.addEventListener('storage', (e)=>{ if(e.key === KEY || e.key === 'zk_sp_v
 (function(){ const toggle = document.getElementById('themeToggle'); const saved = localStorage.getItem('theme'); const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); if(initial === 'dark') document.documentElement.classList.add('dark'); if(toggle) toggle.checked = (initial === 'dark'); if(toggle) toggle.addEventListener('change', ()=>{ const next = toggle.checked ? 'dark' : 'light'; localStorage.setItem('theme', next); if(next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); updateUI(); });})();
 
 /* Init */
-(function init(){ if(!state.startTimestamp && document.visibilityState === 'visible') state.startTimestamp = Date.now(); if(!state.sp) state.sp = bn_fromNumber(0); state.totalClicks = Number(state.totalClicks) || 0; state.manualBase = Number(state.manualBase) || DEFAULT.manualBase; if(!state.playAcc) state.playAcc = 0; if(!state._feverMultiplier) state._feverMultiplier = 1; calcSPS(); updateUI(); startTick(); setInterval(updatePlayTimeDisplay,1000); })();
+(function init(){ if(!state.startTimestamp && document.visibilityState === 'visible') state.startTimestamp = Date.now(); if(!state.sp) state.sp = bn_fromNumber(0); state.totalClicks = Number(state.totalClicks) || 0; state.manualBase = Number(state.manualBase) || DEFAULT.manualBase; if(!state.playAcc) state.playAcc = 0; if(!state._feverMultiplier) state._feverMultiplier = 1; calcSPS(); updateUI(); startTick(); setInterval(updatePlayTimeDisplay,1000); window.addEventListener('resize', syncSectionHeights); })();
 
-/* reset */
-resetBtn.addEventListener('click', ()=>{ localStorage.removeItem(KEY); localStorage.removeItem('zk_sp_v1'); state = jsonClone(DEFAULT); state.startTimestamp = document.visibilityState === 'visible' ? Date.now() : null; saveState(); updateUI(); });
+/* Reset moved to modal */
+resetBtn.addEventListener('click', ()=>{ localStorage.removeItem(KEY); localStorage.removeItem('zk_sp_v1'); state = jsonClone(DEFAULT); state.startTimestamp = document.visibilityState === 'visible' ? Date.now() : null; saveState(); updateUI(); closeOverlay(); });
 
-/* info modal handlers */
-infoBtn.addEventListener('click', ()=>{
-  overlay.style.display = 'flex';
-  overlay.setAttribute('aria-hidden','false');
-  document.body.style.filter = 'blur(1px) grayscale(0.05)';
-});
+/* Info modal handlers (overlay darkens only; no body blur) */
+infoBtn.addEventListener('click', ()=>{ overlay.style.display='flex'; overlay.setAttribute('aria-hidden','false'); updateUI(); });
 closeInfo.addEventListener('click', closeOverlay);
 overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeOverlay(); });
-function closeOverlay(){ overlay.style.display = 'none'; overlay.setAttribute('aria-hidden','true'); document.body.style.filter = ''; }
+function closeOverlay(){ overlay.style.display='none'; overlay.setAttribute('aria-hidden','true'); }
+
+/* BUY ALL handler */
+buyAllBtn.addEventListener('click', ()=>{ buyAllUpgrades(); });
+
+/* sync heights: make meta and upgrades same height */
+function syncSectionHeights(){
+  try{
+    const mh = metaPanel.getBoundingClientRect().height;
+    upgradesPanel.style.minHeight = Math.max( mh, 400 ) + 'px';
+    metaPanel.style.minHeight = Math.max( mh, 400 ) + 'px';
+  }catch(e){}
+}
 
 /* small wrappers */
 function bn_subNumber(a,num){ return bn_sub(a, bn_fromNumber(num)); }
 
+/* expose for debug if needed */
+window.renderUpgrades = renderUpgrades;
+window.renderStore = renderStore;
 </script>
 </body>
 </html>
