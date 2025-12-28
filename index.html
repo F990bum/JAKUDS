@@ -28,26 +28,30 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 .brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
 
 .right-controls{ display:flex; align-items:center; gap:0.6rem; }
-.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:120px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:160px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
 .myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
 
-/* Nav row centered, keep highlight */
-.nav-row{ display:flex; align-items:center; justify-content:center; gap:0.6rem; padding:0.45rem 12px; border-top:1px solid var(--line); background:transparent; }
-.nav-row a{ text-decoration:none; padding:0.45rem 0.9rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
-.nav-row a.active{ background: rgba(99,102,241,0.12); color: var(--accent); }
+/* Nav row: left aligned links, right side the dark toggle */
+.nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.6rem; padding:0.45rem 18px; border-top:1px solid var(--line); background:transparent; box-sizing:border-box; }
+.nav-left{ display:flex; gap:0.6rem; align-items:center; }
+.nav-left a{ text-decoration:none; padding:0.45rem 0.9rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
+.nav-left a.active{ background: rgba(99,102,241,0.12); color: var(--accent); }
 
-/* Main hero centered */
+.nav-right{ display:flex; align-items:center; gap:0.6rem; }
+.theme-label{ color:var(--muted); font-weight:700; font-size:0.95rem; }
+.theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
+.theme-switch input{ opacity:0; width:0; height:0; }
+.slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
+.slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
+.theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
+.theme-switch input:checked + .slider::before{ transform: translateX(20px); }
+
+/* Main content centered */
 .main-wrap{ max-width:1180px; margin:1.6rem auto; padding:0 18px; display:flex; justify-content:center; }
 .hero{ width:100%; max-width:920px; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:1.2rem; box-shadow:0 12px 30px rgba(0,0,0,0.06); display:flex; gap:1rem; align-items:flex-start; flex-direction:column; }
 .site-name{ font-size:2.4rem; font-weight:900; margin:0 0 0.4rem 0; color:var(--text-strong) }
 .lead{ font-size:1rem; color:var(--muted); line-height:1.6 }
 
-/* Removed right panel elements from main per request */
-
-/* header controls small utilities */
-.toggle-wrap{ display:flex; align-items:center; gap:0.6rem; }
-
-/* small layouts */
 .article{ margin-top:12px; background:var(--card); border-radius:10px; padding:1rem; color:var(--muted); line-height:1.65; box-shadow:0 8px 20px rgba(0,0,0,0.04) }
 .article h2{ margin-top:0; font-size:1.4rem; color:var(--text-strong) }
 .article p{ margin:0 0 0.9rem 0 }
@@ -74,12 +78,22 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
     </div>
   </div>
 
-  <nav class="nav-row" role="navigation" aria-label="Main">
-    <a id="nav-index" href="index.html">메인</a>
-    <a id="nav-worship" href="worship.html">자쿠드 숭배하기</a>
-    <a id="nav-bible" href="bible.html">자쿠드 성경</a>
-    <a id="nav-generator" href="generator.html">자쿠드 제네레이터</a>
-  </nav>
+  <div class="nav-row" role="navigation" aria-label="Main">
+    <div class="nav-left">
+      <a id="nav-index" href="index.html">메인</a>
+      <a id="nav-worship" href="worship.html">자쿠드 숭배하기</a>
+      <a id="nav-bible" href="bible.html">자쿠드 성경</a>
+      <a id="nav-generator" href="generator.html">자쿠드 제네레이터</a>
+    </div>
+
+    <div class="nav-right">
+      <div class="theme-label">다크</div>
+      <label class="theme-switch" title="다크 모드">
+        <input id="themeToggle" type="checkbox" />
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
 </header>
 
 <main class="main-wrap">
@@ -97,8 +111,15 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 </main>
 
 <script>
-/* BN helpers (same as worship) for consistent SP display */
-const UNITS = ['M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','KU'];
+/* 사용자 정의 단위 규칙 적용
+   순서: M, B, T, Qu, Qi, Sx, Sp, Oc, No, Dc
+   그 다음 단계(1000 Dc) 가 KU. KU는 SP 접미사 없음. KU는 한글 단위(만/억)로 표기.
+   KU 최대치: 550,000,000 KU.
+*/
+
+const UNIT_LIST = ['M','B','T','Qu','Qi','Sx','Sp','Oc','No','Dc']; // indices 0..9 correspond to e = 2..11
+const KU_MAX = 550_000_000; // KU cap
+
 function bn_fromNumber(n){
   let m = Number(n), e = 0;
   if(!isFinite(m) || m === 0) return {m:0,e:0};
@@ -121,44 +142,116 @@ function bn_toNumberIfSafe(b){
     return null;
   }catch(e){ return null; }
 }
-function bn_toStringUnit(b){
+
+/* KU formatting: Korean unit grouping (억, 만)
+   Examples required by user:
+   - 12,345 KU -> "1만 2345 KU"
+   - 12,345,678 KU -> "1234만 5678 KU"
+   - 123,456,789 KU -> "1억 2345만 KU"
+   Implementation: show up to two highest groups (억 and 만). If 万-part is zero, omit it.
+*/
+function formatKUInteger(n){
+  // n is integer KU count
+  if(n >= KU_MAX) return `${KU_MAX.toLocaleString()} KU (MAX)`;
+  if(n < 10000) return `${n.toLocaleString()} KU`;
+  const man = Math.floor(n / 10000); // 만
+  const rest = n % 10000;
+  if(man < 10000){
+    // show "X만 Y KU" (Y without leading zeros)
+    if(rest === 0) return `${man.toLocaleString()}만 KU`;
+    return `${man.toLocaleString()}만 ${rest.toString().padStart(1,'0')} KU`;
+  }
+  // man >= 10000 -> convert to 억
+  const uk = Math.floor(man / 10000); // 억
+  const manRem = man % 10000;
+  if(manRem === 0) return `${uk.toLocaleString()}억 KU`;
+  return `${uk.toLocaleString()}억 ${manRem.toLocaleString()}만 KU`;
+}
+
+/* main formatting function
+   Input: BN {m,e}
+   Output: string per rules: for standard units show "99.85 T SP"
+           for KU show special KU formatting and NO "SP"
+*/
+function bn_toDisplayString(b){
   b = bn_normalize(b);
   if(!b || b.m === 0) return '0 SP';
   const e = b.e;
-  if(e < 2){
-    const val = b.m * Math.pow(1000, e);
-    return Math.floor(val).toLocaleString() + ' SP';
+  const unitIndex = e - 2; // 0 -> M
+  if(unitIndex < 0){
+    // below 1M: show integer with commas + " SP"
+    const num = b.m * Math.pow(1000, e);
+    return `${Math.floor(num).toLocaleString()} SP`;
   }
-  const unitIndex = Math.min(e - 2, UNITS.length - 1);
-  const displayVal = b.m * Math.pow(1000, e - (unitIndex + 2));
-  return displayVal.toFixed(2) + ' ' + UNITS[unitIndex];
+  if(unitIndex <= UNIT_LIST.length - 1){
+    // show with unit label
+    const unit = UNIT_LIST[unitIndex];
+    const displayVal = b.m * Math.pow(1000, e - (unitIndex + 2));
+    // format with two decimals, trim trailing zeros
+    const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
+    return `${s} ${unit} SP`;
+  }
+  // beyond Dc -> KU handling
+  // KU exponent base: e_KU = (2 + (UNIT_LIST.length - 1)) + 1 = 2 + (UNIT_LIST.length) 
+  const e_KU = 2 + UNIT_LIST.length; // exponent where 1 KU == 1000^(e_KU)
+  // compute KU_count = b.m * 1000^(e - e_KU)
+  const expDiff = e - e_KU;
+  let KU_count;
+  if(expDiff >= 0){
+    // potentially large. try to compute safely
+    const maybe = bn_toNumberIfSafe(b);
+    if(maybe !== null){
+      KU_count = Math.floor(maybe / Math.pow(1000, e_KU));
+    } else {
+      // fallback: if too large, clamp to max
+      KU_count = KU_MAX + 1;
+    }
+  } else {
+    // less than one KU, compute fractional KU -> show as Dc-based with suffix DC SP
+    // but user demanded KU only when reaching 1000 Dc, so treat as Dc-level number
+    const idx = UNIT_LIST.length - 1; // Dc index
+    const displayVal = b.m * Math.pow(1000, e - (idx + 2));
+    const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
+    return `${s} Dc SP`;
+  }
+  // KU_count integer
+  if(KU_count <= 0) return `0 KU`;
+  return formatKUInteger(KU_count);
 }
 
-/* Load SP and stats from same storage key used by worship */
+/* Load SP from storage and apply to header badge */
 const KEY = 'zk_tycoon_v_final_v2';
-function loadTopState(){
+function loadTopSPDisplay(){
   try{
     const raw = localStorage.getItem(KEY);
-    if(!raw) return { spDisplay: localStorage.getItem('zk_sp_v1') || '0 SP' };
+    if(!raw){
+      // fallback to human readable saved display key if exists
+      const alt = localStorage.getItem('zk_sp_v1');
+      if(alt) return alt.endsWith('SP') ? alt : `${alt}`;
+      return '0 SP';
+    }
     const parsed = JSON.parse(raw);
     let spBN = {m:0,e:0};
-    if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined) spBN = bn_normalize(parsed.sp);
-    else spBN = bn_fromNumber(Number(parsed.sp || 0));
-    const spDisplay = bn_toStringUnit(spBN);
-    return { spDisplay };
+    if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined){
+      spBN = bn_normalize(parsed.sp);
+    } else {
+      spBN = bn_fromNumber(Number(parsed.sp || 0));
+    }
+    return bn_toDisplayString(spBN);
   }catch(e){
-    return { spDisplay: localStorage.getItem('zk_sp_v1') || '0 SP' };
+    const alt = localStorage.getItem('zk_sp_v1');
+    return alt ? alt : '0 SP';
   }
 }
 
-/* Set top SP badge, fix earlier "not shown" bug by checking multiple keys */
-function applyTopStateToHeader(){
-  const st = loadTopState();
+/* Apply to header badge */
+function applyTopState(){
   const badge = document.getElementById('spBadge');
-  if(badge) badge.textContent = st.spDisplay || '0 SP';
+  if(!badge) return;
+  badge.textContent = loadTopSPDisplay();
 }
 
-/* nav active highlighting based on path (keep highlight) */
+/* nav active highlighting */
 (function setActiveNav(){
   const path = location.pathname.split('/').pop() || 'index.html';
   const map = { 'index.html':'nav-index', '':'nav-index', 'worship.html':'nav-worship', 'bible.html':'nav-bible', 'generator.html':'nav-generator' };
@@ -169,7 +262,7 @@ function applyTopStateToHeader(){
   }
 })();
 
-/* Theme toggle sync (header only) */
+/* Theme toggle */
 (function(){
   const toggle = document.getElementById('themeToggle');
   const saved = localStorage.getItem('theme');
@@ -184,8 +277,8 @@ function applyTopStateToHeader(){
 })();
 
 /* init */
-applyTopStateToHeader();
-setInterval(applyTopStateToHeader, 1500);
+applyTopState();
+setInterval(applyTopState, 1500);
 </script>
 </body>
 </html>
