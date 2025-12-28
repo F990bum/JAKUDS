@@ -3,189 +3,91 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>자쿠드 숭배 시뮬레이터</title>
+<title>자쿠드 숭배 시뮬레이터 — 메인</title>
 
-<!-- 파비콘 (루트에 /favicon.png 업로드) -->
 <link rel="icon" href="favicon.png" type="image/png">
-
-<!-- 한글 폰트 -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-  /* 색 변수 통일: 다크 모드에서 색이 자동으로 바뀜 */
-  :root{
-    --bg: #f6f8fb;
-    --card: #ffffff;
-    --line: #e5e7eb;
-    --accent: #2563eb;
-    --accent-2: #ffb86b;
-    --muted: #475569;
-    --text: #0f172a;
-    --text-strong: #071035;
-    --shadow: rgba(10,20,40,0.06);
-  }
+:root{
+  --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
+  --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
+}
+html.dark{
+  --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
+  --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
+.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.8rem 1.2rem; max-width:1180px; margin:0 auto; }
+.brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
+.brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
+.brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
 
-  html.dark{
-    --bg: #071018;
-    --card: #0b1724;
-    --line: #12202a;
-    --accent: #ffd166;
-    --accent-2: #ffb86b;
-    --muted: #9aa0ab;
-    --text: #eaf6ff;
-    --text-strong: #ffffff;
-    --shadow: rgba(0,0,0,0.45);
-  }
+.right-controls{ display:flex; align-items:center; gap:0.6rem; }
+.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:120px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
 
-  html{font-size:100%}
-  body{
-    margin:0;
-    font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-    background:var(--bg);
-    color:var(--text);
-  }
+.nav-row{ max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:flex-start; gap:0.5rem; padding:0.45rem 1.2rem; border-top:1px solid var(--line); background:transparent; }
+.nav-row a{ text-decoration:none; padding:0.45rem 0.85rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
 
-  /* Header / top row */
-  .header{
-    background:var(--card);
-    border-bottom:1px solid var(--line);
-    position:sticky;
-    top:0;
-    z-index:1000;
-  }
-  .header-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:0.75rem;
-    padding:0.8rem 1.2rem;
-  }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:0.7rem;
-    text-decoration:none;
-    color:var(--text);
-  }
-  .brand img{
-    width:46px;
-    height:46px;
-    object-fit:contain;
-    border-radius:6px;
-    background:transparent;
-  }
-  .brand .title{
-    font-size:1.6rem;
-    font-weight:900;
-    color:var(--text-strong);
-    line-height:1;
-  }
+main{ max-width:1180px; margin:1.6rem auto; padding:0 1rem; display:grid; grid-template-columns: 1fr 360px; gap:1.2rem; align-items:start; }
+@media(max-width:980px){ main{ grid-template-columns:1fr; } .right-col{ order:2 } }
 
-  /* right controls (SP + My Home) */
-  .right-controls{
-    display:flex;
-    align-items:center;
-    gap:0.6rem;
-  }
-  .sp-badge{
-    padding:0.35rem 0.6rem;
-    border-radius:0.6rem;
-    background:transparent;
-    border:1px solid var(--line);
-    font-weight:800;
-    color:var(--accent);
-  }
-  .myhome-btn{
-    padding:0.45rem 0.9rem;
-    border-radius:0.6rem;
-    border:1px solid var(--line);
-    background:var(--card);
-    font-weight:700;
-    color:var(--text);
-    cursor:pointer;
-  }
+.hero{ background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:1.2rem; box-shadow:0 12px 30px rgba(0,0,0,0.06); display:flex; gap:1rem; align-items:flex-start; }
+.hero .left{ flex:1 }
+.site-name{ font-size:2.4rem; font-weight:900; margin:0 0 0.4rem 0; color:var(--text-strong) }
+.lead{ font-size:1rem; color:var(--muted); line-height:1.6 }
 
-  /* Nav (second row) */
-  .nav-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:0.5rem;
-    padding:0.45rem 1.2rem;
-    border-top:1px solid var(--line);
-  }
-  .nav-left{
-    display:flex;
-    gap:0.5rem;
-    align-items:center;
-  }
-  .nav-left a{
-    text-decoration:none;
-    padding:0.4rem 0.8rem;
-    border-radius:0.6rem;
-    font-weight:700;
-    font-size:0.95rem;
-    color:var(--muted);
-    background:transparent;
-  }
-  .nav-left a.active{
-    background: rgba(99,102,241,0.12);
-    color: var(--accent);
-  }
+.right-panel .card{ background:var(--card); border-radius:10px; padding:0.9rem; box-shadow:0 8px 22px rgba(0,0,0,0.06); margin-bottom:0.9rem; }
+.stat-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; font-weight:800; color:var(--muted); }
 
-  /* theme switch */
-  .theme-wrap{ display:flex; align-items:center; gap:0.5rem; }
-  .theme-label{ color:var(--muted); font-weight:700; font-size:0.9rem; }
-  .theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
-  .theme-switch input{ opacity:0; width:0; height:0; }
-  .slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
-  .slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
-  .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
-  .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
+.toggle-wrap{ display:flex; align-items:center; gap:0.6rem; }
+.theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
+.theme-switch input{ opacity:0; width:0; height:0; }
+.theme-switch .slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; }
+.theme-switch .slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
+.theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
+.theme-switch input:checked + .slider::before{ transform: translateX(20px); }
 
-  /* main */
-  main{ max-width:980px; margin:2rem auto; padding:0 1.2rem; }
-  h1{ font-size:1.5rem; margin:0 0 0.6rem 0; color:var(--accent); font-weight:900; }
-  .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    padding:1.2rem;
-    border-radius:12px;
-    box-shadow:0 8px 22px var(--shadow);
-    color:var(--muted);
-  }
+/* article */
+.article{ margin-top:12px; background:var(--card); border-radius:10px; padding:1rem; color:var(--muted); line-height:1.65; box-shadow:0 8px 20px rgba(0,0,0,0.04) }
+.article h2{ margin-top:0; font-size:1.4rem; color:var(--text-strong) }
+.article p{ margin:0 0 0.9rem 0 }
 
-  @media(max-width:720px){
-    .brand .title{ font-size:1.15rem; }
-    .sp-badge{ display:none; }
-  }
+/* floating helper (for index we won't show many floats, but keep available) */
+.float-elem{ position:absolute; pointer-events:none; transform:translate(-50%,-50%); font-weight:900; background:linear-gradient(90deg,rgba(255,255,255,0.98),rgba(255,255,255,0.95)); padding:6px 10px; border-radius:10px; box-shadow:0 8px 22px rgba(0,0,0,0.12); color:#071018; }
+
+/* small utility */
+.kv{ font-weight:900; color:var(--text-strong); }
+.small-muted{ color:var(--muted); font-weight:700; font-size:0.95rem; }
 </style>
 </head>
 <body>
+
 <header class="header">
   <div class="header-top">
     <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
-      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고"
-           onerror="this.onerror=null; this.src='/assets/logo.png'">
+      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고" onerror="this.onerror=null;this.src='/assets/logo.png'">
       <span class="title">자쿠드 숭배 시뮬레이터</span>
     </a>
 
     <div class="right-controls">
       <div id="spBadge" class="sp-badge">0 SP</div>
-      <a href="home.html"><button class="myhome-btn" type="button">My Home</button></a>
+      <a class="myhome-btn" href="home.html">My Home</a>
     </div>
   </div>
 
   <div class="nav-row">
-    <div class="nav-left">
-      <a id="link-worship" href="worship.html">자쿠드 숭배하기</a>
-      <a id="link-bible" href="bible.html">자쿠드 성경</a>
-      <a id="link-generator" href="generator.html">자쿠드 제네레이터</a>
-    </div>
+    <a href="index.html">메인</a>
+    <a href="worship.html">자쿠드 숭배하기</a>
+    <a href="bible.html">자쿠드 성경</a>
+    <a href="generator.html">자쿠드 제네레이터</a>
 
-    <div class="theme-wrap" aria-hidden="false">
-      <span class="theme-label">다크</span>
-      <label class="theme-switch" title="다크 모드 토글">
+    <div style="margin-left:auto" class="toggle-wrap">
+      <div class="small-muted">다크</div>
+      <label class="theme-switch">
         <input id="themeToggle" type="checkbox" />
         <span class="slider"></span>
       </label>
@@ -194,60 +96,171 @@
 </header>
 
 <main>
-  <h1>자쿠드를 숭배해야 하는 이유</h1>
+  <section class="hero">
+    <div class="left">
+      <h1 class="site-name">자쿠드를 숭배해야 하는 이유</h1>
+      <p class="lead">이곳은 자쿠드를 숭배하는 사람들을 위한 공간이다. 자쿠드 숭배 시뮬레이터의 메인 페이지로서 숭배의 철학과 가이드, 짧은 사상문을 제공한다.</p>
 
-  <div class="card">
-    <p>
-      이곳은 자쿠드를 숭배하는 시뮬레이터 메인 페이지입니다.
-      상단 네비에서 숭배, 성경, 제네레이터로 이동하세요.
-    </p>
-  </div>
+      <article class="article">
+        <h2>숭배글</h2>
+        <p>자쿠드는 변하지 않는 중심이다. 오늘도 우리에게 작지만 확실한 보상을 준다. 작은 의식들이 모여 거대한 신념을 만든다.</p>
+        <p>이 사이트는 숭배 자체를 게임으로 재구성했다. 클릭 한 번은 헌신의 표시다. 수동 숭배력과 자동 숭배력은 당신의 신앙을 숫자로 보여준다. 더 나아가 장비와 업그레이드를 통해 당신의 숭배는 성장한다.</p>
+        <p>메뉴의 <strong>자쿠드 숭배하기</strong>로 이동해 직접 체험해 보라. 가챠 연출은 제네레이터에서 확인할 수 있다. 성경 페이지에는 숭배 관련 텍스트와 장별 바로가기가 준비될 것이다.</p>
+        <p style="font-weight:800">경고: 이것은 게임이며 실제 종교 행위와는 무관하다.</p>
+      </article>
+    </div>
+
+    <aside class="right-col right-panel" style="width:360px">
+      <div class="card">
+        <div class="stat-row"><div class="small-muted">총 SP</div><div id="totalSP_sidebar" class="kv">0 SP</div></div>
+        <div class="stat-row"><div class="small-muted">수동 숭배력</div><div id="manual_sidebar" class="kv">0 SP</div></div>
+        <div class="stat-row"><div class="small-muted">자동 숭배력</div><div id="sps_sidebar" class="kv">0 SPS</div></div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div class="small-muted">빠른 링크</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="worship.html" class="small-muted">→ 자쿠드 숭배하기</a>
+          <a href="generator.html" class="small-muted">→ 자쿠드 제네레이터</a>
+          <a href="bible.html" class="small-muted">→ 자쿠드 성경</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="small-muted" style="margin-bottom:6px">설정</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label class="theme-switch" title="다크 모드">
+            <input id="themeToggleSidebar" type="checkbox" />
+            <span class="slider"></span>
+          </label>
+          <div class="small-muted">다크 모드</div>
+        </div>
+      </div>
+    </aside>
+  </section>
 </main>
 
 <script>
-/* SP 표시 (localStorage 기반). 다른 페이지가 변경하면 storage 이벤트로 갱신 */
-(function(){
-  const KEY = 'zk_sp_v1';
-  const el = document.getElementById('spBadge');
-  const read = ()=> parseInt(localStorage.getItem(KEY) || '0', 10);
-  const writeUI = ()=> { el.textContent = read() + ' SP'; };
-  writeUI();
-  window.__updateSP = writeUI;
-  window.addEventListener('storage', (e) => { if(e.key === KEY) writeUI(); });
-})();
+/* BN helpers reused from worship to format SP the same way */
+const UNITS = ['M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','KU'];
+function bn_fromNumber(n){
+  let m = Number(n);
+  let e = 0;
+  if(!isFinite(m) || m === 0) return {m:0,e:0};
+  while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
+  while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
+  return {m,e};
+}
+function bn_normalize(b){
+  if(!b || !isFinite(b.m)) return {m:0,e:0};
+  let m = b.m, e = b.e;
+  if(m === 0) return {m:0,e:0};
+  while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
+  while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
+  return {m,e};
+}
+function bn_toNumberIfSafe(b){
+  try{
+    const val = b.m * Math.pow(1000, b.e);
+    if(Number.isFinite(val) && Math.abs(val) <= Number.MAX_SAFE_INTEGER) return val;
+    return null;
+  }catch(e){ return null; }
+}
+function bn_toStringUnit(b){
+  b = bn_normalize(b);
+  if(!b || b.m === 0) return '0 SP';
+  const e = b.e;
+  if(e < 2){
+    const val = b.m * Math.pow(1000, e);
+    return Math.floor(val).toLocaleString() + ' SP';
+  }
+  const unitIndex = Math.min(e - 2, UNITS.length - 1);
+  const displayVal = b.m * Math.pow(1000, e - (unitIndex + 2));
+  return displayVal.toFixed(2) + ' ' + UNITS[unitIndex];
+}
 
-/* 다크 모드 토글 (localStorage 유지) */
+/* load top state saved by worship (same KEY) */
+const KEY = 'zk_tycoon_v_final_v2';
+function loadTopState(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(!raw){
+      // fallback: try human-readable key
+      const badge = localStorage.getItem('zk_sp_v1');
+      return { spDisplay: badge || '0 SP', manual: null, sps: null };
+    }
+    const parsed = JSON.parse(raw);
+    // sp might be BN object or number
+    let spBN = {m:0,e:0};
+    if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined){
+      spBN = bn_normalize(parsed.sp);
+    } else {
+      spBN = bn_fromNumber(Number(parsed.sp || 0));
+    }
+    const spDisplay = bn_toStringUnit(spBN);
+    // manual: compute effective manual if data present
+    const manualBase = Number(parsed.manualBase ?? parsed.manualPower ?? 1);
+    const templeCount = (parsed.buildings && parsed.buildings.temple && parsed.buildings.temple.count) || 0;
+    const devotionLv = (parsed.upgrades && parsed.upgrades.devotion && parsed.upgrades.devotion.level) || 0;
+    const effManual = (manualBase + templeCount) * Math.pow(2, devotionLv);
+    const sps = (() => {
+      try{
+        let total = 0;
+        const b = parsed.buildings || {};
+        if(b.follower) total += (b.follower.count || 0) * (b.follower.sps ?? 0.5);
+        if(b.altar) total += (b.altar.count || 0) * (b.altar.sps ?? 2);
+        if(b.temple) total += (b.temple.count || 0) * (b.temple.sps ?? 10);
+        total *= Math.pow(2, devotionLv);
+        return total;
+      }catch(e){ return null; }
+    })();
+    return { spDisplay, manual: effManual, sps };
+  }catch(e){
+    return { spDisplay: localStorage.getItem('zk_sp_v1') || '0 SP', manual:null, sps:null };
+  }
+}
+
+function applyTopStateToUI(){
+  const st = loadTopState();
+  document.getElementById('totalSP_sidebar').textContent = st.spDisplay || '0 SP';
+  if(st.manual !== null){
+    const val = st.manual;
+    document.getElementById('manual_sidebar').textContent = (Math.abs(val) >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(val)) : Math.round(val)) + ' SP';
+  } else {
+    document.getElementById('manual_sidebar').textContent = '—';
+  }
+  if(st.sps !== null){
+    const v = Math.round(st.sps * 100) / 100;
+    document.getElementById('sps_sidebar').textContent = (Math.abs(v) >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(v)) : (v % 1 === 0 ? v.toFixed(0) : v.toFixed(2))) + ' SPS';
+  } else {
+    document.getElementById('sps_sidebar').textContent = '—';
+  }
+}
+
+/* theme toggles (header + sidebar toggles sync) */
 (function(){
-  const toggle = document.getElementById('themeToggle');
+  const toggles = [document.getElementById('themeToggle'), document.getElementById('themeToggleSidebar')].filter(Boolean);
   const apply = (t) => {
     if(t === 'dark') document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
-    toggle.checked = (t === 'dark');
+    toggles.forEach(el => el.checked = (t === 'dark'));
   };
   const saved = localStorage.getItem('theme');
   const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   apply(initial);
-  toggle.addEventListener('change', () => {
-    const next = toggle.checked ? 'dark' : 'light';
+  toggles.forEach(el => el.addEventListener('change', ()=>{
+    const next = el.checked ? 'dark' : 'light';
     localStorage.setItem('theme', next);
     apply(next);
-  });
+  }));
 })();
 
-/* 네비 자동 active 클래스 적용 (각 페이지에 동일 스크립트 포함하면 해당 페이지에서 강조됨) */
-(function(){
-  const path = location.pathname.split('/').pop();
-  const map = {
-    'worship.html':'link-worship',
-    'bible.html':'link-bible',
-    'generator.html':'link-generator'
-  };
-  const id = map[path];
-  if(id){
-    const el = document.getElementById(id);
-    if(el) el.classList.add('active');
-  }
-})();
+/* initialise UI */
+applyTopStateToUI();
+/* update periodically in case worship page changes localStorage */
+setInterval(applyTopStateToUI, 1500);
 </script>
 </body>
 </html>
