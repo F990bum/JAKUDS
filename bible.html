@@ -3,87 +3,74 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>자쿠드 숭배 성경</title>
+<title>자쿠드 숭배 시뮬레이터 — 자쿠드 성경</title>
 
-<link rel="icon" href="favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
-  --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
+  --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --muted:#475569; --text:#0f172a; --text-strong:#071035;
 }
 html.dark{
-  --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
-  --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff; --shadow:rgba(0,0,0,0.45);
+  --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff;
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 
-/* header / nav (same as other pages) */
+/* header same style as other pages (compact) */
 .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
-.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.8rem 1.2rem; max-width:1180px; margin:0 auto; }
+.header-top{ display:flex; align-items:center; justify-content:space-between; padding:0.6rem 18px; gap:1rem; }
 .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
-.brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
-.brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
+.brand img{ width:40px; height:40px; object-fit:contain; border-radius:6px; background:transparent; }
+.brand .title{ font-size:1.25rem; font-weight:900; color:var(--text-strong); }
 
 .right-controls{ display:flex; align-items:center; gap:0.6rem; }
-.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:120px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
-.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
+.sp-badge{ padding:0 12px; border-radius:8px; border:1px solid var(--line); font-weight:800; color:var(--accent); height:36px; display:flex; align-items:center; justify-content:center; font-size:13px; background:transparent; }
+.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); height:36px; display:flex; align-items:center; justify-content:center; font-size:13px; text-decoration:none; }
 
-.nav-row{ max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:flex-start; gap:0.5rem; padding:0.45rem 1.2rem; border-top:1px solid var(--line); background:transparent; }
-.nav-row a{ text-decoration:none; padding:0.45rem 0.85rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
+.nav-row{ display:flex; align-items:center; justify-content:space-between; padding:0.45rem 18px; border-top:1px solid var(--line); }
+.nav-left{ display:flex; gap:0.6rem; align-items:center; }
+.nav-left a{ text-decoration:none; padding:0.35rem 0.8rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.92rem; }
+.nav-left a.active{ background: rgba(99,102,241,0.12); color: var(--accent); }
 
-/* page layout */
-main{ max-width:1180px; margin:1.6rem auto; padding:0 1rem; display:grid; grid-template-columns: 1fr 420px; gap:1.2rem; align-items:start; }
-@media(max-width:980px){ main{ grid-template-columns:1fr; } .right-col{ order:2 } }
-
-.content-card{ background:var(--card); border-radius:12px; padding:1.2rem; box-shadow:0 12px 30px rgba(0,0,0,0.06); min-height:360px; }
-.page-title{ font-size:2rem; font-weight:900; margin:0 0 12px 0; color:var(--text-strong) }
-.lead{ color:var(--muted); font-weight:700; margin-bottom:12px }
-
-/* chapter button grid */
-.chapter-grid{ display:flex; flex-direction:column; gap:0.8rem; }
-.row{ display:flex; gap:0.8rem; flex-wrap:wrap; }
-.ch-btn{
-  flex:1 1 0;
-  min-width:80px;
-  padding:12px 14px;
-  border-radius:10px;
-  border:1px solid var(--line);
-  background:linear-gradient(180deg, rgba(0,0,0,0.01), transparent);
-  font-weight:900;
-  cursor:pointer;
-  text-align:center;
-  color:var(--text-strong);
-}
-.ch-btn.small{ flex:0 0 110px; } /* for third row grouping */
-
-.hint{ font-size:0.92rem; color:var(--muted); margin-top:8px }
-
-/* right column */
-.side-card{ background:var(--card); border-radius:10px; padding:0.9rem; box-shadow:0 8px 22px rgba(0,0,0,0.06); margin-bottom:0.9rem; }
-.stat-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; font-weight:800; color:var(--muted); }
-
+.nav-right{ display:flex; align-items:center; gap:0.6rem; }
+.theme-label{ color:var(--muted); font-weight:700; font-size:0.92rem; }
 .theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
 .theme-switch input{ opacity:0; width:0; height:0; }
-.theme-switch .slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; }
-.theme-switch .slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
-.theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
+.slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
+.slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
+.theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),#ffb86b); }
 .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
 
-/* small utilities */
-.kv{ font-weight:900; color:var(--text-strong); }
-.small-muted{ color:var(--muted); font-weight:700; font-size:0.95rem; }
+/* main simple layout */
+.main-wrap{ max-width:920px; margin:2rem auto; padding:0 18px; }
+.container{ background:var(--card); border-radius:12px; padding:28px; box-shadow:0 12px 30px rgba(0,0,0,0.06); display:flex; flex-direction:column; gap:20px; align-items:center; }
+.h1{ font-size:1.5rem; font-weight:900; color:var(--text-strong); margin:0; }
 
+.grid{ display:grid; grid-template-columns: repeat(6, 1fr); gap:12px; width:100%; max-width:640px; }
+.btn{ padding:14px 10px; border-radius:10px; border:1px solid var(--line); background:transparent; cursor:pointer; font-weight:800; color:var(--text); text-align:center; }
+.btn.big{ grid-column: span 6; padding:16px; font-size:1.05rem; background:linear-gradient(90deg,var(--accent),#ffb86b); color:#071018; box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+
+/* image preview modal (very simple) */
+.preview-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:10000; }
+.preview-box{ width:90%; max-width:900px; background:var(--card); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:8px; align-items:center; }
+.preview-img{ max-width:100%; max-height:70vh; border-radius:6px; object-fit:contain; }
+
+/* footer note small */
+.note{ font-size:0.9rem; color:var(--muted); }
+
+/* responsive */
+@media(max-width:720px){
+  .grid{ grid-template-columns: repeat(3, 1fr); }
+}
 </style>
 </head>
 <body>
 
 <header class="header">
   <div class="header-top">
-    <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
-      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고" onerror="this.onerror=null;this.src='/assets/logo.png'">
+    <a class="brand" href="index.html">
+      <img src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="logo">
       <span class="title">자쿠드 숭배 시뮬레이터</span>
     </a>
 
@@ -93,15 +80,17 @@ main{ max-width:1180px; margin:1.6rem auto; padding:0 1rem; display:grid; grid-t
     </div>
   </div>
 
-  <div class="nav-row">
-    <a href="index.html">메인</a>
-    <a href="worship.html">자쿠드 숭배하기</a>
-    <a href="bible.html">자쿠드 성경</a>
-    <a href="generator.html">자쿠드 제네레이터</a>
+  <div class="nav-row" role="navigation">
+    <div class="nav-left">
+      <a id="nav-index" href="index.html">메인</a>
+      <a id="nav-worship" href="worship.html">자쿠드 숭배하기</a>
+      <a id="nav-bible" href="bible.html">자쿠드 성경</a>
+      <a id="nav-generator" href="generator.html">자쿠드 제네레이터</a>
+    </div>
 
-    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
-      <div class="small-muted">다크</div>
-      <label class="theme-switch">
+    <div class="nav-right">
+      <div class="theme-label">다크 모드</div>
+      <label class="theme-switch" title="다크 모드">
         <input id="themeToggle" type="checkbox" />
         <span class="slider"></span>
       </label>
@@ -109,178 +98,116 @@ main{ max-width:1180px; margin:1.6rem auto; padding:0 1rem; display:grid; grid-t
   </div>
 </header>
 
-<main>
-  <section>
-    <div class="content-card">
-      <h1 class="page-title">자쿠드 숭배 성경</h1>
-      <div class="lead">장(章)별 바로가기. 각 장은 별도 내부 페이지로 연결된다.</div>
+<main class="main-wrap">
+  <div class="container" role="main" aria-labelledby="bibleTitle">
+    <h1 id="bibleTitle" class="h1">자쿠드 성경</h1>
 
-      <div class="chapter-grid">
-        <!-- 첫 줄: 1~4 -->
-        <div class="row">
-          <a class="ch-btn" href="bible_ch1.html">1장</a>
-          <a class="ch-btn" href="bible_ch2.html">2장</a>
-          <a class="ch-btn" href="bible_ch3.html">3장</a>
-          <a class="ch-btn" href="bible_ch4.html">4장</a>
-        </div>
+    <!-- chapter buttons 1..10 and EX -->
+    <div class="grid" id="chapters">
+      <button class="btn" data-ch="1">1장</button>
+      <button class="btn" data-ch="2">2장</button>
+      <button class="btn" data-ch="3">3장</button>
+      <button class="btn" data-ch="4">4장</button>
+      <button class="btn" data-ch="5">5장</button>
+      <button class="btn" data-ch="6">6장</button>
 
-        <!-- 둘째 줄: 5~8 -->
-        <div class="row">
-          <a class="ch-btn" href="bible_ch5.html">5장</a>
-          <a class="ch-btn" href="bible_ch6.html">6장</a>
-          <a class="ch-btn" href="bible_ch7.html">7장</a>
-          <a class="ch-btn" href="bible_ch8.html">8장</a>
-        </div>
-
-        <!-- 셋째 줄: 9~10, EX장, 사진 -->
-        <div class="row">
-          <a class="ch-btn small" href="bible_ch9.html">9장</a>
-          <a class="ch-btn small" href="bible_ch10.html">10장</a>
-          <a class="ch-btn small" href="bible_ex.html">EX장</a>
-          <a class="ch-btn small" href="bible_photos.html">사진</a>
-        </div>
-
-        <div class="hint">버튼을 클릭하면 해당 장의 페이지로 이동합니다. 장 내부 내용은 별도 파일로 관리하세요.</div>
-      </div>
-    </div>
-  </section>
-
-  <aside class="right-col">
-    <div class="side-card">
-      <div class="stat-row"><div class="small-muted">총 SP</div><div id="totalSP_sidebar" class="kv">0 SP</div></div>
-      <div class="stat-row"><div class="small-muted">수동 숭배력</div><div id="manual_sidebar" class="kv">0 SP</div></div>
-      <div class="stat-row"><div class="small-muted">자동 숭배력</div><div id="sps_sidebar" class="kv">0 SPS</div></div>
+      <button class="btn" data-ch="7">7장</button>
+      <button class="btn" data-ch="8">8장</button>
+      <button class="btn" data-ch="9">9장</button>
+      <button class="btn" data-ch="10">10장</button>
+      <button class="btn" data-ch="EX">EX장</button>
+      <button class="btn" id="photoBtn">사진</button>
     </div>
 
-    <div class="side-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div class="small-muted">빠른 이동</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <a href="worship.html" class="small-muted">→ 자쿠드 숭배하기</a>
-        <a href="generator.html" class="small-muted">→ 자쿠드 제네레이터</a>
-        <a href="index.html" class="small-muted">→ 메인</a>
-      </div>
-    </div>
+    <button class="btn big" id="openSelected">열기</button>
 
-    <div class="side-card">
-      <div class="small-muted" style="margin-bottom:8px">설정</div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <label class="theme-switch" title="다크 모드">
-          <input id="themeToggleSidebar" type="checkbox" />
-          <span class="slider"></span>
-        </label>
-        <div class="small-muted">다크 모드</div>
-      </div>
-    </div>
-  </aside>
+    <div class="note">원하는 장을 선택한 뒤 열기 버튼을 누르세요. 사진 버튼은 이미지 미리보기를 엽니다.</div>
+  </div>
 </main>
 
+<!-- image preview modal -->
+<div id="previewOverlay" class="preview-overlay" aria-hidden="true">
+  <div class="preview-box" role="dialog" aria-modal="true">
+    <img id="previewImg" class="preview-img" alt="선택한 사진이 여기 표시됩니다">
+    <div style="display:flex;gap:8px;">
+      <input id="fileInput" type="file" accept="image/*" style="display:none">
+      <button id="selectFile" class="btn">파일 선택</button>
+      <button id="closePreview" class="btn">닫기</button>
+    </div>
+  </div>
+</div>
+
 <script>
-/* BN helpers (same logic used across pages) */
-const UNITS = ['M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','KU'];
-function bn_fromNumber(n){
-  let m = Number(n), e = 0;
-  if(!isFinite(m) || m === 0) return {m:0,e:0};
-  while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
-  while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
-  return {m,e};
-}
-function bn_normalize(b){
-  if(!b || !isFinite(b.m)) return {m:0,e:0};
-  let m = b.m, e = b.e;
-  if(m === 0) return {m:0,e:0};
-  while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
-  while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
-  return {m,e};
-}
-function bn_toNumberIfSafe(b){
-  try{
-    const val = b.m * Math.pow(1000, b.e);
-    if(Number.isFinite(val) && Math.abs(val) <= Number.MAX_SAFE_INTEGER) return val;
-    return null;
-  }catch(e){ return null; }
-}
-function bn_toStringUnit(b){
-  b = bn_normalize(b);
-  if(!b || b.m === 0) return '0 SP';
-  const e = b.e;
-  if(e < 2){
-    const val = b.m * Math.pow(1000, e);
-    return Math.floor(val).toLocaleString() + ' SP';
-  }
-  const unitIndex = Math.min(e - 2, UNITS.length - 1);
-  const displayVal = b.m * Math.pow(1000, e - (unitIndex + 2));
-  return displayVal.toFixed(2) + ' ' + UNITS[unitIndex];
-}
-
-/* Read same storage key used by worship */
-const KEY = 'zk_tycoon_v_final_v2';
-function loadTopState(){
-  try{
-    const raw = localStorage.getItem(KEY);
-    if(!raw) return { spDisplay: localStorage.getItem('zk_sp_v1') || '0 SP', manual: null, sps: null };
-    const parsed = JSON.parse(raw);
-    let spBN = {m:0,e:0};
-    if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined) spBN = bn_normalize(parsed.sp);
-    else spBN = bn_fromNumber(Number(parsed.sp || 0));
-    const spDisplay = bn_toStringUnit(spBN);
-
-    const manualBase = Number(parsed.manualBase ?? parsed.manualPower ?? 1);
-    const templeCount = (parsed.buildings && parsed.buildings.temple && parsed.buildings.temple.count) || 0;
-    const devotionLv = (parsed.upgrades && parsed.upgrades.devotion && parsed.upgrades.devotion.level) || 0;
-    const effManual = (manualBase + templeCount) * Math.pow(2, devotionLv);
-
-    let totalSps = null;
-    try{
-      totalSps = 0;
-      const b = parsed.buildings || {};
-      if(b.follower) totalSps += (b.follower.count || 0) * (b.follower.sps ?? 0.5);
-      if(b.altar) totalSps += (b.altar.count || 0) * (b.altar.sps ?? 2);
-      if(b.temple) totalSps += (b.temple.count || 0) * (b.temple.sps ?? 10);
-      totalSps *= Math.pow(2, devotionLv);
-    } catch(e){ totalSps = null; }
-
-    return { spDisplay, manual: effManual, sps: totalSps };
-  }catch(e){
-    return { spDisplay: localStorage.getItem('zk_sp_v1') || '0 SP', manual:null, sps:null };
-  }
-}
-
-function applyTopStateToUI(){
-  const st = loadTopState();
-  document.getElementById('totalSP_sidebar').textContent = st.spDisplay || '0 SP';
-  if(st.manual !== null){
-    const v = st.manual;
-    document.getElementById('manual_sidebar').textContent = (Math.abs(v) >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(v)) : Math.round(v)) + ' SP';
-  } else {
-    document.getElementById('manual_sidebar').textContent = '—';
-  }
-  if(st.sps !== null){
-    const v = Math.round(st.sps * 100) / 100;
-    document.getElementById('sps_sidebar').textContent = (Math.abs(v) >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(v)) : (v % 1 === 0 ? v.toFixed(0) : v.toFixed(2))) + ' SPS';
-  } else {
-    document.getElementById('sps_sidebar').textContent = '—';
-  }
-}
-
-/* theme toggles sync */
+/* nav active */
 (function(){
-  const toggles = [document.getElementById('themeToggle'), document.getElementById('themeToggleSidebar')].filter(Boolean);
-  const apply = (t)=>{ if(t==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); toggles.forEach(el=>el.checked=(t==='dark')); };
-  const saved = localStorage.getItem('theme');
-  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  apply(initial);
-  toggles.forEach(el => el.addEventListener('change', ()=>{
-    const next = el.checked ? 'dark' : 'light';
-    localStorage.setItem('theme', next);
-    apply(next);
-  }));
+  const path = location.pathname.split('/').pop() || 'index.html';
+  const map = { 'index.html':'nav-index', '':'nav-index', 'worship.html':'nav-worship', 'bible.html':'nav-bible', 'generator.html':'nav-generator' };
+  const id = map[path] || null;
+  if(id){ const el=document.getElementById(id); if(el) el.classList.add('active'); }
 })();
 
-/* init and periodic update */
-applyTopStateToUI();
-setInterval(applyTopStateToUI, 1500);
+/* theme toggle (persist) */
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if(initial === 'dark') document.documentElement.classList.add('dark');
+  if(toggle) toggle.checked = (initial === 'dark');
+  if(toggle) toggle.addEventListener('change', ()=>{
+    const next = toggle.checked ? 'dark' : 'light';
+    localStorage.setItem('theme', next);
+    if(next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+  });
+})();
+
+/* chapter selection */
+const chapters = document.getElementById('chapters');
+let selected = null;
+chapters.addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  if(btn.id === 'photoBtn') { openPhoto(); return; }
+  // toggle selection visual
+  const all = chapters.querySelectorAll('button');
+  all.forEach(b=>b.style.boxShadow='none');
+  btn.style.boxShadow = '0 6px 18px rgba(0,0,0,0.12)';
+  selected = btn.dataset.ch;
+});
+
+/* open selected (placeholder behavior: navigate to fragment or show alert) */
+document.getElementById('openSelected').addEventListener('click', ()=>{
+  if(!selected){ alert('장(1~10 또는 EX)을 먼저 선택하세요.'); return; }
+  // open a simple fragment anchor to show which chapter would open
+  // replace with real navigation if you have chapter pages
+  location.hash = 'chapter-' + selected;
+  // small inline preview modal could be implemented; for now show native alert for clarity
+  alert(selected + '장 열기 (여기에 실제 성경 텍스트를 삽입하세요).');
+});
+
+/* photo modal */
+const previewOverlay = document.getElementById('previewOverlay');
+const fileInput = document.getElementById('fileInput');
+const previewImg = document.getElementById('previewImg');
+document.getElementById('selectFile').addEventListener('click', ()=> fileInput.click());
+document.getElementById('closePreview').addEventListener('click', closePhoto);
+fileInput.addEventListener('change', (ev)=>{
+  const f = ev.target.files && ev.target.files[0];
+  if(!f) return;
+  const url = URL.createObjectURL(f);
+  previewImg.src = url;
+});
+function openPhoto(){ previewOverlay.style.display = 'flex'; previewOverlay.setAttribute('aria-hidden','false'); previewImg.src = ''; }
+function closePhoto(){ previewOverlay.style.display = 'none'; previewOverlay.setAttribute('aria-hidden','true'); previewImg.src = ''; fileInput.value = ''; }
+
+/* spBadge shows stored SP display if available (reuse small formatter) */
+(function applyTopState(){
+  try{
+    const alt = localStorage.getItem('zk_sp_v1');
+    const el = document.getElementById('spBadge');
+    if(el) el.textContent = alt ? alt : '0 SP';
+  }catch(e){}
+})();
+setInterval(applyTopState, 2000);
 </script>
 </body>
 </html>
