@@ -21,25 +21,25 @@ html.dark{
 html{font-size:100%}
 body{margin:0;font-family:"Noto Sans KR",system-ui;background:var(--bg);color:var(--text);overflow-x:hidden}
 
-/* header */
+/* header copied / matched from index.html */
 .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
-.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.8rem 1.2rem; }
+.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; }
 .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
 .brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
 .brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
 
 .right-controls{ display:flex; align-items:center; gap:0.6rem; }
-.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:120px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
-.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); }
+.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:160px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
 
-/* nav */
-.nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.5rem; padding:0.45rem 1.2rem; border-top:1px solid var(--line); }
-.nav-left{ display:flex; gap:0.5rem; align-items:center; }
-.nav-left a{ text-decoration:none; padding:0.4rem 0.8rem; border-radius:0.6rem; font-weight:700; font-size:0.95rem; color:var(--muted); background:transparent; }
+/* Nav row */
+.nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.6rem; padding:0.45rem 18px; border-top:1px solid var(--line); background:transparent; box-sizing:border-box; }
+.nav-left{ display:flex; gap:0.6rem; align-items:center; }
+.nav-left a{ text-decoration:none; padding:0.45rem 0.9rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
 .nav-left a.active{ background: rgba(99,102,241,0.12); color: var(--accent); }
 
-.theme-wrap{ display:flex; align-items:center; gap:0.5rem; }
-.theme-label{ color:var(--muted); font-weight:700; font-size:0.9rem; }
+.nav-right{ display:flex; align-items:center; gap:0.6rem; }
+.theme-label{ color:var(--muted); font-weight:700; font-size:0.95rem; }
 .theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
 .theme-switch input{ opacity:0; width:0; height:0; }
 .slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
@@ -55,26 +55,32 @@ main{ max-width:1180px; margin:1.5rem auto; padding:1rem; display:flex; gap:1rem
 .worship-line.big{ font-size:2.8rem; line-height:1; }
 .worship-line.small{ font-size:1.2rem; opacity:0.95; margin-top:8px; }
 
-/* right */
-.right{ width:560px; display:flex; flex-direction:column; gap:0.9rem; } /* wider for buttons */
+/* right area now split into two columns: content and upgrades */
+.right{ display:flex; gap:0.9rem; align-items:flex-start; width:100%; max-width:880px; }
+.right .content { width:560px; display:flex; flex-direction:column; gap:0.9rem; }
 .meta{ background:var(--card); border-radius:10px; padding:0.95rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
 .meta .row{ display:flex; justify-content:space-between; margin-bottom:0.45rem; }
 .section-title{ font-weight:900; color:var(--text-strong); }
 html.dark .section-title{ color:#fff; }
 .thin-hr{ border:0; border-top:1px solid var(--line); margin:18px 0; }
 
-/* store */
 .store-title{ margin-top:0.2rem;font-weight:800;color:var(--text-strong); margin-bottom:8px; }
-.store{ display:grid; grid-template-columns:1fr; gap:0.8rem; margin-top:0.4rem; }
+.store{ display:grid; grid-template-columns:1fr; gap:0.8rem; margin-top:0.4rem; max-height:320px; overflow:auto; padding-right:6px; }
 .item{ background:var(--card); border-radius:10px; padding:0.8rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); gap:8px; }
 .item-left{ display:flex; flex-direction:column; gap:6px; max-width:70%; }
 .item-right{ display:flex; gap:8px; align-items:center; min-width:220px; justify-content:flex-end; }
 .item-right button{ min-width:120px; }
+
+/* buy / buy-max buttons */
 .item button{ padding:0.45rem 0.9rem; border-radius:8px; border:0; font-weight:800; cursor:pointer; }
 .buy{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; }
-.buy-max{ background:transparent; border:2px solid var(--line); color:var(--muted); padding:0.35rem 0.6rem; border-radius:8px; font-weight:800; cursor:pointer; }
+.buy-max{ background:transparent; border:2px solid var(--line); color:var(--muted); padding:0.35rem 0.6rem; border-radius:8px; font-weight:800; cursor:pointer; white-space:normal; text-align:center; line-height:1; }
 
-/* building desc removed - per request */
+/* upgrade panel */
+.upgrades{ width:260px; background:var(--card); border-radius:10px; padding:12px; box-shadow:0 8px 22px var(--shadow); max-height:520px; overflow:auto; }
+.upgrades .title{ font-weight:900; color:var(--text-strong); margin-bottom:10px; }
+.upgrades .spacer{ height:8px; }
+.upgrade-btn{ width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); background:transparent; font-weight:800; cursor:pointer; margin-bottom:8px; }
 
 /* floating */
 .float-elem{
@@ -85,13 +91,14 @@ html.dark .section-title{ color:#fff; }
 html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rgba(10,10,20,0.92)); color:var(--text); }
 @keyframes floatUp{ 0%{ transform:translate(-50%, -10% ) scale(1); opacity:1; } 100%{ transform:translate(-50%, -180% ) scale(1.04); opacity:0; } }
 
-/* crit text */
 .crit-text { font-weight:900; margin-right:8px; }
 
 /* responsive */
 @media(max-width:920px){
   main{ flex-direction:column; align-items:center; }
-  .right{ width:100%; }
+  .right{ flex-direction:column; }
+  .right .content{ width:100%; }
+  .upgrades{ width:100%; }
   .card-wrap{ width:92%; height:420px; }
   .item-right{ min-width:96px; }
 }
@@ -108,19 +115,20 @@ html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rg
 
     <div class="right-controls">
       <div id="spBadge" class="sp-badge">0 SP</div>
-      <a href="home.html"><button class="myhome-btn" type="button">My Home</button></a>
+      <a class="myhome-btn" href="home.html">My Home</a>
     </div>
   </div>
 
-  <div class="nav-row">
+  <div class="nav-row" role="navigation" aria-label="Main">
     <div class="nav-left">
-      <a id="link-worship" href="worship.html">자쿠드 숭배하기</a>
-      <a id="link-bible" href="bible.html">자쿠드 성경</a>
-      <a id="link-generator" href="generator.html">자쿠드 제네레이터</a>
+      <a id="nav-index" href="index.html">메인</a>
+      <a id="nav-worship" href="worship.html">자쿠드 숭배하기</a>
+      <a id="nav-bible" href="bible.html">자쿠드 성경</a>
+      <a id="nav-generator" href="generator.html">자쿠드 제네레이터</a>
     </div>
 
-    <div class="theme-wrap">
-      <span class="theme-label">다크</span>
+    <div class="nav-right">
+      <div class="theme-label">다크</div>
       <label class="theme-switch" title="다크 모드">
         <input id="themeToggle" type="checkbox" />
         <span class="slider"></span>
@@ -146,27 +154,44 @@ html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rg
     </div>
   </div>
 
-  <aside class="right">
-    <div class="meta">
-      <div class="row"><div class="section-title">통계</div><div></div></div>
-      <div class="row"><div>총 SP</div><div id="totalSP">0 SP</div></div>
-      <div class="row"><div>총 숭배 횟수</div><div id="totalClicks">0</div></div>
-      <div class="row"><div>플레이 시간</div><div id="playTime">00:00:00</div></div>
+  <div class="right">
+    <div class="content">
+      <div class="meta">
+        <div class="row"><div class="section-title">통계</div><div></div></div>
+        <div class="row"><div>총 SP</div><div id="totalSP">0 SP</div></div>
+        <div class="row"><div>총 숭배 횟수</div><div id="totalClicks">0</div></div>
+        <div class="row"><div>플레이 시간</div><div id="playTime">00:00:00</div></div>
 
-      <div class="thin-hr" aria-hidden="true"></div>
+        <div class="thin-hr" aria-hidden="true"></div>
 
-      <div class="store-title">상점</div>
-      <div class="store" id="store"></div>
+        <div class="store-title">상점</div>
+        <div class="store" id="store"></div>
 
+      </div>
     </div>
-  </aside>
+
+    <aside class="upgrades" id="upgradesPanel">
+      <div class="title">업그레이드</div>
+      <div style="color:var(--muted);font-weight:700;margin-bottom:8px">(공간 확보용 섹션 — 스크롤 가능)</div>
+      <button id="money10" class="upgrade-btn">돈 x10 (테스트)</button>
+      <button id="money01" class="upgrade-btn">돈 x0.1 (테스트)</button>
+      <div class="spacer"></div>
+      <!-- 더 많은 업그레이드 항목은 이 영역에 추가될 예정 (스크롤 필요하도록 준비됨) -->
+      <div style="height:800px;"></div>
+    </aside>
+  </div>
 </main>
 
 <script>
 /* -----------------------
-   Units / BN (base-1000) helpers
+   BN / units helpers (대체 및 통합)
+   - UNITS for M..Dc
+   - KU formatting without internal commas as requested
    ----------------------- */
-const UNITS = ['M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','KU']; // used from 1e6 onwards
+const UNIT_LIST = ['M','B','T','Qu','Qi','Sx','Sp','Oc','No','Dc']; // e=2..11
+const KU_MAX = 550_000_000;
+const E_KU = 2 + UNIT_LIST.length; // exponent index for KU
+
 function bn_fromNumber(n){
   let m = Number(n);
   let e = 0;
@@ -176,7 +201,7 @@ function bn_fromNumber(n){
   return {m,e};
 }
 function bn_normalize(b){
-  if(!b || !isFinite(b.m)) return {m:0,e:0};
+  if(!b || typeof b.m !== 'number' || typeof b.e !== 'number') return {m:0,e:0};
   let m = b.m, e = b.e;
   if(m === 0) return {m:0,e:0};
   while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
@@ -190,46 +215,87 @@ function bn_toNumberIfSafe(b){
     return null;
   }catch(e){ return null; }
 }
-function bn_toStringUnit(b){
-  b = bn_normalize(b);
-  if(!b || b.m === 0) return '0 SP';
-  const e = b.e;
-  if(e < 2){
-    const val = b.m * Math.pow(1000, e);
-    return Math.floor(val).toLocaleString() + ' SP';
-  }
-  const unitIndex = Math.min(e - 2, UNITS.length - 1);
-  const displayVal = b.m * Math.pow(1000, e - (unitIndex + 2));
-  return displayVal.toFixed(2) + ' ' + UNITS[unitIndex];
-}
-function bn_add(a,b){ // a,b are BN
-  a = bn_normalize(a); b = bn_normalize(b);
-  if(a.m === 0) return {m:b.m,e:b.e};
-  if(b.m === 0) return {m:a.m,e:a.e};
-  if(a.e === b.e) return bn_normalize({m: a.m + b.m, e: a.e});
-  // ensure a.e > b.e
-  if(a.e < b.e){ const t=a; a=b; b=t; }
-  const diff = a.e - b.e;
-  const m = a.m + b.m / Math.pow(1000, diff);
-  return bn_normalize({m, e: a.e});
-}
-function bn_addNumber(a, num){ return bn_add(a, bn_fromNumber(num)); }
-function bn_subNumber(a, num){
-  const b = bn_fromNumber(num);
-  return bn_sub(a,b);
-}
-function bn_sub(a,b){
-  a = bn_normalize(a); b = bn_normalize(b);
-  if(bn_compare(a,b) <= 0) return {m:0,e:0};
-  if(a.e === b.e) return bn_normalize({m: a.m - b.m, e: a.e});
-  if(a.e < b.e){ return bn_normalize({m: -(b.m - a.m * Math.pow(1000, b.e - a.e)), e: b.e}); }
-  const diff = a.e - b.e;
-  const m = a.m - b.m / Math.pow(1000, diff);
-  return bn_normalize({m,e: a.e});
-}
-function bn_compare(a,b){ a = bn_normalize(a); b = bn_normalize(b); if(a.e !== b.e) return a.e > b.e ? 1 : -1; if(Math.abs(a.m - b.m) < 1e-12) return 0; return a.m > b.m ? 1 : -1; }
 function bn_gte_number(a, num){ return bn_compare(a, bn_fromNumber(num)) >= 0; }
+function bn_compare(a,b){ a = bn_normalize(a); b = bn_normalize(b); if(a.e !== b.e) return a.e > b.e ? 1 : -1; if(Math.abs(a.m - b.m) < 1e-12) return 0; return a.m > b.m ? 1 : -1; }
+function bn_addNumber(a, num){ return bn_add(a, bn_fromNumber(num)); }
+function bn_add(a,b){ a = bn_normalize(a); b = bn_normalize(b); if(a.m === 0) return {m:b.m,e:b.e}; if(b.m === 0) return {m:a.m,e:a.e}; if(a.e === b.e) return bn_normalize({m: a.m + b.m, e: a.e}); if(a.e < b.e){ const t=a; a=b; b=t; } const diff = a.e - b.e; const m = a.m + b.m / Math.pow(1000, diff); return bn_normalize({m, e: a.e}); }
+function bn_subNumber(a, num){ return bn_sub(a, bn_fromNumber(num)); }
+function bn_sub(a,b){ a = bn_normalize(a); b = bn_normalize(b); if(bn_compare(a,b) <= 0) return {m:0,e:0}; if(a.e === b.e) return bn_normalize({m: a.m - b.m, e: a.e}); if(a.e < b.e){ return bn_normalize({m: -(b.m - a.m * Math.pow(1000, b.e - a.e)), e: b.e}); } const diff = a.e - b.e; const m = a.m - b.m / Math.pow(1000, diff); return bn_normalize({m,e: a.e}); }
 function bn_mulNumber(a, num){ return bn_normalize({m: a.m * num, e: a.e}); }
+
+/* KU formatting WITHOUT internal commas (요구사항)
+   - 반환 예: "1만 2345 KU", "1234만 5678 KU", "1억 2345만 KU"
+   - 숫자 그룹(만/억 등)은 toLocaleString() 사용하지 않음 (콤마 없음)
+*/
+function formatKUInteger(n){
+  if(n <= 0) return '0 KU';
+  if(n > KU_MAX) n = KU_MAX;
+  if(n < 10000) return `${n} KU`;
+  const man = Math.floor(n / 10000);
+  const rest = n % 10000;
+  if(man < 10000){
+    if(rest === 0) return `${man}만 KU`;
+    return `${man}만 ${rest} KU`;
+  }
+  const uk = Math.floor(man / 10000);
+  const manRem = man % 10000;
+  if(manRem === 0) return `${uk}억 KU`;
+  return `${uk}억 ${manRem}만 KU`;
+}
+
+/* 범용 SP 표시 함수 (숫자 또는 BN 객체 모두 수용)
+   - 1,000,000 미만: 정수 콤마 표기 + " SP"
+   - >= 1,000,000: 단위 적용 (M..Dc). Dc 초과 시 KU로 변환.
+   - Dc 레벨에서 소수 2자리까지 표기 (불필요 0 제거)
+*/
+function formatSPDisplay(value){
+  if(value && typeof value === 'object' && value.m !== undefined && value.e !== undefined){
+    const b = bn_normalize(value);
+    const maybe = bn_toNumberIfSafe(b);
+    if(maybe !== null) return formatSPDisplay(maybe);
+    if(b.e < E_KU){
+      const idx = UNIT_LIST.length - 1; // Dc index
+      const displayVal = b.m * Math.pow(1000, b.e - (idx + 2));
+      let s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
+      return `${s} ${UNIT_LIST[idx]} SP`;
+    }
+    const expDiff = b.e - E_KU;
+    if(expDiff > 6) return formatKUInteger(KU_MAX);
+    const kuCount = Math.floor(b.m * Math.pow(1000, expDiff));
+    return formatKUInteger(kuCount);
+  }
+
+  const n = Number(value || 0);
+  if(!isFinite(n) || n === 0) return '0 SP';
+  if(n < 1_000_000){
+    return `${Math.floor(n).toLocaleString()} SP`;
+  }
+  // pick unit
+  let e = 2;
+  for(let i = 0; i < UNIT_LIST.length; i++, e++){
+    const unitExp = Math.pow(1000, e);
+    if(n < unitExp * 1000 || i === UNIT_LIST.length - 1){
+      const displayVal = n / unitExp;
+      const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
+      if(i === UNIT_LIST.length - 1 && n >= unitExp * 1000){
+        const kuCount = Math.floor(n / (unitExp * 1000));
+        return formatKUInteger(kuCount);
+      }
+      return `${s} ${UNIT_LIST[i]} SP`;
+    }
+  }
+  return `${Math.floor(n).toLocaleString()} SP`;
+}
+
+/* small-number format for manual / sps when <1M
+   - 정수는 콤마, 소수는 최대 2자리 유지. 불필요한 0 제거.
+*/
+function formatSmallNumber(n){
+  if(!isFinite(n)) return '0';
+  if(Math.abs(n) < 1) return n.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
+  if(Math.abs(n - Math.round(n)) < 1e-9) return Math.round(n).toLocaleString();
+  return Number(n.toFixed(2)).toLocaleString();
+}
 
 /* -----------------------
    Defaults / State
@@ -238,12 +304,12 @@ const KEY = 'zk_tycoon_v_final_v2';
 const DEFAULT = {
   sp: {m:0,e:0}, // BN
   totalClicks: 0,
-  manualBase: 1,     // base manual (excludes temple)
+  manualBase: 1,
   sps: 0,
   buildings: {
     follower: {count:0, baseCost:10, sps:0.5},
     altar:    {count:0, baseCost:100, sps:2},
-    temple:   {count:0, baseCost:1000, sps:10} // 사원 +10 SPS +1 manualBase
+    temple:   {count:0, baseCost:1000, sps:10}
   },
   upgrades: {
     devotion: {level:0, baseCost:50, effect:2}
@@ -270,27 +336,11 @@ const critPctEl = document.getElementById('critPct');
 const feverPctEl = document.getElementById('feverPct');
 
 /* -----------------------
-   Helpers
+   Mechanics (same as 이전)
    ----------------------- */
 function jsonClone(o){ return JSON.parse(JSON.stringify(o)); }
-function formatFloatingAmount(n){
-  const r = Math.round((n + Number.EPSILON) * 100) / 100;
-  if(Math.abs(r - Math.round(r)) < 1e-9) return Math.round(r).toString();
-  return r.toFixed(2);
-}
-function bn_toDisplayOrNumber(b){
-  // return string if >=1e6 else integer string
-  const maybe = bn_toNumberIfSafe(b);
-  if(maybe !== null && Math.abs(maybe) < 1_000_000) return Math.floor(maybe).toString();
-  return bn_toStringUnit(b);
-}
-
-/* -----------------------
-   Mechanics
-   ----------------------- */
 function getDevotionMultiplier(){ return Math.pow(2, state.upgrades.devotion.level || 0); }
 function getEffectiveManualBase(){
-  // manualBase + temple.count, then devotion multiplier applies
   const base = Number(state.manualBase || 0) + (state.buildings.temple.count || 0);
   return base * getDevotionMultiplier();
 }
@@ -306,7 +356,7 @@ function calcSPS(){
   return total;
 }
 
-/* Fever and Crit sampling (multi-level) */
+/* Fever / Crit sampling (동일) */
 let feverExpire = null;
 function isFeverActive(){ return feverExpire && Date.now() < feverExpire; }
 function getCurrentFeverMultiplier(){ return isFeverActive() ? (state._feverMultiplier || 1.5) : 1; }
@@ -346,7 +396,7 @@ function critLevelDisplay(level){
 }
 
 /* -----------------------
-   Store definitions
+   Store items
    ----------------------- */
 const ITEMS = [
   { key:'follower', label:'신도', desc1:'+0.5 SPS', desc2:'크리티컬 확률 +1%', costFn: (b)=> Math.ceil(b.baseCost * Math.pow(1.15, b.count)) },
@@ -356,11 +406,11 @@ const ITEMS = [
 ];
 
 function formatCostForDisplay(costNum){
-  if(costNum >= 1_000_000) return bn_toStringUnit(bn_fromNumber(costNum));
+  if(costNum >= 1_000_000) return formatSPDisplay(bn_fromNumber(costNum));
   return Math.floor(costNum).toLocaleString() + ' SP';
 }
 
-/* render store with BUY and BUY MAX (equal widths) */
+/* render store and BUY MAX two-line label */
 function renderStore(){
   storeEl.innerHTML = '';
   ITEMS.forEach(item=>{
@@ -375,7 +425,7 @@ function renderStore(){
       const buyBtn = document.createElement('button'); buyBtn.className='buy'; buyBtn.textContent = formatCostForDisplay(cost);
       buyBtn.disabled = !bn_gte_number(state.sp, cost);
       buyBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyDevotion(); });
-      const buyMaxBtn = document.createElement('button'); buyMaxBtn.className='buy-max'; buyMaxBtn.textContent='BUY MAX';
+      const buyMaxBtn = document.createElement('button'); buyMaxBtn.className='buy-max'; buyMaxBtn.innerHTML='BUY<br>MAX';
       buyMaxBtn.disabled = !bn_gte_number(state.sp, cost);
       buyMaxBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyMaxDevotion(); });
       right.appendChild(buyBtn); right.appendChild(buyMaxBtn);
@@ -386,7 +436,7 @@ function renderStore(){
       const buyBtn = document.createElement('button'); buyBtn.className='buy'; buyBtn.textContent = formatCostForDisplay(cost);
       buyBtn.disabled = !bn_gte_number(state.sp, cost);
       buyBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyBuilding(item.key); });
-      const buyMaxBtn = document.createElement('button'); buyMaxBtn.className='buy-max'; buyMaxBtn.textContent='BUY MAX';
+      const buyMaxBtn = document.createElement('button'); buyMaxBtn.className='buy-max'; buyMaxBtn.innerHTML='BUY<br>MAX';
       buyMaxBtn.disabled = !bn_gte_number(state.sp, cost);
       buyMaxBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyMaxBuilding(item.key); });
       right.appendChild(buyBtn); right.appendChild(buyMaxBtn);
@@ -396,7 +446,7 @@ function renderStore(){
 }
 
 /* -----------------------
-   Buy functions
+   Buying logic (기존 로직 유지)
    ----------------------- */
 function buyBuilding(key){
   const b = state.buildings[key];
@@ -413,9 +463,9 @@ function buyMaxBuilding(key){
   if(denom <= 0) return;
   const availableNum = bn_toNumberIfSafe(state.sp);
   if(availableNum === null){
-    // SP huge: greedy limited buy
+    // extremely large SP path: greedy buy but with safe loop cap
     let loops = 0;
-    while(bn_gte_number(state.sp, Math.ceil(base * Math.pow(r, b.count))) && loops < 2000){
+    while(bn_gte_number(state.sp, Math.ceil(base * Math.pow(r, b.count))) && loops < 500){
       buyBuilding(key);
       loops++;
     }
@@ -439,7 +489,6 @@ function buyDevotion(){
   if(!bn_gte_number(state.sp, cost)) return;
   state.sp = bn_subNumber(state.sp, cost);
   u.level += 1;
-  // devotion doubles manual & sps via multiplier applied in calc functions
   saveState(); updateUI();
 }
 function buyMaxDevotion(){
@@ -456,19 +505,14 @@ function buyMaxDevotion(){
 }
 
 /* -----------------------
-   Worship (click) handling
-   - pointerdown for immediacy
-   - floating shows '+' prefix always
-   - CRITICAL prefix (colored) when crit
+   Worship click handling
    ----------------------- */
 worshipBtn.addEventListener('pointerdown', (ev)=>{
-  // Fever sampling: altar gives +0.1% each
   const altarCount = state.buildings.altar.count || 0;
   const feverPercent = altarCount * 0.1;
   const feverSample = sampleMultiLevel(feverPercent);
   if(feverSample.level >= 0) triggerFever(feverSample.level);
 
-  // Crit sampling: base 2% + follower *1%
   const shindoCount = state.buildings.follower.count || 0;
   const critPercent = 2 + shindoCount * 1;
   const critSample = sampleMultiLevel(critPercent);
@@ -476,8 +520,6 @@ worshipBtn.addEventListener('pointerdown', (ev)=>{
   const critLevel = critSample.level;
   let critMult = critMultiplierForLevel(critLevel);
 
-  // Note: altar no longer increases crit reward (changed earlier)
-  // Fever click multiplier
   const feverActiveNow = isFeverActive();
   const feverClickMult = feverActiveNow ? state._feverMultiplier || 1.5 : 1;
 
@@ -489,7 +531,6 @@ worshipBtn.addEventListener('pointerdown', (ev)=>{
   state.totalClicks = (state.totalClicks || 0) + 1;
   saveState(); updateUI();
 
-  // floating
   const x = ev.clientX + window.scrollX;
   const y = ev.clientY + window.scrollY - 5;
   if(isCrit){
@@ -500,10 +541,15 @@ worshipBtn.addEventListener('pointerdown', (ev)=>{
   }
 });
 
-/* floating util ensures + prefix and unitization for >=1e6 */
 function displayNumberForFloat(n){
-  if(Math.abs(n) >= 1_000_000) return bn_toStringUnit(bn_fromNumber(n)).replace(/ SP$/,'');
+  // use formatSPDisplay for large, else formatted small number without " SP"
+  if(Math.abs(n) >= 1_000_000) return formatSPDisplay(bn_fromNumber(n)).replace(/ SP$/,'');
   return formatFloatingAmount(n);
+}
+function formatFloatingAmount(n){
+  const r = Math.round((n + Number.EPSILON) * 100) / 100;
+  if(Math.abs(r - Math.round(r)) < 1e-9) return Math.round(r).toString();
+  return r.toFixed(2);
 }
 function showFloatingAt(x,y,text,critInfo){
   const el = document.createElement('div');
@@ -550,6 +596,7 @@ document.addEventListener('visibilitychange', ()=>{
 
 /* -----------------------
    Persistence: load/save (BN aware)
+   - storage merge hardened (buildings/upgrades preserved)
    ----------------------- */
 function loadState(){
   try{
@@ -560,18 +607,27 @@ function loadState(){
       return s;
     }
     const parsed = JSON.parse(raw);
-    const out = Object.assign(jsonClone(DEFAULT), parsed);
-    // sp: if object with m/e use as BN; else convert number
+    const out = jsonClone(DEFAULT);
+
+    // merge top-level simple fields
+    out.totalClicks = Number(parsed.totalClicks || out.totalClicks);
+    out.manualBase = Number(parsed.manualBase || out.manualBase);
+    out.sps = parsed.sps || out.sps;
+    out.playAcc = parsed.playAcc || out.playAcc;
+    out.startTimestamp = parsed.startTimestamp || null;
+    out.lastSaved = parsed.lastSaved || 0;
+    out._feverMultiplier = parsed._feverMultiplier || 1;
+
+    // sp handling
     if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined){
       out.sp = bn_normalize(parsed.sp);
     } else {
       out.sp = bn_fromNumber(Number(parsed.sp || 0));
     }
-    out.upgrades = out.upgrades || DEFAULT.upgrades;
-    out.buildings = out.buildings || DEFAULT.buildings;
-    out._feverMultiplier = parsed._feverMultiplier || 1;
-    if(!out.startTimestamp) out.startTimestamp = null;
-    if(!out.playAcc) out.playAcc = 0;
+
+    // merge buildings (preserve any missing)
+    out.buildings = Object.assign(jsonClone(DEFAULT.buildings), parsed.buildings || {});
+    out.upgrades = Object.assign(jsonClone(DEFAULT.upgrades), parsed.upgrades || {});
     return out;
   }catch(e){
     console.error('load failed', e);
@@ -585,7 +641,7 @@ function saveState(){
   const copy = jsonClone(state);
   copy.sp = bn_normalize(state.sp);
   localStorage.setItem(KEY, JSON.stringify(copy));
-  localStorage.setItem('zk_sp_v1', bn_toStringUnit(state.sp));
+  localStorage.setItem('zk_sp_v1', formatSPDisplay(state.sp));
 }
 
 /* -----------------------
@@ -605,7 +661,7 @@ function startTick(){
 setInterval(()=> saveState(), 5000);
 
 /* -----------------------
-   UI Render
+   UI Render (포맷 변경 반영)
    ----------------------- */
 function updateUI(){
   // worship button highlight if fever
@@ -617,18 +673,26 @@ function updateUI(){
     worshipBtn.style.color = '#071018';
   }
 
-  // top badge and totals using BN formatting
-  spBadge.textContent = bn_toStringUnit(state.sp);
-  totalSPEl.textContent = bn_toStringUnit(state.sp);
-  totalClicksEl.textContent = state.totalClicks || 0;
+  // top badge and totals using unified formatter
+  spBadge.textContent = formatSPDisplay(state.sp);
+  totalSPEl.textContent = formatSPDisplay(state.sp);
+  totalClicksEl.textContent = (state.totalClicks || 0).toLocaleString();
 
-  // manual display always show SP suffix; unitize if >=1e6
+  // manual display: if <1e6 show with commas, else use formatSPDisplay
   const effManual = getEffectiveManualBase();
-  manualPowerEl.textContent = (effManual >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(effManual)) : Math.round(effManual)) + ' SP';
+  if(effManual < 1_000_000){
+    manualPowerEl.textContent = `${Math.round(effManual).toLocaleString()} SP`;
+  } else {
+    manualPowerEl.textContent = formatSPDisplay(bn_fromNumber(effManual));
+  }
 
-  // automatic label: '자동 숭배력'
-  const spsVal = Math.round(calcSPS() * 100) / 100;
-  spsEl.textContent = spsVal >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(spsVal)) : (spsVal.toFixed(2).replace(/\.00$/,'')); // compact
+  // automatic label: show formatted small number for <1e6, else formatSPDisplay
+  const spsVal = calcSPS();
+  if(spsVal < 1_000_000){
+    spsEl.textContent = formatSmallNumber(Math.round(spsVal * 100) / 100).replace(/\.00$/,'');
+  } else {
+    spsEl.textContent = formatSPDisplay(bn_fromNumber(Math.round(spsVal * 100) / 100)).replace(/ SP$/,'');
+  }
 
   // crit & fever %
   const critPercent = 2 + (state.buildings.follower.count || 0) * 1;
@@ -641,35 +705,52 @@ function updateUI(){
 }
 
 /* -----------------------
-   Nav theme storage sync
+   storage event sync (더 안전한 병합)
    ----------------------- */
-(function(){ const el = document.getElementById('link-worship'); if(el) el.classList.add('active'); })();
-(function(){
-  const toggle = document.getElementById('themeToggle');
-  const apply = (t)=>{ if(t === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); toggle.checked = (t === 'dark'); };
-  const saved = localStorage.getItem('theme');
-  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  apply(initial);
-  toggle.addEventListener('change', ()=>{
-    const next = toggle.checked ? 'dark' : 'light';
-    localStorage.setItem('theme', next);
-    apply(next);
-  });
-})();
-
 window.addEventListener('storage', (e)=>{
   if(e.key === KEY || e.key === 'zk_sp_v1'){
     try{
       const parsed = JSON.parse(localStorage.getItem(KEY) || '{}');
       if(parsed){
-        state = Object.assign(jsonClone(DEFAULT), parsed);
-        if(parsed.sp && parsed.sp.m !== undefined) state.sp = bn_normalize(parsed.sp);
-        else state.sp = bn_fromNumber(Number(parsed.sp || 0));
+        // merge safely
+        const merged = Object.assign(jsonClone(DEFAULT), parsed);
+        if(parsed.sp && parsed.sp.m !== undefined) merged.sp = bn_normalize(parsed.sp);
+        else merged.sp = bn_fromNumber(Number(parsed.sp || 0));
+        // ensure nested preserved
+        merged.buildings = Object.assign(jsonClone(DEFAULT.buildings), parsed.buildings || {});
+        merged.upgrades = Object.assign(jsonClone(DEFAULT.upgrades), parsed.upgrades || {});
+        state = merged;
         updateUI();
       }
     }catch(err){}
   }
 });
+
+/* -----------------------
+   Nav theme storage sync (copied from index)
+   ----------------------- */
+(function setActiveNav(){
+  const path = location.pathname.split('/').pop() || 'index.html';
+  const map = { 'index.html':'nav-index', '':'nav-index', 'worship.html':'nav-worship', 'bible.html':'nav-bible', 'generator.html':'nav-generator' };
+  const id = map[path] || null;
+  if(id){
+    const el = document.getElementById(id);
+    if(el) el.classList.add('active');
+  }
+})();
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if(initial === 'dark') document.documentElement.classList.add('dark');
+  if(toggle) toggle.checked = (initial === 'dark');
+  if(toggle) toggle.addEventListener('change', ()=>{
+    const next = toggle.checked ? 'dark' : 'light';
+    localStorage.setItem('theme', next);
+    if(next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+    updateUI();
+  });
+})();
 
 /* -----------------------
    Init
@@ -686,6 +767,18 @@ window.addEventListener('storage', (e)=>{
   startTick();
   setInterval(updatePlayTimeDisplay, 1000);
 })();
+
+/* -----------------------
+   테스트용 업그레이드 버튼 (돈 x10 / 돈 x0.1)
+   ----------------------- */
+document.getElementById('money10').addEventListener('click', ()=>{
+  state.sp = bn_mulNumber(state.sp, 10);
+  saveState(); updateUI();
+});
+document.getElementById('money01').addEventListener('click', ()=>{
+  state.sp = bn_mulNumber(state.sp, 0.1);
+  saveState(); updateUI();
+});
 </script>
 </body>
 </html>
