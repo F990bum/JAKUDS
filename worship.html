@@ -3,94 +3,98 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>자쿠드 숭배하기</title>
+<title>자쿠드 숭배 시뮬레이터 — 숭배하기</title>
 
 <link rel="icon" href="favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-  :root{
-    --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
-    --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
-    --crit-yellow:#ffd166; --crit-orange:#ff9f1c; --crit-red:#ff3b30;
-  }
-  html.dark{
-    --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
-    --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff; --shadow:rgba(0,0,0,0.45);
-  }
-  html{font-size:100%}
-  body{margin:0;font-family:"Noto Sans KR",system-ui; background:var(--bg); color:var(--text); overflow-x:hidden}
+:root{
+  --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
+  --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
+  --crit-yellow:#ffd166; --crit-orange:#ff9f1c; --crit-red:#ff3b30;
+}
+html.dark{
+  --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
+  --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff; --shadow:rgba(0,0,0,0.45);
+}
+html{font-size:100%}
+body{margin:0;font-family:"Noto Sans KR",system-ui;background:var(--bg);color:var(--text);overflow-x:hidden}
 
-  /* header */
-  .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
-  .header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.8rem 1.2rem; }
-  .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
-  .brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
-  .brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
+/* header */
+.header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
+.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.8rem 1.2rem; }
+.brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
+.brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
+.brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
 
-  .right-controls{ display:flex; align-items:center; gap:0.6rem; }
-  .sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:120px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
-  .myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); }
+.right-controls{ display:flex; align-items:center; gap:0.6rem; }
+.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:120px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); }
 
-  /* nav */
-  .nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.5rem; padding:0.45rem 1.2rem; border-top:1px solid var(--line); }
-  .nav-left{ display:flex; gap:0.5rem; align-items:center; }
-  .nav-left a{ text-decoration:none; padding:0.4rem 0.8rem; border-radius:0.6rem; font-weight:700; font-size:0.95rem; color:var(--muted); background:transparent; }
-  .nav-left a.active{ background: rgba(99,102,241,0.12); color: var(--accent); }
+/* nav */
+.nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.5rem; padding:0.45rem 1.2rem; border-top:1px solid var(--line); }
+.nav-left{ display:flex; gap:0.5rem; align-items:center; }
+.nav-left a{ text-decoration:none; padding:0.4rem 0.8rem; border-radius:0.6rem; font-weight:700; font-size:0.95rem; color:var(--muted); background:transparent; }
+.nav-left a.active{ background: rgba(99,102,241,0.12); color: var(--accent); }
 
-  .theme-wrap{ display:flex; align-items:center; gap:0.5rem; }
-  .theme-label{ color:var(--muted); font-weight:700; font-size:0.9rem; }
-  .theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
-  .theme-switch input{ opacity:0; width:0; height:0; }
-  .slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
-  .slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
-  .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
-  .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
+.theme-wrap{ display:flex; align-items:center; gap:0.5rem; }
+.theme-label{ color:var(--muted); font-weight:700; font-size:0.9rem; }
+.theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
+.theme-switch input{ opacity:0; width:0; height:0; }
+.slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
+.slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
+.theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
+.theme-switch input:checked + .slider::before{ transform: translateX(20px); }
 
-  /* main layout */
-  main{ max-width:1180px; margin:1.5rem auto; padding:1rem; display:flex; gap:1rem; align-items:flex-start; }
-  .left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1rem; align-items:center; }
-  .card-wrap{ width:400px; height:480px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; }
-  #worshipBtn{ width:92%; height:82%; border-radius:14px; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 18px 40px rgba(0,0,0,0.14); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0.4rem; line-height:1.05; }
-  .worship-line.big{ font-size:2.6rem; line-height:1; }
-  .worship-line.small{ font-size:1.2rem; opacity:0.95; margin-top:8px; }
+/* layout */
+main{ max-width:1180px; margin:1.5rem auto; padding:1rem; display:flex; gap:1rem; align-items:flex-start; }
+.left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1rem; align-items:center; }
+.card-wrap{ width:420px; height:520px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; }
+#worshipBtn{ width:92%; height:84%; border-radius:14px; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 18px 40px rgba(0,0,0,0.14); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0.6rem; line-height:1.05; }
+.worship-line.big{ font-size:2.8rem; line-height:1; }
+.worship-line.small{ font-size:1.2rem; opacity:0.95; margin-top:8px; }
 
-  .right{ width:520px; display:flex; flex-direction:column; gap:0.9rem; } /* widened */
-  .meta{ background:var(--card); border-radius:10px; padding:0.85rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
-  .meta .row{ display:flex; justify-content:space-between; margin-bottom:0.4rem; }
-  .section-title{ font-weight:800; color:var(--text-strong); } /* default */
-  html.dark .section-title{ color:#fff; } /* requested: white in dark */
-  .thin-hr{ border:0; border-top:1px solid var(--line); margin:20px 0; } /* increased spacing */
+/* right */
+.right{ width:560px; display:flex; flex-direction:column; gap:0.9rem; } /* wider for buttons */
+.meta{ background:var(--card); border-radius:10px; padding:0.95rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
+.meta .row{ display:flex; justify-content:space-between; margin-bottom:0.45rem; }
+.section-title{ font-weight:900; color:var(--text-strong); }
+html.dark .section-title{ color:#fff; }
+.thin-hr{ border:0; border-top:1px solid var(--line); margin:18px 0; }
 
-  .store-title{ margin-top:0.2rem;font-weight:800;color:var(--text-strong) }
-  .store{ display:grid; grid-template-columns:1fr; gap:0.7rem; margin-top:0.4rem; }
-  .item{ background:var(--card); border-radius:10px; padding:0.7rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); gap:8px; }
-  .item-left{ display:flex; flex-direction:column; gap:6px; }
-  .item-right{ display:flex; gap:8px; align-items:center; }
-  .item-right button{ min-width:130px; } /* equal width for BUY and BUY MAX */
-  .item button{ padding:0.45rem 0.9rem; border-radius:8px; border:0; font-weight:800; cursor:pointer; }
-  .buy{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; }
-  .buy-max{ background:transparent; border:2px solid var(--line); color:var(--muted); padding:0.35rem 0.6rem; border-radius:8px; font-weight:800; cursor:pointer; } /* stronger border */
+/* store */
+.store-title{ margin-top:0.2rem;font-weight:800;color:var(--text-strong); margin-bottom:8px; }
+.store{ display:grid; grid-template-columns:1fr; gap:0.8rem; margin-top:0.4rem; }
+.item{ background:var(--card); border-radius:10px; padding:0.8rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); gap:8px; }
+.item-left{ display:flex; flex-direction:column; gap:6px; max-width:70%; }
+.item-right{ display:flex; gap:8px; align-items:center; min-width:220px; justify-content:flex-end; }
+.item-right button{ min-width:120px; }
+.item button{ padding:0.45rem 0.9rem; border-radius:8px; border:0; font-weight:800; cursor:pointer; }
+.buy{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; }
+.buy-max{ background:transparent; border:2px solid var(--line); color:var(--muted); padding:0.35rem 0.6rem; border-radius:8px; font-weight:800; cursor:pointer; }
 
-  .building-desc{ display:none; } /* removed */
+/* building desc removed - per request */
 
-  /* floating */
-  .float-elem{
-    position:absolute; pointer-events:none; transform:translate(-50%, -50%); font-weight:900; opacity:1; white-space:nowrap;
-    display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border-radius:16px;
-    background:linear-gradient(90deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95)); color:#071018; font-size:16px; box-shadow:0 10px 28px rgba(0,0,0,0.18);
-    animation: floatUp 1000ms forwards;
-  }
-  html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rgba(10,10,20,0.92)); color:var(--text); }
-  @keyframes floatUp{ 0%{ transform:translate(-50%, -10% ) scale(1); opacity:1; } 100%{ transform:translate(-50%, -180% ) scale(1.04); opacity:0; } }
-  .crit-text { font-weight:900; margin-right:8px; }
+/* floating */
+.float-elem{
+  position:absolute; pointer-events:none; transform:translate(-50%, -50%); font-weight:900; opacity:1; white-space:nowrap; display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border-radius:16px;
+  background:linear-gradient(90deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
+  color:#071018; font-size:16px; box-shadow:0 10px 28px rgba(0,0,0,0.18); animation: floatUp 1000ms forwards;
+}
+html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rgba(10,10,20,0.92)); color:var(--text); }
+@keyframes floatUp{ 0%{ transform:translate(-50%, -10% ) scale(1); opacity:1; } 100%{ transform:translate(-50%, -180% ) scale(1.04); opacity:0; } }
 
-  @media(max-width:920px){
-    main{ flex-direction:column; align-items:center; }
-    .right{ width:100%; }
-    .card-wrap{ width:92%; height:420px; }
-    .item-right button{ min-width:96px; }
-  }
+/* crit text */
+.crit-text { font-weight:900; margin-right:8px; }
+
+/* responsive */
+@media(max-width:920px){
+  main{ flex-direction:column; align-items:center; }
+  .right{ width:100%; }
+  .card-wrap{ width:92%; height:420px; }
+  .item-right{ min-width:96px; }
+}
 </style>
 </head>
 <body>
@@ -134,9 +138,9 @@
       </button>
     </div>
 
-    <div style="width:400px;max-width:92%;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-weight:800">
-      <div style="display:flex;justify-content:space-between"><div>수동 숭배력</div><div><span id="manualPower">1</span></div></div>
-      <div style="display:flex;justify-content:space-between"><div>자동 수입</div><div><span id="sps">0</span> SPS</div></div>
+    <div style="width:420px;max-width:92%;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-weight:800">
+      <div style="display:flex;justify-content:space-between"><div>수동 숭배력</div><div id="manualPower">1 SP</div></div>
+      <div style="display:flex;justify-content:space-between"><div>자동 숭배력</div><div><span id="sps">0</span> SPS</div></div>
       <div style="display:flex;justify-content:space-between;color:var(--muted);font-weight:700"><div>크리티컬 확률</div><div id="critPct">0%</div></div>
       <div style="display:flex;justify-content:space-between;color:var(--muted);font-weight:700"><div>피버 확률</div><div id="feverPct">0%</div></div>
     </div>
@@ -154,35 +158,37 @@
       <div class="store-title">상점</div>
       <div class="store" id="store"></div>
 
-      <!-- 건물 및 업그레이드 설명 섹션 제거 -->
     </div>
   </aside>
 </main>
 
 <script>
-/* ------------------------
-   Units + base-1000 big-number (BN)
-   ------------------------ */
-const KEY = 'zk_tycoon_v1';
-const UNITS = ['M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','KU'];
-const MAX_UNIT_INDEX = UNITS.length - 1;
-
-/* BN: { m: Number, e: Integer } representing m * 1000^e */
+/* -----------------------
+   Units / BN (base-1000) helpers
+   ----------------------- */
+const UNITS = ['M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','KU']; // used from 1e6 onwards
 function bn_fromNumber(n){
   let m = Number(n);
   let e = 0;
   if(!isFinite(m) || m === 0) return {m:0,e:0};
-  while(m >= 1000){ m /= 1000; e += 1; }
-  while(m > 0 && m < 1 && e > -1000){ m *= 1000; e -= 1; }
-  return {m, e};
+  while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
+  while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
+  return {m,e};
 }
 function bn_normalize(b){
   if(!b || !isFinite(b.m)) return {m:0,e:0};
   let m = b.m, e = b.e;
   if(m === 0) return {m:0,e:0};
-  while(m >= 1000){ m /= 1000; e += 1; }
-  while(m > 0 && m < 1 && e > -1000){ m *= 1000; e -= 1; }
+  while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
+  while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
   return {m,e};
+}
+function bn_toNumberIfSafe(b){
+  try{
+    const val = b.m * Math.pow(1000, b.e);
+    if(Number.isFinite(val) && Math.abs(val) <= Number.MAX_SAFE_INTEGER) return val;
+    return null;
+  }catch(e){ return null; }
 }
 function bn_toStringUnit(b){
   b = bn_normalize(b);
@@ -192,21 +198,11 @@ function bn_toStringUnit(b){
     const val = b.m * Math.pow(1000, e);
     return Math.floor(val).toLocaleString() + ' SP';
   }
-  const unitIndex = Math.min(e - 2, MAX_UNIT_INDEX);
+  const unitIndex = Math.min(e - 2, UNITS.length - 1);
   const displayVal = b.m * Math.pow(1000, e - (unitIndex + 2));
   return displayVal.toFixed(2) + ' ' + UNITS[unitIndex];
 }
-function bn_toNumberIfSafe(b){
-  try{
-    const val = b.m * Math.pow(1000, b.e);
-    if(Number.isFinite(val) && Math.abs(val) <= Number.MAX_SAFE_INTEGER) return val;
-    return null;
-  }catch(e){ return null; }
-}
-function bn_addNumber(b, num){
-  return bn_add(b, bn_fromNumber(num));
-}
-function bn_add(a,b){
+function bn_add(a,b){ // a,b are BN
   a = bn_normalize(a); b = bn_normalize(b);
   if(a.m === 0) return {m:b.m,e:b.e};
   if(b.m === 0) return {m:a.m,e:a.e};
@@ -214,12 +210,13 @@ function bn_add(a,b){
   // ensure a.e > b.e
   if(a.e < b.e){ const t=a; a=b; b=t; }
   const diff = a.e - b.e;
-  const factor = Math.pow(1000, diff);
-  const m = a.m + b.m / factor;
+  const m = a.m + b.m / Math.pow(1000, diff);
   return bn_normalize({m, e: a.e});
 }
+function bn_addNumber(a, num){ return bn_add(a, bn_fromNumber(num)); }
 function bn_subNumber(a, num){
-  return bn_sub(a, bn_fromNumber(num));
+  const b = bn_fromNumber(num);
+  return bn_sub(a,b);
 }
 function bn_sub(a,b){
   a = bn_normalize(a); b = bn_normalize(b);
@@ -228,44 +225,42 @@ function bn_sub(a,b){
   if(a.e < b.e){ return bn_normalize({m: -(b.m - a.m * Math.pow(1000, b.e - a.e)), e: b.e}); }
   const diff = a.e - b.e;
   const m = a.m - b.m / Math.pow(1000, diff);
-  return bn_normalize({m, e: a.e});
+  return bn_normalize({m,e: a.e});
 }
-function bn_compare(a,b){
-  a = bn_normalize(a); b = bn_normalize(b);
-  if(a.e !== b.e) return a.e > b.e ? 1 : -1;
-  if(Math.abs(a.m - b.m) < 1e-12) return 0;
-  return a.m > b.m ? 1 : -1;
-}
+function bn_compare(a,b){ a = bn_normalize(a); b = bn_normalize(b); if(a.e !== b.e) return a.e > b.e ? 1 : -1; if(Math.abs(a.m - b.m) < 1e-12) return 0; return a.m > b.m ? 1 : -1; }
 function bn_gte_number(a, num){ return bn_compare(a, bn_fromNumber(num)) >= 0; }
 function bn_mulNumber(a, num){ return bn_normalize({m: a.m * num, e: a.e}); }
 
-/* ------------------------
-   Defaults + state (manualBase + devotion level)
-   ------------------------ */
+/* -----------------------
+   Defaults / State
+   ----------------------- */
+const KEY = 'zk_tycoon_v_final_v2';
 const DEFAULT = {
-  sp: {m:0,e:0},
-  totalClicks:0,
-  manualBase:1,   // base manual power excluding temple and devotion
-  sps:0,
+  sp: {m:0,e:0}, // BN
+  totalClicks: 0,
+  manualBase: 1,     // base manual (excludes temple)
+  sps: 0,
   buildings: {
-    follower:{count:0, baseCost:10, sps:0.5},
-    altar:{count:0, baseCost:100, sps:2},
-    temple:{count:0, baseCost:1000, sps:0} // temple no longer gives SPS
+    follower: {count:0, baseCost:10, sps:0.5},
+    altar:    {count:0, baseCost:100, sps:2},
+    temple:   {count:0, baseCost:1000, sps:10} // 사원 +10 SPS +1 manualBase
   },
-  upgrades:{ devotion:{level:0, baseCost:50, effect:2} },
-  startTimestamp:null,
-  playAcc:0,
-  lastSaved:0,
-  _feverMultiplier:1
+  upgrades: {
+    devotion: {level:0, baseCost:50, effect:2}
+  },
+  startTimestamp: null,
+  playAcc: 0,
+  lastSaved: 0,
+  _feverMultiplier: 1
 };
 let state = loadState();
 
-/* ------------------------
+/* -----------------------
    DOM refs
-   ------------------------ */
+   ----------------------- */
 const spBadge = document.getElementById('spBadge');
-const totalSP = document.getElementById('totalSP');
-const totalClicks = document.getElementById('totalClicks');
+const totalSPEl = document.getElementById('totalSP');
+const totalClicksEl = document.getElementById('totalClicks');
 const spsEl = document.getElementById('sps');
 const manualPowerEl = document.getElementById('manualPower');
 const worshipBtn = document.getElementById('worshipBtn');
@@ -274,77 +269,90 @@ const playTimeEl = document.getElementById('playTime');
 const critPctEl = document.getElementById('critPct');
 const feverPctEl = document.getElementById('feverPct');
 
-/* ---------- Helpers ---------- */
+/* -----------------------
+   Helpers
+   ----------------------- */
 function jsonClone(o){ return JSON.parse(JSON.stringify(o)); }
 function formatFloatingAmount(n){
-  const rounded = Math.round((n + Number.EPSILON) * 100) / 100;
-  if(Math.abs(rounded - Math.round(rounded)) < 1e-9) return Math.round(rounded);
-  return rounded.toFixed(2);
+  const r = Math.round((n + Number.EPSILON) * 100) / 100;
+  if(Math.abs(r - Math.round(r)) < 1e-9) return Math.round(r).toString();
+  return r.toFixed(2);
 }
-function getEffectiveManualPower(){
-  // (manualBase + temple.count) * 2^devotionLevel
-  const base = Number(state.manualBase || 0) + (state.buildings.temple.count || 0);
-  const devLevel = state.upgrades.devotion.level || 0;
-  return base * Math.pow(2, devLevel);
+function bn_toDisplayOrNumber(b){
+  // return string if >=1e6 else integer string
+  const maybe = bn_toNumberIfSafe(b);
+  if(maybe !== null && Math.abs(maybe) < 1_000_000) return Math.floor(maybe).toString();
+  return bn_toStringUnit(b);
 }
 
-/* ---------- Mechanics: SPS, fever, crit ---------- */
+/* -----------------------
+   Mechanics
+   ----------------------- */
+function getDevotionMultiplier(){ return Math.pow(2, state.upgrades.devotion.level || 0); }
+function getEffectiveManualBase(){
+  // manualBase + temple.count, then devotion multiplier applies
+  const base = Number(state.manualBase || 0) + (state.buildings.temple.count || 0);
+  return base * getDevotionMultiplier();
+}
 function calcSPS(){
   let total = 0;
-  for(const k of ['follower','altar']){ // temple no sps
-    total += (state.buildings[k].count || 0) * state.buildings[k].sps;
+  for(const k of ['follower','altar','temple']){
+    const b = state.buildings[k];
+    total += (b.count || 0) * b.sps;
   }
-  const devLevel = state.upgrades.devotion.level || 0;
-  const devMultiplier = Math.pow(2, devLevel); // devotion doubles SPS per level
-  total *= devMultiplier;
+  total *= getDevotionMultiplier();
   total *= getCurrentFeverMultiplier();
   state.sps = total;
   return total;
 }
 
-/* Fever: altar now gives +0.1% per altar, temple gives manualBase +1 */
+/* Fever and Crit sampling (multi-level) */
 let feverExpire = null;
 function isFeverActive(){ return feverExpire && Date.now() < feverExpire; }
 function getCurrentFeverMultiplier(){ return isFeverActive() ? (state._feverMultiplier || 1.5) : 1; }
 function triggerFever(level){
   const mult = 1.5 * Math.pow(2, Math.max(0, level));
   const duration = 10000;
-  state._feverMultiplier = mult; feverExpire = Date.now() + duration;
+  state._feverMultiplier = mult;
+  feverExpire = Date.now() + duration;
   updateUI();
-  setTimeout(()=> { state._feverMultiplier = 1; feverExpire = null; updateUI(); }, duration + 50);
+  setTimeout(()=>{ state._feverMultiplier = 1; feverExpire = null; updateUI(); }, duration + 50);
 }
-
-/* sample multi-level distribution */
 function sampleMultiLevel(Ppercent){
-  if(Ppercent <= 0) return { level: -1, n:0, r:0 };
+  if(Ppercent <= 0) return {level:-1, n:0, r:0};
   const n = Math.floor(Ppercent / 100);
   const r = Ppercent % 100;
   const rnd = Math.random() * 100;
   if(n === 0){
-    if(rnd < r) return { level: 0, n, r };
-    return { level: -1, n, r };
+    if(rnd < r) return {level:0,n,r};
+    return {level:-1,n,r};
   } else {
-    if(rnd < r) return { level: n, n, r };
-    return { level: n - 1, n, r };
+    if(rnd < r) return {level:n,n,r};
+    return {level:n-1,n,r};
   }
 }
-function critMultiplierForLevel(level){ return level < 0 ? 1 : Math.pow(2, level + 1); }
+function critMultiplierForLevel(level){
+  if(level < 0) return 1;
+  return Math.pow(2, level + 1);
+}
 function critLevelDisplay(level){
   if(level < 0) return null;
   const color = level === 0 ? getComputedStyle(document.documentElement).getPropertyValue('--crit-yellow').trim()
-               : level === 1 ? getComputedStyle(document.documentElement).getPropertyValue('--crit-orange').trim()
-               : getComputedStyle(document.documentElement).getPropertyValue('--crit-red').trim();
+              : level === 1 ? getComputedStyle(document.documentElement).getPropertyValue('--crit-orange').trim()
+              : getComputedStyle(document.documentElement).getPropertyValue('--crit-red').trim();
   const scale = 1 + Math.min(level * 0.08, 0.6);
   const text = 'CRITICAL' + (level > 0 ? '!'.repeat(level) : '');
-  return { color, scale, text, level };
+  return {color,scale,text,level};
 }
 
-/* ---------- Store items & rendering ---------- */
+/* -----------------------
+   Store definitions
+   ----------------------- */
 const ITEMS = [
-  { key:'follower', label:'신도', descLine1:'+0.5 SPS', descLine2:'크리티컬 확률 +1%', costFn: s=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'altar', label:'제단', descLine1:'+2 SPS', descLine2:'피버 확률 +0.1%', costFn: s=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'temple', label:'사원', descLine1:'+1 수동 숭배력', descLine2:'(헌신 강화 적용 전)', costFn: s=>Math.ceil(s.baseCost * Math.pow(1.15, s.count)) },
-  { key:'devotion', label:'헌신 강화', descLine1:'수입 ×2', descLine2:'', costFn: u=>Math.ceil(u.baseCost * Math.pow(2.5, u.level)) }
+  { key:'follower', label:'신도', desc1:'+0.5 SPS', desc2:'크리티컬 확률 +1%', costFn: (b)=> Math.ceil(b.baseCost * Math.pow(1.15, b.count)) },
+  { key:'altar',    label:'제단',  desc1:'+2 SPS',   desc2:'피버 확률 +0.1%', costFn: (b)=> Math.ceil(b.baseCost * Math.pow(1.15, b.count)) },
+  { key:'temple',   label:'사원',  desc1:'+10 SPS',  desc2:'+1 수동 숭배력', costFn: (b)=> Math.ceil(b.baseCost * Math.pow(1.15, b.count)) },
+  { key:'devotion', label:'헌신 강화', desc1:'수입 ×2', desc2:'', costFn: (u)=> Math.ceil(u.baseCost * Math.pow(2.5, u.level)) }
 ];
 
 function formatCostForDisplay(costNum){
@@ -352,71 +360,71 @@ function formatCostForDisplay(costNum){
   return Math.floor(costNum).toLocaleString() + ' SP';
 }
 
+/* render store with BUY and BUY MAX (equal widths) */
 function renderStore(){
   storeEl.innerHTML = '';
   ITEMS.forEach(item=>{
-    const container = document.createElement('div'); container.className='item';
-    const left = document.createElement('div'); left.className='item-left';
-    const right = document.createElement('div'); right.className='item-right';
-
+    const container = document.createElement('div');
+    container.className = 'item';
+    const left = document.createElement('div'); left.className = 'item-left';
+    const right = document.createElement('div'); right.className = 'item-right';
     if(item.key === 'devotion'){
       const u = state.upgrades.devotion;
-      left.innerHTML = `<div style="font-weight:800">헌신 강화 Lv. ${u.level}</div><div style="font-size:0.85rem;color:var(--muted)">${item.descLine1}</div>`;
+      left.innerHTML = `<div style="font-weight:900">${item.label} Lv. ${u.level}</div><div style="font-size:0.9rem;color:var(--muted)">${item.desc1}</div>`;
       const cost = item.costFn(u);
-      const btnBuy = document.createElement('button'); btnBuy.textContent = formatCostForDisplay(cost); btnBuy.className='buy';
-      btnBuy.disabled = !bn_gte_number(state.sp, cost); btnBuy.addEventListener('pointerdown', e=>{ e.preventDefault(); buyItemDevotion(); });
-      right.appendChild(btnBuy);
-      const btnMax = document.createElement('button'); btnMax.textContent='BUY MAX'; btnMax.className='buy-max';
-      btnMax.disabled = !bn_gte_number(state.sp, cost); btnMax.addEventListener('pointerdown', e=>{ e.preventDefault(); buyMaxDevotion(); });
-      right.appendChild(btnMax);
+      const buyBtn = document.createElement('button'); buyBtn.className='buy'; buyBtn.textContent = formatCostForDisplay(cost);
+      buyBtn.disabled = !bn_gte_number(state.sp, cost);
+      buyBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyDevotion(); });
+      const buyMaxBtn = document.createElement('button'); buyMaxBtn.className='buy-max'; buyMaxBtn.textContent='BUY MAX';
+      buyMaxBtn.disabled = !bn_gte_number(state.sp, cost);
+      buyMaxBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyMaxDevotion(); });
+      right.appendChild(buyBtn); right.appendChild(buyMaxBtn);
     } else {
       const b = state.buildings[item.key];
-      left.innerHTML = `<div style="font-weight:800">${item.label} x${b.count}</div><div style="font-size:0.85rem;color:var(--muted)">${item.descLine1}<br>${item.descLine2}</div>`;
+      left.innerHTML = `<div style="font-weight:900">${item.label} x${b.count}</div><div style="font-size:0.9rem;color:var(--muted)">${item.desc1}<br>${item.desc2}</div>`;
       const cost = item.costFn(b);
-      const btnBuy = document.createElement('button'); btnBuy.textContent = formatCostForDisplay(cost); btnBuy.className='buy';
-      btnBuy.disabled = !bn_gte_number(state.sp, cost); btnBuy.addEventListener('pointerdown', e=>{ e.preventDefault(); buyBuilding(item); });
-      right.appendChild(btnBuy);
-      const btnMax = document.createElement('button'); btnMax.textContent='BUY MAX'; btnMax.className='buy-max';
-      btnMax.disabled = !bn_gte_number(state.sp, cost); btnMax.addEventListener('pointerdown', e=>{ e.preventDefault(); buyMaxBuilding(item); });
-      right.appendChild(btnMax);
+      const buyBtn = document.createElement('button'); buyBtn.className='buy'; buyBtn.textContent = formatCostForDisplay(cost);
+      buyBtn.disabled = !bn_gte_number(state.sp, cost);
+      buyBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyBuilding(item.key); });
+      const buyMaxBtn = document.createElement('button'); buyMaxBtn.className='buy-max'; buyMaxBtn.textContent='BUY MAX';
+      buyMaxBtn.disabled = !bn_gte_number(state.sp, cost);
+      buyMaxBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyMaxBuilding(item.key); });
+      right.appendChild(buyBtn); right.appendChild(buyMaxBtn);
     }
-
     container.appendChild(left); container.appendChild(right); storeEl.appendChild(container);
   });
 }
 
-/* ---------- Buy functions ---------- */
-function buyBuilding(item){
-  const b = state.buildings[item.key];
+/* -----------------------
+   Buy functions
+   ----------------------- */
+function buyBuilding(key){
+  const b = state.buildings[key];
   const cost = Math.ceil(b.baseCost * Math.pow(1.15, b.count));
   if(!bn_gte_number(state.sp, cost)) return;
   state.sp = bn_subNumber(state.sp, cost);
-  // apply building effect
   b.count += 1;
-  // temple effect: adds +1 to manualBase before devotion (we compute effective on the fly)
-  // altar effect: increases fever percent (reflected in sampling)
   saveState(); updateUI();
 }
-
-function buyMaxBuilding(item){
-  const b = state.buildings[item.key];
+function buyMaxBuilding(key){
+  const b = state.buildings[key];
   const r = 1.15, base = b.baseCost, c = b.count;
-  const denom = base * Math.pow(r, c); if(denom <= 0) return;
+  const denom = base * Math.pow(r, c);
+  if(denom <= 0) return;
   const availableNum = bn_toNumberIfSafe(state.sp);
   if(availableNum === null){
-    // SP too large to convert safely: fallback to greedy buys with cap
-    let iterations = 0;
-    while(true){
-      const cost = Math.ceil(base * Math.pow(r, b.count));
-      if(!bn_gte_number(state.sp, cost)) break;
-      buyBuilding(item);
-      iterations++;
-      if(iterations > 2000) break;
+    // SP huge: greedy limited buy
+    let loops = 0;
+    while(bn_gte_number(state.sp, Math.ceil(base * Math.pow(r, b.count))) && loops < 2000){
+      buyBuilding(key);
+      loops++;
     }
     return;
   }
-  const inside = 1 + (availableNum * (r - 1)) / denom; if(inside <= 1) return;
-  const n = Math.floor(Math.log(inside) / Math.log(r)); if(n <= 0) return;
+  const inside = 1 + (availableNum * (r - 1)) / denom;
+  if(inside <= 1) return;
+  const n = Math.floor(Math.log(inside) / Math.log(r));
+  if(n <= 0) return;
   const costSum = base * Math.pow(r, c) * (Math.pow(r, n) - 1) / (r - 1);
   const actualCost = Math.min(costSum, availableNum);
   state.sp = bn_subNumber(state.sp, actualCost);
@@ -425,121 +433,152 @@ function buyMaxBuilding(item){
 }
 
 /* devotion */
-function buyItemDevotion(){
-  const u = state.upgrades.devotion; const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
+function buyDevotion(){
+  const u = state.upgrades.devotion;
+  const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
   if(!bn_gte_number(state.sp, cost)) return;
   state.sp = bn_subNumber(state.sp, cost);
   u.level += 1;
-  // DO NOT mutate manualBase. effective manual is computed: (manualBase + templeCount) * 2^level
+  // devotion doubles manual & sps via multiplier applied in calc functions
   saveState(); updateUI();
 }
 function buyMaxDevotion(){
-  const u = state.upgrades.devotion; let count=0;
+  const u = state.upgrades.devotion;
+  let cnt = 0;
   while(true){
     const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
     if(!bn_gte_number(state.sp, cost)) break;
     state.sp = bn_subNumber(state.sp, cost);
-    u.level += 1;
-    count++; if(count>200) break;
+    u.level += 1; cnt++;
+    if(cnt > 200) break;
   }
-  if(count>0){ saveState(); updateUI(); }
+  if(cnt>0){ saveState(); updateUI(); }
 }
 
-/* ---------- Worship handler (pointerdown) ---------- */
+/* -----------------------
+   Worship (click) handling
+   - pointerdown for immediacy
+   - floating shows '+' prefix always
+   - CRITICAL prefix (colored) when crit
+   ----------------------- */
 worshipBtn.addEventListener('pointerdown', (ev)=>{
-  // FEVER: each altar adds 0.1% (changed)
+  // Fever sampling: altar gives +0.1% each
   const altarCount = state.buildings.altar.count || 0;
   const feverPercent = altarCount * 0.1;
   const feverSample = sampleMultiLevel(feverPercent);
   if(feverSample.level >= 0) triggerFever(feverSample.level);
 
-  // CRIT: base 2% + 1% per follower
-  const baseCrit = 2; const shindoCount = state.buildings.follower.count || 0;
-  const critPercent = baseCrit + shindoCount * 1;
+  // Crit sampling: base 2% + follower *1%
+  const shindoCount = state.buildings.follower.count || 0;
+  const critPercent = 2 + shindoCount * 1;
   const critSample = sampleMultiLevel(critPercent);
-  const isCrit = critSample.level >= 0; const critLevel = critSample.level;
+  const isCrit = critSample.level >= 0;
+  const critLevel = critSample.level;
   let critMult = critMultiplierForLevel(critLevel);
 
-  // altar no longer modifies crit reward, so remove altar multiplier (user requested altar -> fever)
-  // fever (click) multiplier
+  // Note: altar no longer increases crit reward (changed earlier)
+  // Fever click multiplier
   const feverActiveNow = isFeverActive();
-  const feverClickMultiplier = feverActiveNow ? state._feverMultiplier || 1.5 : 1;
+  const feverClickMult = feverActiveNow ? state._feverMultiplier || 1.5 : 1;
 
-  // effective manual power now computed
-  const effectiveManual = getEffectiveManualPower();
-  const gain = effectiveManual * critMult * feverClickMultiplier;
+  const baseManual = Number(state.manualBase || 0) + (state.buildings.temple.count || 0);
+  const finalManual = baseManual * getDevotionMultiplier();
+  const gain = finalManual * critMult * feverClickMult;
 
   state.sp = bn_addNumber(state.sp, gain);
-  state.totalClicks += 1;
+  state.totalClicks = (state.totalClicks || 0) + 1;
   saveState(); updateUI();
 
-  // floating: show with units if >= 1e6
-  const x = ev.clientX + window.scrollX; const y = ev.clientY + window.scrollY - 5;
+  // floating
+  const x = ev.clientX + window.scrollX;
+  const y = ev.clientY + window.scrollY - 5;
   if(isCrit){
-    const critInfo = critLevelDisplay(critLevel);
-    showFloatingAt(x, y, gain, critInfo);
+    const info = critLevelDisplay(critLevel);
+    showFloatingAt(x, y, info.text + ' 🛐 +' + displayNumberForFloat(gain), info);
   } else {
-    showFloatingAt(x, y, gain, null);
+    showFloatingAt(x, y, '🛐 +' + displayNumberForFloat(gain), null);
   }
 });
 
-/* floating display accepts numeric gain and uses BN for unitization when large */
-function showFloatingAt(x, y, gainNum, critInfo){
-  const el = document.createElement('div'); el.className='float-elem'; el.style.left = x + 'px'; el.style.top = y + 'px';
-  const needUnit = Math.abs(gainNum) >= 1_000_000;
+/* floating util ensures + prefix and unitization for >=1e6 */
+function displayNumberForFloat(n){
+  if(Math.abs(n) >= 1_000_000) return bn_toStringUnit(bn_fromNumber(n)).replace(/ SP$/,'');
+  return formatFloatingAmount(n);
+}
+function showFloatingAt(x,y,text,critInfo){
+  const el = document.createElement('div');
+  el.className = 'float-elem';
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
   if(critInfo){
     const t = document.createElement('span'); t.className='crit-text'; t.textContent = critInfo.text;
-    t.style.color = critInfo.color; t.style.fontSize = (16*critInfo.scale)+'px';
+    t.style.color = critInfo.color; t.style.fontSize = (14 * critInfo.scale) + 'px';
     el.appendChild(t);
-    const v = document.createElement('span');
-    v.style.fontSize = (16*critInfo.scale)+'px';
-    v.textContent = ' ' + (needUnit ? bn_toStringUnit(bn_fromNumber(gainNum)) : ('+' + formatFloatingAmount(gainNum)));
+    const v = document.createElement('span'); v.textContent = ' ' + text.replace(/^.*\+/, '+'); v.style.fontSize = (14 * critInfo.scale) + 'px';
     el.appendChild(v);
   } else {
-    el.textContent = needUnit ? bn_toStringUnit(bn_fromNumber(gainNum)) : ('🛐 +' + formatFloatingAmount(gainNum));
+    el.textContent = text;
   }
-  document.body.appendChild(el); setTimeout(()=> el.remove(), 1000);
+  document.body.appendChild(el);
+  setTimeout(()=> el.remove(), 1000);
 }
 
-/* ---------- Play time ---------- */
-function updatePlayTimeDisplay(){ playTimeEl.textContent = formatMs(getAccumulatedPlayMs()); }
-function formatMs(ms){ const s=Math.floor(ms/1000); const hh=String(Math.floor(s/3600)).padStart(2,'0'); const mm=String(Math.floor((s%3600)/60)).padStart(2,'0'); const ss=String(s%60).padStart(2,'0'); return `${hh}:${mm}:${ss}`; }
-function getAccumulatedPlayMs(){ let acc = Number(state.playAcc || 0); if(state.startTimestamp) acc += (Date.now() - state.startTimestamp); return acc; }
+/* -----------------------
+   Playtime / tick / persistence
+   ----------------------- */
+function updatePlayTimeDisplay(){
+  const elapsed = getAccumulatedPlayMs();
+  playTimeEl.textContent = formatMs(elapsed);
+}
+function formatMs(ms){
+  const s = Math.floor(ms/1000);
+  const hh = String(Math.floor(s/3600)).padStart(2,'0');
+  const mm = String(Math.floor((s%3600)/60)).padStart(2,'0');
+  const ss = String(s%60).padStart(2,'0');
+  return `${hh}:${mm}:${ss}`;
+}
+function getAccumulatedPlayMs(){
+  let acc = Number(state.playAcc || 0);
+  if(state.startTimestamp) acc += (Date.now() - state.startTimestamp);
+  return acc;
+}
 document.addEventListener('visibilitychange', ()=>{
   if(document.visibilityState === 'visible'){ state.startTimestamp = Date.now(); saveState(); } else {
-    if(state.startTimestamp){ state.playAcc = Number(state.playAcc || 0) + (Date.now() - state.startTimestamp); state.startTimestamp = null; saveState(); }
+    if(state.startTimestamp){ state.playAcc = (Number(state.playAcc || 0) + (Date.now() - state.startTimestamp)); state.startTimestamp = null; saveState(); }
   }
 });
 
-/* ---------- Persistence / Tick / UI ---------- */
+/* -----------------------
+   Persistence: load/save (BN aware)
+   ----------------------- */
 function loadState(){
   try{
     const raw = localStorage.getItem(KEY);
-    if(!raw){ const s = jsonClone(DEFAULT); s.startTimestamp = document.visibilityState==='visible'?Date.now():null; return s; }
+    if(!raw){
+      const s = jsonClone(DEFAULT);
+      s.startTimestamp = document.visibilityState === 'visible' ? Date.now() : null;
+      return s;
+    }
     const parsed = JSON.parse(raw);
     const out = Object.assign(jsonClone(DEFAULT), parsed);
-    // sp saved as BN object or number
+    // sp: if object with m/e use as BN; else convert number
     if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined){
       out.sp = bn_normalize(parsed.sp);
     } else {
       out.sp = bn_fromNumber(Number(parsed.sp || 0));
     }
-    // handle manualBase compatibility: if old manualPower exists (pre-change), derive manualBase
-    if(parsed.manualBase !== undefined) out.manualBase = Number(parsed.manualBase);
-    else if(parsed.manualPower !== undefined){
-      // best-effort: assume manualPower = effective manual before; attempt to reverse using devotion level and temple count
-      const devLevel = (parsed.upgrades && parsed.upgrades.devotion && parsed.upgrades.devotion.level) || 0;
-      const templeCount = (parsed.buildings && parsed.buildings.temple && parsed.buildings.temple.count) || 0;
-      const multiplier = Math.pow(2, devLevel);
-      out.manualBase = Math.max(1, (Number(parsed.manualPower) / multiplier) - templeCount);
-    } else {
-      out.manualBase = DEFAULT.manualBase;
-    }
+    out.upgrades = out.upgrades || DEFAULT.upgrades;
+    out.buildings = out.buildings || DEFAULT.buildings;
     out._feverMultiplier = parsed._feverMultiplier || 1;
     if(!out.startTimestamp) out.startTimestamp = null;
     if(!out.playAcc) out.playAcc = 0;
     return out;
-  }catch(e){ console.error('load failed', e); const s=jsonClone(DEFAULT); s.startTimestamp=document.visibilityState==='visible'?Date.now():null; return s; }
+  }catch(e){
+    console.error('load failed', e);
+    const s = jsonClone(DEFAULT);
+    s.startTimestamp = document.visibilityState === 'visible' ? Date.now() : null;
+    return s;
+  }
 }
 function saveState(){
   state.lastSaved = Date.now();
@@ -549,7 +588,9 @@ function saveState(){
   localStorage.setItem('zk_sp_v1', bn_toStringUnit(state.sp));
 }
 
-/* tick */
+/* -----------------------
+   Tick & UI loop
+   ----------------------- */
 let tickTimer = null;
 function startTick(){
   if(tickTimer) clearInterval(tickTimer);
@@ -557,48 +598,84 @@ function startTick(){
     const spsBase = calcSPS();
     const feverMult = getCurrentFeverMultiplier();
     const sps = spsBase * feverMult;
-    if(sps > 0) state.sp = bn_addNumber(state.sp, sps / 10);
+    if(sps > 0) state.sp = bn_addNumber(state.sp, sps / 10); // per 0.1s
     updateUI();
   }, 100);
 }
 setInterval(()=> saveState(), 5000);
 
-/* update UI */
+/* -----------------------
+   UI Render
+   ----------------------- */
 function updateUI(){
-  if(isFeverActive()){ worshipBtn.style.background = 'linear-gradient(90deg,#ff3b30,#ff6b6b)'; worshipBtn.style.color = '#fff'; } else {
-    worshipBtn.style.background = 'linear-gradient(90deg,var(--accent),var(--accent-2))'; worshipBtn.style.color = '#071018';
+  // worship button highlight if fever
+  if(isFeverActive()){
+    worshipBtn.style.background = 'linear-gradient(90deg,#ff3b30,#ff6b6b)';
+    worshipBtn.style.color = '#fff';
+  } else {
+    worshipBtn.style.background = 'linear-gradient(90deg,var(--accent),var(--accent-2))';
+    worshipBtn.style.color = '#071018';
   }
+
+  // top badge and totals using BN formatting
   spBadge.textContent = bn_toStringUnit(state.sp);
-  totalSP.textContent = bn_toStringUnit(state.sp);
-  totalClicks.textContent = state.totalClicks;
-  // manualPower effective display (unitized)
-  const effManual = getEffectiveManualPower();
-  manualPowerEl.textContent = effManual >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(effManual)) : formatFloatingAmount(effManual);
-  const spsVal = Math.round(calcSPS()*100)/100;
-  spsEl.textContent = spsVal >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(spsVal)) : formatFloatingAmount(spsVal);
-  // crit & fever display
+  totalSPEl.textContent = bn_toStringUnit(state.sp);
+  totalClicksEl.textContent = state.totalClicks || 0;
+
+  // manual display always show SP suffix; unitize if >=1e6
+  const effManual = getEffectiveManualBase();
+  manualPowerEl.textContent = (effManual >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(effManual)) : Math.round(effManual)) + ' SP';
+
+  // automatic label: '자동 숭배력'
+  const spsVal = Math.round(calcSPS() * 100) / 100;
+  spsEl.textContent = spsVal >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(spsVal)) : (spsVal.toFixed(2).replace(/\.00$/,'')); // compact
+
+  // crit & fever %
   const critPercent = 2 + (state.buildings.follower.count || 0) * 1;
-  critPctEl.textContent = (Math.round((critPercent + Number.EPSILON) * 10)/10) + '%';
+  critPctEl.textContent = (Math.round(critPercent * 10)/10) + '%';
   const feverPercent = (state.buildings.altar.count || 0) * 0.1;
-  feverPctEl.textContent = (Math.round((feverPercent + Number.EPSILON) * 10)/10) + '%';
-  renderStore(); updatePlayTimeDisplay();
+  feverPctEl.textContent = (Math.round(feverPercent * 10)/10) + '%';
+
+  renderStore();
+  updatePlayTimeDisplay();
 }
 
-/* theme & storage sync */
-(function(){ const el=document.getElementById('link-worship'); if(el) el.classList.add('active'); })();
-(function(){ const toggle=document.getElementById('themeToggle'); const apply=(t)=>{ if(t==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); toggle.checked=(t==='dark'); }; const saved=localStorage.getItem('theme'); const initial=saved||(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); apply(initial); toggle.addEventListener('change', ()=>{ const next=toggle.checked?'dark':'light'; localStorage.setItem('theme', next); apply(next); }); })();
-window.addEventListener('storage', (e)=>{ if(e.key===KEY || e.key==='zk_sp_v1'){ try{ const parsed=JSON.parse(localStorage.getItem(KEY)||'{}'); if(parsed && parsed.sp){ state = Object.assign(jsonClone(DEFAULT), parsed); if(parsed.sp.m !== undefined) state.sp = bn_normalize(parsed.sp); else state.sp = bn_fromNumber(Number(parsed.sp||0)); // handle manualBase legacy
-      if(parsed.manualBase !== undefined) state.manualBase = Number(parsed.manualBase); else if(parsed.manualPower !== undefined){
-        const devLevel = (parsed.upgrades && parsed.upgrades.devotion && parsed.upgrades.devotion.level) || 0;
-        const templeCount = (parsed.buildings && parsed.buildings.temple && parsed.buildings.temple.count) || 0;
-        const multiplier = Math.pow(2, devLevel);
-        state.manualBase = Math.max(1, (Number(parsed.manualPower) / multiplier) - templeCount);
-      }
-      updateUI(); } }catch(err){} } });
+/* -----------------------
+   Nav theme storage sync
+   ----------------------- */
+(function(){ const el = document.getElementById('link-worship'); if(el) el.classList.add('active'); })();
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  const apply = (t)=>{ if(t === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); toggle.checked = (t === 'dark'); };
+  const saved = localStorage.getItem('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  apply(initial);
+  toggle.addEventListener('change', ()=>{
+    const next = toggle.checked ? 'dark' : 'light';
+    localStorage.setItem('theme', next);
+    apply(next);
+  });
+})();
 
-/* init */
+window.addEventListener('storage', (e)=>{
+  if(e.key === KEY || e.key === 'zk_sp_v1'){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(KEY) || '{}');
+      if(parsed){
+        state = Object.assign(jsonClone(DEFAULT), parsed);
+        if(parsed.sp && parsed.sp.m !== undefined) state.sp = bn_normalize(parsed.sp);
+        else state.sp = bn_fromNumber(Number(parsed.sp || 0));
+        updateUI();
+      }
+    }catch(err){}
+  }
+});
+
+/* -----------------------
+   Init
+   ----------------------- */
 (function init(){
-  if(!state.startTimestamp && document.visibilityState==='visible') state.startTimestamp = Date.now();
+  if(!state.startTimestamp && document.visibilityState === 'visible') state.startTimestamp = Date.now();
   if(!state.sp) state.sp = bn_fromNumber(0);
   state.totalClicks = Number(state.totalClicks) || 0;
   state.manualBase = Number(state.manualBase) || DEFAULT.manualBase;
