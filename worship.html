@@ -47,31 +47,31 @@ body{margin:0;font-family:"Noto Sans KR",system-ui;background:var(--bg);color:va
 .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
 .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
 
-/* layout */
-main{ max-width:1180px; margin:1.5rem auto; padding:1rem; display:flex; gap:1rem; align-items:flex-start; }
-.left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1rem; align-items:center; }
-.card-wrap{ width:420px; height:520px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; }
+/* layout - increased gaps and alignments to avoid overlap */
+main{ max-width:1180px; margin:2rem auto; padding:1.2rem; display:flex; gap:2rem; align-items:flex-start; min-height:520px; }
+.left{ flex:1; min-width:300px; display:flex; flex-direction:column; gap:1.2rem; align-items:flex-start; } /* changed center->flex-start */
+.card-wrap{ width:420px; height:520px; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02)); box-shadow:0 18px 40px var(--shadow); display:flex; align-items:center; justify-content:center; position:relative; margin-bottom:8px; z-index:1; }
 #worshipBtn{ width:92%; height:84%; border-radius:14px; font-weight:900; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 18px 40px rgba(0,0,0,0.14); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0.6rem; line-height:1.05; }
 .worship-line.big{ font-size:2.8rem; line-height:1; }
 .worship-line.small{ font-size:1.2rem; opacity:0.95; margin-top:8px; }
 
-/* right area now split into two columns: content and upgrades */
-.right{ display:flex; gap:0.9rem; align-items:flex-start; width:100%; max-width:880px; }
-.right .content { width:560px; display:flex; flex-direction:column; gap:0.9rem; }
-.meta{ background:var(--card); border-radius:10px; padding:0.95rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
-.meta .row{ display:flex; justify-content:space-between; margin-bottom:0.45rem; }
+/* right area split into content and upgrades with spacing */
+.right{ display:flex; gap:1.2rem; align-items:flex-start; width:100%; max-width:880px; }
+.right .content { width:560px; display:flex; flex-direction:column; gap:1rem; }
+.meta{ background:var(--card); border-radius:10px; padding:1rem; box-shadow:0 8px 22px var(--shadow); font-size:0.95rem; color:var(--muted); }
+.meta .row{ display:flex; justify-content:space-between; margin-bottom:0.6rem; }
 .section-title{ font-weight:900; color:var(--text-strong); }
 html.dark .section-title{ color:#fff; }
-.thin-hr{ border:0; border-top:1px solid var(--line); margin:18px 0; }
+.thin-hr{ border:0; border-top:1px solid var(--line); margin:20px 0; }
 
 .store-title{ margin-top:0.2rem;font-weight:800;color:var(--text-strong); margin-bottom:8px; }
-.store{ display:grid; grid-template-columns:1fr; gap:0.8rem; margin-top:0.4rem; max-height:320px; overflow:auto; padding-right:6px; }
-.item{ background:var(--card); border-radius:10px; padding:0.8rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); gap:8px; }
+.store{ display:grid; grid-template-columns:1fr; gap:0.9rem; margin-top:0.4rem; max-height:420px; overflow:auto; padding-right:6px; }
+.item{ background:var(--card); border-radius:10px; padding:0.9rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); gap:8px; }
 .item-left{ display:flex; flex-direction:column; gap:6px; max-width:70%; }
 .item-right{ display:flex; gap:8px; align-items:center; min-width:220px; justify-content:flex-end; }
 .item-right button{ min-width:120px; }
 
-/* buy / buy-max buttons */
+/* buy / buy-max buttons (BUY MAX two-line) */
 .item button{ padding:0.45rem 0.9rem; border-radius:8px; border:0; font-weight:800; cursor:pointer; }
 .buy{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; }
 .buy-max{ background:transparent; border:2px solid var(--line); color:var(--muted); padding:0.35rem 0.6rem; border-radius:8px; font-weight:800; cursor:pointer; white-space:normal; text-align:center; line-height:1; }
@@ -80,7 +80,9 @@ html.dark .section-title{ color:#fff; }
 .upgrades{ width:260px; background:var(--card); border-radius:10px; padding:12px; box-shadow:0 8px 22px var(--shadow); max-height:520px; overflow:auto; }
 .upgrades .title{ font-weight:900; color:var(--text-strong); margin-bottom:10px; }
 .upgrades .spacer{ height:8px; }
-.upgrade-btn{ width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); background:transparent; font-weight:800; cursor:pointer; margin-bottom:8px; }
+.upgrade-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; padding:8px; border-radius:8px; border:1px solid var(--line); background:transparent; }
+.upgrade-left{ font-weight:800; }
+.upgrade-right button{ padding:6px 8px; border-radius:8px; border:0; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; font-weight:800; cursor:pointer; }
 
 /* floating */
 .float-elem{
@@ -102,6 +104,7 @@ html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rg
   .card-wrap{ width:92%; height:420px; }
   .item-right{ min-width:96px; }
 }
+.reset-btn{ background:transparent; border:1px solid var(--line); padding:6px 8px; border-radius:8px; cursor:pointer; font-weight:800; color:var(--muted); }
 </style>
 </head>
 <body>
@@ -146,7 +149,7 @@ html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rg
       </button>
     </div>
 
-    <div style="width:420px;max-width:92%;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-weight:800">
+    <div style="width:420px;max-width:92%;display:flex;flex-direction:column;gap:10px;color:var(--muted);font-weight:800">
       <div style="display:flex;justify-content:space-between"><div>수동 숭배력</div><div id="manualPower">1 SP</div></div>
       <div style="display:flex;justify-content:space-between"><div>자동 숭배력</div><div><span id="sps">0</span> SPS</div></div>
       <div style="display:flex;justify-content:space-between;color:var(--muted);font-weight:700"><div>크리티컬 확률</div><div id="critPct">0%</div></div>
@@ -157,7 +160,7 @@ html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rg
   <div class="right">
     <div class="content">
       <div class="meta">
-        <div class="row"><div class="section-title">통계</div><div></div></div>
+        <div class="row"><div class="section-title">통계</div><div><button id="resetBtn" class="reset-btn" title="초기화">초기화</button></div></div>
         <div class="row"><div>총 SP</div><div id="totalSP">0 SP</div></div>
         <div class="row"><div>총 숭배 횟수</div><div id="totalClicks">0</div></div>
         <div class="row"><div>플레이 시간</div><div id="playTime">00:00:00</div></div>
@@ -172,29 +175,24 @@ html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rg
 
     <aside class="upgrades" id="upgradesPanel">
       <div class="title">업그레이드</div>
-      <div style="color:var(--muted);font-weight:700;margin-bottom:8px">(공간 확보용 섹션 — 스크롤 가능)</div>
-      <button id="money10" class="upgrade-btn">돈 x10 (테스트)</button>
-      <button id="money01" class="upgrade-btn">돈 x0.1 (테스트)</button>
-      <div class="spacer"></div>
-      <!-- 더 많은 업그레이드 항목은 이 영역에 추가될 예정 (스크롤 필요하도록 준비됨) -->
-      <div style="height:800px;"></div>
+      <div style="color:var(--muted);font-weight:700;margin-bottom:10px">(정렬: 가격순 · 스크롤 가능)</div>
+      <div id="upgradesList"></div>
+      <div style="height:40px;"></div>
     </aside>
   </div>
 </main>
 
 <script>
 /* -----------------------
-   BN / units helpers (대체 및 통합)
-   - UNITS for M..Dc
-   - KU formatting without internal commas as requested
+   Units / BN helpers
    ----------------------- */
 const UNIT_LIST = ['M','B','T','Qu','Qi','Sx','Sp','Oc','No','Dc']; // e=2..11
-const KU_MAX = 550_000_000;
+const KU_DISPLAY_MAX = 550_000_000; // 표시 한도
+const KU_INTERNAL_MAX = 1_000_000_000; // 내부 실제 최대 (10억 KU)
 const E_KU = 2 + UNIT_LIST.length; // exponent index for KU
 
 function bn_fromNumber(n){
-  let m = Number(n);
-  let e = 0;
+  let m = Number(n), e = 0;
   if(!isFinite(m) || m === 0) return {m:0,e:0};
   while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
   while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
@@ -215,7 +213,6 @@ function bn_toNumberIfSafe(b){
     return null;
   }catch(e){ return null; }
 }
-function bn_gte_number(a, num){ return bn_compare(a, bn_fromNumber(num)) >= 0; }
 function bn_compare(a,b){ a = bn_normalize(a); b = bn_normalize(b); if(a.e !== b.e) return a.e > b.e ? 1 : -1; if(Math.abs(a.m - b.m) < 1e-12) return 0; return a.m > b.m ? 1 : -1; }
 function bn_addNumber(a, num){ return bn_add(a, bn_fromNumber(num)); }
 function bn_add(a,b){ a = bn_normalize(a); b = bn_normalize(b); if(a.m === 0) return {m:b.m,e:b.e}; if(b.m === 0) return {m:a.m,e:a.e}; if(a.e === b.e) return bn_normalize({m: a.m + b.m, e: a.e}); if(a.e < b.e){ const t=a; a=b; b=t; } const diff = a.e - b.e; const m = a.m + b.m / Math.pow(1000, diff); return bn_normalize({m, e: a.e}); }
@@ -223,13 +220,10 @@ function bn_subNumber(a, num){ return bn_sub(a, bn_fromNumber(num)); }
 function bn_sub(a,b){ a = bn_normalize(a); b = bn_normalize(b); if(bn_compare(a,b) <= 0) return {m:0,e:0}; if(a.e === b.e) return bn_normalize({m: a.m - b.m, e: a.e}); if(a.e < b.e){ return bn_normalize({m: -(b.m - a.m * Math.pow(1000, b.e - a.e)), e: b.e}); } const diff = a.e - b.e; const m = a.m - b.m / Math.pow(1000, diff); return bn_normalize({m,e: a.e}); }
 function bn_mulNumber(a, num){ return bn_normalize({m: a.m * num, e: a.e}); }
 
-/* KU formatting WITHOUT internal commas (요구사항)
-   - 반환 예: "1만 2345 KU", "1234만 5678 KU", "1억 2345만 KU"
-   - 숫자 그룹(만/억 등)은 toLocaleString() 사용하지 않음 (콤마 없음)
-*/
+/* KU formatting WITHOUT internal commas */
 function formatKUInteger(n){
   if(n <= 0) return '0 KU';
-  if(n > KU_MAX) n = KU_MAX;
+  if(n > KU_DISPLAY_MAX) n = KU_DISPLAY_MAX;
   if(n < 10000) return `${n} KU`;
   const man = Math.floor(n / 10000);
   const rest = n % 10000;
@@ -243,10 +237,10 @@ function formatKUInteger(n){
   return `${uk}억 ${manRem}만 KU`;
 }
 
-/* 범용 SP 표시 함수 (숫자 또는 BN 객체 모두 수용)
-   - 1,000,000 미만: 정수 콤마 표기 + " SP"
-   - >= 1,000,000: 단위 적용 (M..Dc). Dc 초과 시 KU로 변환.
-   - Dc 레벨에서 소수 2자리까지 표기 (불필요 0 제거)
+/* unified SP display function
+   - 1,000,000 미만: 콤마 정수표시
+   - >=1,000,000: 단위 표기 (M..Dc); Dc 초과 KU 변환
+   - 소수값이 너무 작으면 '<0.01'로 표시
 */
 function formatSPDisplay(value){
   if(value && typeof value === 'object' && value.m !== undefined && value.e !== undefined){
@@ -256,11 +250,12 @@ function formatSPDisplay(value){
     if(b.e < E_KU){
       const idx = UNIT_LIST.length - 1; // Dc index
       const displayVal = b.m * Math.pow(1000, b.e - (idx + 2));
+      if(displayVal > 0 && displayVal < 0.01) return '<0.01 ' + UNIT_LIST[idx] + ' SP';
       let s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
       return `${s} ${UNIT_LIST[idx]} SP`;
     }
     const expDiff = b.e - E_KU;
-    if(expDiff > 6) return formatKUInteger(KU_MAX);
+    if(expDiff > 9) return formatKUInteger(KU_DISPLAY_MAX); // 안전 클램프
     const kuCount = Math.floor(b.m * Math.pow(1000, expDiff));
     return formatKUInteger(kuCount);
   }
@@ -270,12 +265,12 @@ function formatSPDisplay(value){
   if(n < 1_000_000){
     return `${Math.floor(n).toLocaleString()} SP`;
   }
-  // pick unit
   let e = 2;
   for(let i = 0; i < UNIT_LIST.length; i++, e++){
     const unitExp = Math.pow(1000, e);
     if(n < unitExp * 1000 || i === UNIT_LIST.length - 1){
       const displayVal = n / unitExp;
+      if(displayVal > 0 && displayVal < 0.01) return `<0.01 ${UNIT_LIST[i]} SP`;
       const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
       if(i === UNIT_LIST.length - 1 && n >= unitExp * 1000){
         const kuCount = Math.floor(n / (unitExp * 1000));
@@ -287,9 +282,7 @@ function formatSPDisplay(value){
   return `${Math.floor(n).toLocaleString()} SP`;
 }
 
-/* small-number format for manual / sps when <1M
-   - 정수는 콤마, 소수는 최대 2자리 유지. 불필요한 0 제거.
-*/
+/* small-number formatting for manual/sps when <1M */
 function formatSmallNumber(n){
   if(!isFinite(n)) return '0';
   if(Math.abs(n) < 1) return n.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
@@ -312,7 +305,11 @@ const DEFAULT = {
     temple:   {count:0, baseCost:1000, sps:10}
   },
   upgrades: {
-    devotion: {level:0, baseCost:50, effect:2}
+    // store-level devotion was removed from the shop; kept here but moved to upgrades panel
+    devotion: 0,
+    groupWorship: 0,
+    godBless: 0,
+    faithMiracle: 0
   },
   startTimestamp: null,
   playAcc: 0,
@@ -334,16 +331,51 @@ const storeEl = document.getElementById('store');
 const playTimeEl = document.getElementById('playTime');
 const critPctEl = document.getElementById('critPct');
 const feverPctEl = document.getElementById('feverPct');
+const upgradesListEl = document.getElementById('upgradesList');
+const resetBtn = document.getElementById('resetBtn');
 
 /* -----------------------
-   Mechanics (same as 이전)
+   Helpers / mechanics
    ----------------------- */
 function jsonClone(o){ return JSON.parse(JSON.stringify(o)); }
-function getDevotionMultiplier(){ return Math.pow(2, state.upgrades.devotion.level || 0); }
-function getEffectiveManualBase(){
-  const base = Number(state.manualBase || 0) + (state.buildings.temple.count || 0);
-  return base * getDevotionMultiplier();
+function getDevotionMultiplier(){ return Math.pow(2, state.upgrades.devotion || 0); }
+
+/* EFFECTS: building base effects removed.
+   New effects are sourced from upgrades:
+   - groupWorship: per follower + (level * 1%) critPercent per follower
+   - godBless: per 10 altars + (level * 1%) feverPercent per 10 altars
+   - faithMiracle: per 5 temples + (level * 1) manual per 5 temples
+*/
+function getCritPercent(){
+  let base = 2; // base 2%
+  const lvl = state.upgrades.groupWorship || 0;
+  if(lvl > 0){
+    base += (state.buildings.follower.count || 0) * (1 * lvl); // % per follower
+  }
+  return base;
 }
+function getFeverPercent(){
+  let base = 0;
+  const lvl = state.upgrades.godBless || 0;
+  if(lvl > 0){
+    base += Math.floor((state.buildings.altar.count || 0) / 10) * (1 * lvl); // % per 10 altars
+  }
+  return base;
+}
+function getManualBonusFromTemple(){
+  const lvl = state.upgrades.faithMiracle || 0;
+  if(lvl > 0){
+    return Math.floor((state.buildings.temple.count || 0) / 5) * (1 * lvl);
+  }
+  return 0;
+}
+
+function getEffectiveManualBase(){
+  const base = Number(state.manualBase || 0);
+  const templeBonus = getManualBonusFromTemple();
+  return (base + templeBonus) * getDevotionMultiplier();
+}
+
 function calcSPS(){
   let total = 0;
   for(const k of ['follower','altar','temple']){
@@ -356,7 +388,7 @@ function calcSPS(){
   return total;
 }
 
-/* Fever / Crit sampling (동일) */
+/* Fever and Crit sampling (multi-level) */
 let feverExpire = null;
 function isFeverActive(){ return feverExpire && Date.now() < feverExpire; }
 function getCurrentFeverMultiplier(){ return isFeverActive() ? (state._feverMultiplier || 1.5) : 1; }
@@ -396,13 +428,12 @@ function critLevelDisplay(level){
 }
 
 /* -----------------------
-   Store items
+   Store definitions (removed effect texts)
    ----------------------- */
 const ITEMS = [
-  { key:'follower', label:'신도', desc1:'+0.5 SPS', desc2:'크리티컬 확률 +1%', costFn: (b)=> Math.ceil(b.baseCost * Math.pow(1.15, b.count)) },
-  { key:'altar',    label:'제단',  desc1:'+2 SPS',   desc2:'피버 확률 +0.1%', costFn: (b)=> Math.ceil(b.baseCost * Math.pow(1.15, b.count)) },
-  { key:'temple',   label:'사원',  desc1:'+10 SPS',  desc2:'+1 수동 숭배력', costFn: (b)=> Math.ceil(b.baseCost * Math.pow(1.15, b.count)) },
-  { key:'devotion', label:'헌신 강화', desc1:'수입 ×2', desc2:'', costFn: (u)=> Math.ceil(u.baseCost * Math.pow(2.5, u.level)) }
+  { key:'follower', label:'신도', costBase:10, sps:0.5 },
+  { key:'altar',    label:'제단', costBase:100, sps:2 },
+  { key:'temple',   label:'사원', costBase:1000, sps:10 }
 ];
 
 function formatCostForDisplay(costNum){
@@ -410,44 +441,33 @@ function formatCostForDisplay(costNum){
   return Math.floor(costNum).toLocaleString() + ' SP';
 }
 
-/* render store and BUY MAX two-line label */
+/* render store with simplified left (no extra effect text) */
 function renderStore(){
   storeEl.innerHTML = '';
   ITEMS.forEach(item=>{
+    const b = state.buildings[item.key];
     const container = document.createElement('div');
     container.className = 'item';
     const left = document.createElement('div'); left.className = 'item-left';
     const right = document.createElement('div'); right.className = 'item-right';
-    if(item.key === 'devotion'){
-      const u = state.upgrades.devotion;
-      left.innerHTML = `<div style="font-weight:900">${item.label} Lv. ${u.level}</div><div style="font-size:0.9rem;color:var(--muted)">${item.desc1}</div>`;
-      const cost = item.costFn(u);
-      const buyBtn = document.createElement('button'); buyBtn.className='buy'; buyBtn.textContent = formatCostForDisplay(cost);
-      buyBtn.disabled = !bn_gte_number(state.sp, cost);
-      buyBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyDevotion(); });
-      const buyMaxBtn = document.createElement('button'); buyMaxBtn.className='buy-max'; buyMaxBtn.innerHTML='BUY<br>MAX';
-      buyMaxBtn.disabled = !bn_gte_number(state.sp, cost);
-      buyMaxBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyMaxDevotion(); });
-      right.appendChild(buyBtn); right.appendChild(buyMaxBtn);
-    } else {
-      const b = state.buildings[item.key];
-      left.innerHTML = `<div style="font-weight:900">${item.label} x${b.count}</div><div style="font-size:0.9rem;color:var(--muted)">${item.desc1}<br>${item.desc2}</div>`;
-      const cost = item.costFn(b);
-      const buyBtn = document.createElement('button'); buyBtn.className='buy'; buyBtn.textContent = formatCostForDisplay(cost);
-      buyBtn.disabled = !bn_gte_number(state.sp, cost);
-      buyBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyBuilding(item.key); });
-      const buyMaxBtn = document.createElement('button'); buyMaxBtn.className='buy-max'; buyMaxBtn.innerHTML='BUY<br>MAX';
-      buyMaxBtn.disabled = !bn_gte_number(state.sp, cost);
-      buyMaxBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyMaxBuilding(item.key); });
-      right.appendChild(buyBtn); right.appendChild(buyMaxBtn);
-    }
+    left.innerHTML = `<div style="font-weight:900">${item.label} x${b.count}</div>`;
+    const cost = Math.ceil(item.costBase * Math.pow(1.15, b.count));
+    const buyBtn = document.createElement('button'); buyBtn.className='buy'; buyBtn.textContent = formatCostForDisplay(cost);
+    buyBtn.disabled = !bn_gte_number(state.sp, cost);
+    buyBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyBuilding(item.key); });
+    const buyMaxBtn = document.createElement('button'); buyMaxBtn.className='buy-max'; buyMaxBtn.innerHTML='BUY<br>MAX';
+    buyMaxBtn.disabled = !bn_gte_number(state.sp, cost);
+    buyMaxBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyMaxBuilding(item.key); });
+    right.appendChild(buyBtn); right.appendChild(buyMaxBtn);
     container.appendChild(left); container.appendChild(right); storeEl.appendChild(container);
   });
 }
 
 /* -----------------------
-   Buying logic (기존 로직 유지)
+   Buy logic (unchanged for buildings)
    ----------------------- */
+function bn_gte_number(a, num){ return bn_compare(a, bn_fromNumber(num)) >= 0; }
+
 function buyBuilding(key){
   const b = state.buildings[key];
   const cost = Math.ceil(b.baseCost * Math.pow(1.15, b.count));
@@ -463,7 +483,7 @@ function buyMaxBuilding(key){
   if(denom <= 0) return;
   const availableNum = bn_toNumberIfSafe(state.sp);
   if(availableNum === null){
-    // extremely large SP path: greedy buy but with safe loop cap
+    // extremely large SP path: greedy buy with a safe cap
     let loops = 0;
     while(bn_gte_number(state.sp, Math.ceil(base * Math.pow(r, b.count))) && loops < 500){
       buyBuilding(key);
@@ -482,39 +502,106 @@ function buyMaxBuilding(key){
   saveState(); updateUI();
 }
 
-/* devotion */
-function buyDevotion(){
-  const u = state.upgrades.devotion;
-  const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
-  if(!bn_gte_number(state.sp, cost)) return;
-  state.sp = bn_subNumber(state.sp, cost);
-  u.level += 1;
-  saveState(); updateUI();
-}
-function buyMaxDevotion(){
-  const u = state.upgrades.devotion;
-  let cnt = 0;
-  while(true){
-    const cost = Math.ceil(u.baseCost * Math.pow(2.5, u.level));
-    if(!bn_gte_number(state.sp, cost)) break;
-    state.sp = bn_subNumber(state.sp, cost);
-    u.level += 1; cnt++;
-    if(cnt > 200) break;
+/* -----------------------
+   Upgrades system
+   ----------------------- */
+const UPGRADE_DEFS = [
+  {
+    key: 'groupWorship',
+    name: '단체 숭배',
+    req: { building: 'follower', count: 10 },
+    levels: [
+      { lv:1, price: 1000, desc: '신도 1개당 크리티컬 +1%' },
+      { lv:2, price: 10000, desc: '신도 1개당 크리티컬 +2%' },
+      { lv:3, price: 100000, desc: '신도 1개당 크리티컬 +3%' },
+      { lv:4, price: 1000000, desc: '신도 1개당 크리티컬 +4%' }
+    ]
+  },
+  {
+    key: 'godBless',
+    name: '신의 축복',
+    req: { building: 'altar', count: 10 },
+    levels: [
+      { lv:1, price: 10000, desc: '제단 10개당 피버 확률 +1%' },
+      { lv:2, price: 100000, desc: '제단 10개당 피버 확률 +2%' },
+      { lv:3, price: 1000000, desc: '제단 10개당 피버 확률 +3%' }
+    ]
+  },
+  {
+    key: 'faithMiracle',
+    name: '신앙심의 기적',
+    req: { building: 'temple', count: 10 },
+    levels: [
+      { lv:1, price: 100000, desc: '사원 5개당 수동 숭배력 +1' },
+      { lv:2, price: 1000000, desc: '사원 5개당 수동 숭배력 +2' }
+    ]
+  },
+  {
+    key: 'devotion',
+    name: '헌신 강화',
+    req: { building: 'follower', count: 30 },
+    levels: [
+      { lv:1, price: 150000, desc: '수입 ×2' },
+      { lv:2, price: 450000, desc: '수입 ×4' },
+      { lv:3, price: 1350000, desc: '수입 ×8' }
+    ]
   }
-  if(cnt>0){ saveState(); updateUI(); }
+];
+
+function renderUpgrades(){
+  // compute next-level price for each upgrade and sort by price
+  const rows = [];
+  for(const u of UPGRADE_DEFS){
+    const curLv = state.upgrades[u.key] || 0;
+    const next = u.levels[curLv];
+    if(!next) continue; // maxed
+    rows.push({ def: u, next });
+  }
+  rows.sort((a,b)=> a.next.price - b.next.price);
+  upgradesListEl.innerHTML = '';
+  rows.forEach(r=>{
+    const u = r.def;
+    const curLv = state.upgrades[u.key] || 0;
+    const next = r.next;
+    const canUnlock = (state.buildings[u.req.building].count || 0) >= u.req.count;
+    const el = document.createElement('div'); el.className = 'upgrade-row';
+    const left = document.createElement('div'); left.className = 'upgrade-left';
+    left.innerHTML = `<div>${u.name} Lv ${curLv} → ${next.lv}</div><div style="font-size:0.85rem;color:var(--muted)">${next.desc}</div>`;
+    const right = document.createElement('div'); right.className = 'upgrade-right';
+    const btn = document.createElement('button'); btn.textContent = formatCostForDisplay(next.price);
+    btn.disabled = !canUnlock || !bn_gte_number(state.sp, next.price);
+    btn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); buyUpgrade(u.key); });
+    right.appendChild(btn);
+    el.appendChild(left); el.appendChild(right); upgradesListEl.appendChild(el);
+  });
+}
+
+function buyUpgrade(key){
+  const def = UPGRADE_DEFS.find(x=>x.key === key);
+  if(!def) return;
+  const cur = state.upgrades[key] || 0;
+  const next = def.levels[cur];
+  if(!next) return;
+  if(!bn_gte_number(state.sp, next.price)) return;
+  // check requirement
+  if((state.buildings[def.req.building].count || 0) < def.req.count) return;
+  state.sp = bn_subNumber(state.sp, next.price);
+  state.upgrades[key] = (state.upgrades[key] || 0) + 1;
+  // If devotion, ensure getDevotionMultiplier uses this new level (already implemented)
+  saveState(); updateUI(); renderUpgrades();
 }
 
 /* -----------------------
-   Worship click handling
+   Worship click handling (build effects removed)
    ----------------------- */
 worshipBtn.addEventListener('pointerdown', (ev)=>{
-  const altarCount = state.buildings.altar.count || 0;
-  const feverPercent = altarCount * 0.1;
+  // Fever sampling based on upgrade-driven fever percent
+  const feverPercent = getFeverPercent();
   const feverSample = sampleMultiLevel(feverPercent);
   if(feverSample.level >= 0) triggerFever(feverSample.level);
 
-  const shindoCount = state.buildings.follower.count || 0;
-  const critPercent = 2 + shindoCount * 1;
+  // Crit sampling: base only (buildings no longer give crit unless upgrade)
+  const critPercent = getCritPercent();
   const critSample = sampleMultiLevel(critPercent);
   const isCrit = critSample.level >= 0;
   const critLevel = critSample.level;
@@ -523,8 +610,7 @@ worshipBtn.addEventListener('pointerdown', (ev)=>{
   const feverActiveNow = isFeverActive();
   const feverClickMult = feverActiveNow ? state._feverMultiplier || 1.5 : 1;
 
-  const baseManual = Number(state.manualBase || 0) + (state.buildings.temple.count || 0);
-  const finalManual = baseManual * getDevotionMultiplier();
+  const finalManual = getEffectiveManualBase();
   const gain = finalManual * critMult * feverClickMult;
 
   state.sp = bn_addNumber(state.sp, gain);
@@ -542,7 +628,6 @@ worshipBtn.addEventListener('pointerdown', (ev)=>{
 });
 
 function displayNumberForFloat(n){
-  // use formatSPDisplay for large, else formatted small number without " SP"
   if(Math.abs(n) >= 1_000_000) return formatSPDisplay(bn_fromNumber(n)).replace(/ SP$/,'');
   return formatFloatingAmount(n);
 }
@@ -595,8 +680,7 @@ document.addEventListener('visibilitychange', ()=>{
 });
 
 /* -----------------------
-   Persistence: load/save (BN aware)
-   - storage merge hardened (buildings/upgrades preserved)
+   Persistence: load/save (BN aware), plus internal KU clamp
    ----------------------- */
 function loadState(){
   try{
@@ -609,7 +693,6 @@ function loadState(){
     const parsed = JSON.parse(raw);
     const out = jsonClone(DEFAULT);
 
-    // merge top-level simple fields
     out.totalClicks = Number(parsed.totalClicks || out.totalClicks);
     out.manualBase = Number(parsed.manualBase || out.manualBase);
     out.sps = parsed.sps || out.sps;
@@ -618,14 +701,12 @@ function loadState(){
     out.lastSaved = parsed.lastSaved || 0;
     out._feverMultiplier = parsed._feverMultiplier || 1;
 
-    // sp handling
     if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined){
       out.sp = bn_normalize(parsed.sp);
     } else {
       out.sp = bn_fromNumber(Number(parsed.sp || 0));
     }
 
-    // merge buildings (preserve any missing)
     out.buildings = Object.assign(jsonClone(DEFAULT.buildings), parsed.buildings || {});
     out.upgrades = Object.assign(jsonClone(DEFAULT.upgrades), parsed.upgrades || {});
     return out;
@@ -638,6 +719,9 @@ function loadState(){
 }
 function saveState(){
   state.lastSaved = Date.now();
+  // clamp internal maximum to KU_INTERNAL_MAX
+  const bnMaxInternal = bn_normalize({m: KU_INTERNAL_MAX, e: E_KU});
+  if(bn_compare(state.sp, bnMaxInternal) > 0) state.sp = bn_normalize(bnMaxInternal);
   const copy = jsonClone(state);
   copy.sp = bn_normalize(state.sp);
   localStorage.setItem(KEY, JSON.stringify(copy));
@@ -661,10 +745,9 @@ function startTick(){
 setInterval(()=> saveState(), 5000);
 
 /* -----------------------
-   UI Render (포맷 변경 반영)
+   UI Render
    ----------------------- */
 function updateUI(){
-  // worship button highlight if fever
   if(isFeverActive()){
     worshipBtn.style.background = 'linear-gradient(90deg,#ff3b30,#ff6b6b)';
     worshipBtn.style.color = '#fff';
@@ -673,12 +756,10 @@ function updateUI(){
     worshipBtn.style.color = '#071018';
   }
 
-  // top badge and totals using unified formatter
   spBadge.textContent = formatSPDisplay(state.sp);
   totalSPEl.textContent = formatSPDisplay(state.sp);
   totalClicksEl.textContent = (state.totalClicks || 0).toLocaleString();
 
-  // manual display: if <1e6 show with commas, else use formatSPDisplay
   const effManual = getEffectiveManualBase();
   if(effManual < 1_000_000){
     manualPowerEl.textContent = `${Math.round(effManual).toLocaleString()} SP`;
@@ -686,7 +767,6 @@ function updateUI(){
     manualPowerEl.textContent = formatSPDisplay(bn_fromNumber(effManual));
   }
 
-  // automatic label: show formatted small number for <1e6, else formatSPDisplay
   const spsVal = calcSPS();
   if(spsVal < 1_000_000){
     spsEl.textContent = formatSmallNumber(Math.round(spsVal * 100) / 100).replace(/\.00$/,'');
@@ -694,29 +774,27 @@ function updateUI(){
     spsEl.textContent = formatSPDisplay(bn_fromNumber(Math.round(spsVal * 100) / 100)).replace(/ SP$/,'');
   }
 
-  // crit & fever %
-  const critPercent = 2 + (state.buildings.follower.count || 0) * 1;
-  critPctEl.textContent = (Math.round(critPercent * 10)/10) + '%';
-  const feverPercent = (state.buildings.altar.count || 0) * 0.1;
-  feverPctEl.textContent = (Math.round(feverPercent * 10)/10) + '%';
+  const critPercent = Math.round(getCritPercent() * 10)/10;
+  critPctEl.textContent = critPercent + '%';
+  const feverPercent = Math.round(getFeverPercent() * 10)/10;
+  feverPctEl.textContent = feverPercent + '%';
 
   renderStore();
+  renderUpgrades();
   updatePlayTimeDisplay();
 }
 
 /* -----------------------
-   storage event sync (더 안전한 병합)
+   storage event sync (safe merge)
    ----------------------- */
 window.addEventListener('storage', (e)=>{
   if(e.key === KEY || e.key === 'zk_sp_v1'){
     try{
       const parsed = JSON.parse(localStorage.getItem(KEY) || '{}');
       if(parsed){
-        // merge safely
         const merged = Object.assign(jsonClone(DEFAULT), parsed);
         if(parsed.sp && parsed.sp.m !== undefined) merged.sp = bn_normalize(parsed.sp);
         else merged.sp = bn_fromNumber(Number(parsed.sp || 0));
-        // ensure nested preserved
         merged.buildings = Object.assign(jsonClone(DEFAULT.buildings), parsed.buildings || {});
         merged.upgrades = Object.assign(jsonClone(DEFAULT.upgrades), parsed.upgrades || {});
         state = merged;
@@ -769,16 +847,40 @@ window.addEventListener('storage', (e)=>{
 })();
 
 /* -----------------------
-   테스트용 업그레이드 버튼 (돈 x10 / 돈 x0.1)
+   Buttons: reset
    ----------------------- */
-document.getElementById('money10').addEventListener('click', ()=>{
-  state.sp = bn_mulNumber(state.sp, 10);
+resetBtn.addEventListener('click', ()=>{
+  // 초기화: 저장소 삭제 및 상태 재설정
+  localStorage.removeItem(KEY);
+  localStorage.removeItem('zk_sp_v1');
+  state = jsonClone(DEFAULT);
+  state.startTimestamp = document.visibilityState === 'visible' ? Date.now() : null;
   saveState(); updateUI();
 });
-document.getElementById('money01').addEventListener('click', ()=>{
-  state.sp = bn_mulNumber(state.sp, 0.1);
-  saveState(); updateUI();
-});
+
+/* -----------------------
+   Utility used above
+   ----------------------- */
+function bn_subNumber(a,num){ return bn_sub(a, bn_fromNumber(num)); }
+
+/* -----------------------
+   Helpers used at top-level rendering
+   ----------------------- */
+function bn_gte_number(a,num){ return bn_compare(a, bn_fromNumber(num)) >= 0; }
+
+/* -----------------------
+   Expose buyUpgrade render to global scope for initial call
+   ----------------------- */
+window.renderUpgrades = renderUpgrades;
+window.renderStore = renderStore;
+
+/* -----------------------
+   Helper: format cost for upgrade button
+   ----------------------- */
+function formatCostForDisplay(costNum){
+  if(costNum >= 1_000_000) return formatSPDisplay(bn_fromNumber(costNum));
+  return Math.floor(costNum).toLocaleString() + ' SP';
+}
 </script>
 </body>
 </html>
