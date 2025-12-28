@@ -112,9 +112,9 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 
 <script>
 /* 사용자 정의 단위 규칙 적용
-   순서: M, B, T, Qu, Qi, Sx, Sp, Oc, No, Dc
+   순서: 1,000,000 -> 1M -> 1B -> 1T -> 1Qu -> 1Qi -> Sx -> Sp -> Oc -> No -> Dc
    그 다음 단계(1000 Dc) 가 KU. KU는 SP 접미사 없음. KU는 한글 단위(만/억)로 표기.
-   KU 최대치: 550,000,000 KU.
+   KU 최대치: 550,000,000 KU (이상일 경우에도 5억 5000만 KU로 표기).
 */
 
 const UNIT_LIST = ['M','B','T','Qu','Qi','Sx','Sp','Oc','No','Dc']; // indices 0..9 correspond to e = 2..11
@@ -144,35 +144,28 @@ function bn_toNumberIfSafe(b){
 }
 
 /* KU formatting: Korean unit grouping (억, 만)
-   Examples required by user:
+   Examples:
    - 12,345 KU -> "1만 2345 KU"
    - 12,345,678 KU -> "1234만 5678 KU"
    - 123,456,789 KU -> "1억 2345만 KU"
-   Implementation: show up to two highest groups (억 and 만). If 万-part is zero, omit it.
 */
 function formatKUInteger(n){
-  // n is integer KU count
-  if(n >= KU_MAX) return `${KU_MAX.toLocaleString()} KU (MAX)`;
+  // clamp to KU_MAX for display
+  if(n > KU_MAX) n = KU_MAX;
   if(n < 10000) return `${n.toLocaleString()} KU`;
   const man = Math.floor(n / 10000); // 만
   const rest = n % 10000;
   if(man < 10000){
-    // show "X만 Y KU" (Y without leading zeros)
     if(rest === 0) return `${man.toLocaleString()}만 KU`;
-    return `${man.toLocaleString()}만 ${rest.toString().padStart(1,'0')} KU`;
+    return `${man.toLocaleString()}만 ${rest.toString()} KU`;
   }
-  // man >= 10000 -> convert to 억
   const uk = Math.floor(man / 10000); // 억
   const manRem = man % 10000;
   if(manRem === 0) return `${uk.toLocaleString()}억 KU`;
   return `${uk.toLocaleString()}억 ${manRem.toLocaleString()}만 KU`;
 }
 
-/* main formatting function
-   Input: BN {m,e}
-   Output: string per rules: for standard units show "99.85 T SP"
-           for KU show special KU formatting and NO "SP"
-*/
+/* main formatting function */
 function bn_toDisplayString(b){
   b = bn_normalize(b);
   if(!b || b.m === 0) return '0 SP';
@@ -187,34 +180,19 @@ function bn_toDisplayString(b){
     // show with unit label
     const unit = UNIT_LIST[unitIndex];
     const displayVal = b.m * Math.pow(1000, e - (unitIndex + 2));
-    // format with two decimals, trim trailing zeros
     const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
     return `${s} ${unit} SP`;
   }
   // beyond Dc -> KU handling
-  // KU exponent base: e_KU = (2 + (UNIT_LIST.length - 1)) + 1 = 2 + (UNIT_LIST.length) 
-  const e_KU = 2 + UNIT_LIST.length; // exponent where 1 KU == 1000^(e_KU)
-  // compute KU_count = b.m * 1000^(e - e_KU)
-  const expDiff = e - e_KU;
+  const e_KU = 2 + UNIT_LIST.length; // exponent for KU (1 KU == 1000^e_KU)
+  const maybe = bn_toNumberIfSafe(b);
   let KU_count;
-  if(expDiff >= 0){
-    // potentially large. try to compute safely
-    const maybe = bn_toNumberIfSafe(b);
-    if(maybe !== null){
-      KU_count = Math.floor(maybe / Math.pow(1000, e_KU));
-    } else {
-      // fallback: if too large, clamp to max
-      KU_count = KU_MAX + 1;
-    }
+  if(maybe !== null){
+    KU_count = Math.floor(maybe / Math.pow(1000, e_KU));
   } else {
-    // less than one KU, compute fractional KU -> show as Dc-based with suffix DC SP
-    // but user demanded KU only when reaching 1000 Dc, so treat as Dc-level number
-    const idx = UNIT_LIST.length - 1; // Dc index
-    const displayVal = b.m * Math.pow(1000, e - (idx + 2));
-    const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
-    return `${s} Dc SP`;
+    // too big to represent precisely: clamp to KU_MAX
+    KU_count = KU_MAX;
   }
-  // KU_count integer
   if(KU_count <= 0) return `0 KU`;
   return formatKUInteger(KU_count);
 }
@@ -225,7 +203,6 @@ function loadTopSPDisplay(){
   try{
     const raw = localStorage.getItem(KEY);
     if(!raw){
-      // fallback to human readable saved display key if exists
       const alt = localStorage.getItem('zk_sp_v1');
       if(alt) return alt.endsWith('SP') ? alt : `${alt}`;
       return '0 SP';
