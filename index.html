@@ -20,7 +20,7 @@ html.dark{
 *{box-sizing:border-box}
 body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 
-/* Header full-width top bar: brand left, controls right */
+/* Header */
 .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
 .header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; }
 .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
@@ -31,7 +31,7 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 .sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:160px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
 .myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
 
-/* Nav row: left aligned links, right side the dark toggle */
+/* Nav */
 .nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.6rem; padding:0.45rem 18px; border-top:1px solid var(--line); background:transparent; box-sizing:border-box; }
 .nav-left{ display:flex; gap:0.6rem; align-items:center; }
 .nav-left a{ text-decoration:none; padding:0.45rem 0.9rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
@@ -46,16 +46,21 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
 .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
 
-/* Main content centered */
+/* Main content */
 .main-wrap{ max-width:1180px; margin:1.6rem auto; padding:0 18px; display:flex; justify-content:center; }
-.hero{ width:100%; max-width:920px; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:1.2rem; box-shadow:0 12px 30px rgba(0,0,0,0.06); display:flex; gap:1rem; align-items:flex-start; flex-direction:column; }
+.hero{ width:100%; max-width:920px; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:1.4rem; box-shadow:0 12px 30px rgba(0,0,0,0.06); display:flex; gap:1rem; align-items:flex-start; flex-direction:column; }
 .site-name{ font-size:2.4rem; font-weight:900; margin:0 0 0.4rem 0; color:var(--text-strong) }
 .lead{ font-size:1rem; color:var(--muted); line-height:1.6 }
 
+.actions{ display:flex; gap:0.6rem; align-items:center; margin-top:6px; flex-wrap:wrap; }
+.action-btn{ padding:10px 14px; border-radius:10px; border:0; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; font-weight:900; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
+
+/* article */
 .article{ margin-top:12px; background:var(--card); border-radius:10px; padding:1rem; color:var(--muted); line-height:1.65; box-shadow:0 8px 20px rgba(0,0,0,0.04) }
 .article h2{ margin-top:0; font-size:1.4rem; color:var(--text-strong) }
 .article p{ margin:0 0 0.9rem 0 }
 
+/* responsive */
 @media(max-width:720px){
   .brand .title{ font-size:1.2rem; }
   .site-name{ font-size:1.6rem; }
@@ -87,7 +92,7 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
     </div>
 
     <div class="nav-right">
-      <div class="theme-label">다크</div>
+      <div class="theme-label">다크 모드</div>
       <label class="theme-switch" title="다크 모드">
         <input id="themeToggle" type="checkbox" />
         <span class="slider"></span>
@@ -101,8 +106,14 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
     <h1 id="site-title" class="site-name">자쿠드를 숭배해야 하는 이유</h1>
     <p class="lead">이곳은 자쿠드를 숭배하는 사람들을 위한 공간이다. 메인 페이지에서는 숭배의 이유와 간단한 소개를 확인할 수 있다. 실제 숭배 수치(총 SP, 수동/자동)는 '자쿠드 숭배하기'에서 확인하라.</p>
 
-    <article class="article">
-      <h2>숭배글</h2>
+    <div class="actions" role="navigation" aria-label="quick actions">
+      <a class="action-btn" href="worship.html">숭배하러 가기</a>
+      <a class="action-btn" href="bible.html">성경 보기</a>
+      <a class="action-btn" href="generator.html">제네레이터</a>
+    </div>
+
+    <article class="article" aria-labelledby="why-title">
+      <h2 id="why-title">숭배글</h2>
       <p>자쿠드는 변하지 않는 중심이다. 작은 의식이 쌓여 큰 신념이 된다. 이 곳에서 경험하는 것은 게임화된 의례다.</p>
       <p>숭배를 통해 SP를 모으고, 건물을 세우며 당신의 신념을 증식시켜라. 제네레이터에서 가챠 연출을 즐길 수 있다. 성경 페이지에서는 장별로 텍스트와 이미지가 준비될 것이다.</p>
       <p style="font-weight:800">주의: 이 사이트의 내용은 게임적 상상력이며 실제 종교 행위와는 무관하다.</p>
@@ -111,160 +122,8 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 </main>
 
 <script>
-/*
-  최종 단위 포맷 구현.
-  규칙 요약:
-  - 1,000,000 SP 이상부터 단위 적용: M, B, T, Qu, Qi, Sx, Sp, Oc, No, Dc
-  - 1,000 Dc -> 1 KU. KU는 "12,345 KU" 같은 수치(단위화: 만/억 표기). KU는 SP 접미사 없음.
-  - KU 상한 550,000,000 KU. 상한 초과시에도 "5억 5000만 KU"로 표기(별도 접미사 없음).
-  - 1,000,000 미만은 항상 "nn SP" 형식으로 표시.
-*/
-
-const UNIT_LIST = ['M','B','T','Qu','Qi','Sx','Sp','Oc','No','Dc']; // e=2..11
-const KU_MAX = 550_000_000; // KU cap (display only)
-const E_KU = 2 + UNIT_LIST.length; // exponent index for KU (e_KU)
-
-/* BN helpers (used to read stored BN sp) */
-function bn_fromNumber(n){
-  let m = Number(n), e = 0;
-  if(!isFinite(m) || m === 0) return {m:0,e:0};
-  while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
-  while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
-  return {m,e};
-}
-function bn_normalize(b){
-  if(!b || typeof b.m !== 'number' || typeof b.e !== 'number') return {m:0,e:0};
-  let m = b.m, e = b.e;
-  if(m === 0) return {m:0,e:0};
-  while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
-  while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
-  return {m,e};
-}
-function bn_toNumberIfSafe(b){
-  try{
-    const val = b.m * Math.pow(1000, b.e);
-    if(Number.isFinite(val) && Math.abs(val) <= Number.MAX_SAFE_INTEGER) return val;
-    return null;
-  }catch(e){ return null; }
-}
-
-/* KU formatting in Korean grouping (억, 만)
-   Accepts integer KU count (number).
-   Returns strings like:
-     12345 -> "1만 2345 KU"
-     12345678 -> "1234만 5678 KU"
-     123456789 -> "1억 2345만 KU"
-*/
-function formatKUInteger(n){
-  if(n <= 0) return '0 KU';
-  if(n > KU_MAX) n = KU_MAX;
-  if(n < 10000) return `${n.toLocaleString()} KU`;
-  const man = Math.floor(n / 10000);
-  const rest = n % 10000;
-  if(man < 10000){
-    if(rest === 0) return `${man.toLocaleString()}만 KU`;
-    return `${man.toLocaleString()}만 ${rest.toString()} KU`;
-  }
-  const uk = Math.floor(man / 10000);
-  const manRem = man % 10000;
-  if(manRem === 0) return `${uk.toLocaleString()}억 KU`;
-  return `${uk.toLocaleString()}억 ${manRem.toLocaleString()}만 KU`;
-}
-
-/* main display formatter.
-   Accepts either:
-     - number (plain SP count)
-     - BN-like object {m,e}
-   Returns final display string (with SP suffix except KU).
-*/
-function formatSPDisplay(value){
-  // If BN-like
-  if(value && typeof value === 'object' && value.m !== undefined && value.e !== undefined){
-    const b = bn_normalize(value);
-    // try to convert to safe number
-    const maybe = bn_toNumberIfSafe(b);
-    if(maybe !== null) return formatSPDisplay(maybe); // delegate to number path
-    // too big => compute KU count if exponent >= E_KU
-    if(b.e < E_KU){
-      // large but still below KU, fallback to Dc-level unit
-      const idx = UNIT_LIST.length - 1; // Dc index
-      const displayVal = b.m * Math.pow(1000, b.e - (idx + 2));
-      const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
-      return `${s} Dc SP`;
-    }
-    // compute KU count approx: KU = floor(b.m * 1000^(e - E_KU))
-    const expDiff = b.e - E_KU;
-    // if expDiff too large, clamp to KU_MAX
-    if(expDiff > 6){
-      return formatKUInteger(KU_MAX);
-    }
-    const kuCount = Math.floor(b.m * Math.pow(1000, expDiff));
-    return formatKUInteger(kuCount);
-  }
-
-  // Number path
-  const n = Number(value || 0);
-  if(!isFinite(n) || n === 0) return '0 SP';
-
-  // Below 1,000,000 -> always show integer with SP suffix
-  if(n < 1_000_000){
-    return `${Math.floor(n).toLocaleString()} SP`;
-  }
-
-  // Determine unit index (M=1e6 -> index 0)
-  // for unit index i => corresponding exponent e = i + 2 (1000^(i+2))
-  // display value = n / 1000^(unitExp)
-  let e = 2; // exponent for M
-  for(let i = 0; i < UNIT_LIST.length; i++, e++){
-    const unitExp = Math.pow(1000, e); // 1000^(i+2)
-    if(n < unitExp * 1000 || i === UNIT_LIST.length - 1){
-      // use this unit
-      const displayVal = n / unitExp;
-      const s = displayVal.toFixed(2).replace(/\.00$|(\.\d)0$/,'$1');
-      // if we're at Dc (last in list) and n >= 1000 * Dc => KU
-      if(i === UNIT_LIST.length - 1 && n >= unitExp * 1000){
-        // compute KU_count
-        const kuCount = Math.floor(n / (unitExp * 1000));
-        return formatKUInteger(kuCount);
-      }
-      return `${s} ${UNIT_LIST[i]} SP`;
-    }
-  }
-
-  // fallback (shouldn't reach)
-  return `${Math.floor(n).toLocaleString()} SP`;
-}
-
-/* Read stored state and produce display string */
-const KEY = 'zk_tycoon_v_final_v2';
-function readStoredSPDisplay(){
-  try{
-    const raw = localStorage.getItem(KEY);
-    if(!raw){
-      const alt = localStorage.getItem('zk_sp_v1');
-      return alt ? alt : '0 SP';
-    }
-    const parsed = JSON.parse(raw);
-    if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined){
-      return formatSPDisplay(parsed.sp);
-    } else {
-      return formatSPDisplay(Number(parsed.sp || 0));
-    }
-  }catch(e){
-    const alt = localStorage.getItem('zk_sp_v1');
-    return alt ? alt : '0 SP';
-  }
-}
-
-/* Apply to header badge */
-function applyTopState(){
-  const badge = document.getElementById('spBadge');
-  if(!badge) return;
-  badge.textContent = readStoredSPDisplay();
-}
-
 /* nav active highlight */
-(function setActiveNav(){
+(function(){
   const path = location.pathname.split('/').pop() || 'index.html';
   const map = { 'index.html':'nav-index', '':'nav-index', 'worship.html':'nav-worship', 'bible.html':'nav-bible', 'generator.html':'nav-generator' };
   const id = map[path] || null;
@@ -285,13 +144,17 @@ function applyTopState(){
     const next = toggle.checked ? 'dark' : 'light';
     localStorage.setItem('theme', next);
     if(next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
-    // update in case display color dependent
-    applyTopState();
   });
 })();
 
-/* init */
-applyTopState();
+/* SP badge: use stored zk_sp_v1 if present */
+(function applyTopState(){
+  try{
+    const alt = localStorage.getItem('zk_sp_v1');
+    const el = document.getElementById('spBadge');
+    if(el) el.textContent = alt ? alt : '0 SP';
+  }catch(e){}
+})();
 setInterval(applyTopState, 1500);
 </script>
 </body>
