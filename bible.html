@@ -3,56 +3,284 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>자쿠드 성경</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+<title>자쿠드 숭배 성경</title>
+
+<link rel="icon" href="favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+
 <style>
-  html{font-size:100%}
-  :root{--bg:#f7fafc;--card:#fff;--accent:#2563eb;--muted:#6b7280}
-  html.dark{--bg:#071018;--card:#0b1724;--accent:#ffd166;--muted:#9aa0ab}
-  body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--muted)}
-  .header{position:sticky;top:0;background:var(--card);box-shadow:0 1px 0 rgba(0,0,0,0.04)}
-  .header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem}
-  main{max-width:960px;margin:1.5rem auto;padding:1rem}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem}
-  .card{background:linear-gradient(180deg,#fff,#f1f5f9);padding:1rem;border-radius:10px;box-shadow:0 12px 28px rgba(10,20,40,0.06);text-align:center}
-  .card a{display:block;text-decoration:none;color:inherit;font-weight:800;font-size:1rem}
+:root{
+  --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
+  --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
+}
+html.dark{
+  --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
+  --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff; --shadow:rgba(0,0,0,0.45);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* header / nav (same as other pages) */
+.header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
+.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.8rem 1.2rem; max-width:1180px; margin:0 auto; }
+.brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
+.brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
+.brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
+
+.right-controls{ display:flex; align-items:center; gap:0.6rem; }
+.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:120px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
+
+.nav-row{ max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:flex-start; gap:0.5rem; padding:0.45rem 1.2rem; border-top:1px solid var(--line); background:transparent; }
+.nav-row a{ text-decoration:none; padding:0.45rem 0.85rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
+
+/* page layout */
+main{ max-width:1180px; margin:1.6rem auto; padding:0 1rem; display:grid; grid-template-columns: 1fr 420px; gap:1.2rem; align-items:start; }
+@media(max-width:980px){ main{ grid-template-columns:1fr; } .right-col{ order:2 } }
+
+.content-card{ background:var(--card); border-radius:12px; padding:1.2rem; box-shadow:0 12px 30px rgba(0,0,0,0.06); min-height:360px; }
+.page-title{ font-size:2rem; font-weight:900; margin:0 0 12px 0; color:var(--text-strong) }
+.lead{ color:var(--muted); font-weight:700; margin-bottom:12px }
+
+/* chapter button grid */
+.chapter-grid{ display:flex; flex-direction:column; gap:0.8rem; }
+.row{ display:flex; gap:0.8rem; flex-wrap:wrap; }
+.ch-btn{
+  flex:1 1 0;
+  min-width:80px;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(0,0,0,0.01), transparent);
+  font-weight:900;
+  cursor:pointer;
+  text-align:center;
+  color:var(--text-strong);
+}
+.ch-btn.small{ flex:0 0 110px; } /* for third row grouping */
+
+.hint{ font-size:0.92rem; color:var(--muted); margin-top:8px }
+
+/* right column */
+.side-card{ background:var(--card); border-radius:10px; padding:0.9rem; box-shadow:0 8px 22px rgba(0,0,0,0.06); margin-bottom:0.9rem; }
+.stat-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; font-weight:800; color:var(--muted); }
+
+.theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
+.theme-switch input{ opacity:0; width:0; height:0; }
+.theme-switch .slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; }
+.theme-switch .slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
+.theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
+.theme-switch input:checked + .slider::before{ transform: translateX(20px); }
+
+/* small utilities */
+.kv{ font-weight:900; color:var(--text-strong); }
+.small-muted{ color:var(--muted); font-weight:700; font-size:0.95rem; }
+
 </style>
 </head>
 <body>
+
 <header class="header">
   <div class="header-top">
-    <a class="brand" href="worship.html"><img id="siteLogo3" data-ibb="https://ibb.co/ZrgK1DJ" alt="logo" style="width:3rem;height:3rem;border-radius:6px"></a>
-    <div style="display:flex;gap:1rem"><a href="worship.html">숭배하기</a><a href="generator.html">제네레이터</a></div>
+    <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
+      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고" onerror="this.onerror=null;this.src='/assets/logo.png'">
+      <span class="title">자쿠드 숭배 시뮬레이터</span>
+    </a>
+
+    <div class="right-controls">
+      <div id="spBadge" class="sp-badge">0 SP</div>
+      <a class="myhome-btn" href="home.html">My Home</a>
+    </div>
   </div>
-  <div style="padding:.5rem 1.25rem;border-top:1px solid #eee;display:flex;justify-content:flex-end">
-    <label style="display:flex;align-items:center;gap:.5rem"><span style="color:var(--muted)">다크</span><input id="themeToggle3" type="checkbox"></label>
+
+  <div class="nav-row">
+    <a href="index.html">메인</a>
+    <a href="worship.html">자쿠드 숭배하기</a>
+    <a href="bible.html">자쿠드 성경</a>
+    <a href="generator.html">자쿠드 제네레이터</a>
+
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <div class="small-muted">다크</div>
+      <label class="theme-switch">
+        <input id="themeToggle" type="checkbox" />
+        <span class="slider"></span>
+      </label>
+    </div>
   </div>
 </header>
 
 <main>
-  <h1>자쿠드 성경</h1>
-  <p>장(Chapter)을 클릭하면 해당 장으로 이동. 장 파일은 직접 만드시오.</p>
+  <section>
+    <div class="content-card">
+      <h1 class="page-title">자쿠드 숭배 성경</h1>
+      <div class="lead">장(章)별 바로가기. 각 장은 별도 내부 페이지로 연결된다.</div>
 
-  <div class="grid">
-    <!-- 링크는 사용자가 각 장을 만들면 연결 -->
-    <div class="card"><a href="bible/chapter1.html">1장</a></div>
-    <div class="card"><a href="bible/chapter2.html">2장</a></div>
-    <div class="card"><a href="bible/chapter3.html">3장</a></div>
-    <div class="card"><a href="bible/chapter4.html">4장</a></div>
-    <div class="card"><a href="bible/chapter5.html">5장</a></div>
-    <div class="card"><a href="bible/chapter6.html">6장</a></div>
-    <div class="card"><a href="bible/chapter7.html">7장</a></div>
-    <div class="card"><a href="bible/chapter8.html">8장</a></div>
-    <div class="card"><a href="bible/chapter9.html">9장</a></div>
-    <div class="card"><a href="bible/chapter10.html">10장</a></div>
-  </div>
+      <div class="chapter-grid">
+        <!-- 첫 줄: 1~4 -->
+        <div class="row">
+          <a class="ch-btn" href="bible_ch1.html">1장</a>
+          <a class="ch-btn" href="bible_ch2.html">2장</a>
+          <a class="ch-btn" href="bible_ch3.html">3장</a>
+          <a class="ch-btn" href="bible_ch4.html">4장</a>
+        </div>
+
+        <!-- 둘째 줄: 5~8 -->
+        <div class="row">
+          <a class="ch-btn" href="bible_ch5.html">5장</a>
+          <a class="ch-btn" href="bible_ch6.html">6장</a>
+          <a class="ch-btn" href="bible_ch7.html">7장</a>
+          <a class="ch-btn" href="bible_ch8.html">8장</a>
+        </div>
+
+        <!-- 셋째 줄: 9~10, EX장, 사진 -->
+        <div class="row">
+          <a class="ch-btn small" href="bible_ch9.html">9장</a>
+          <a class="ch-btn small" href="bible_ch10.html">10장</a>
+          <a class="ch-btn small" href="bible_ex.html">EX장</a>
+          <a class="ch-btn small" href="bible_photos.html">사진</a>
+        </div>
+
+        <div class="hint">버튼을 클릭하면 해당 장의 페이지로 이동합니다. 장 내부 내용은 별도 파일로 관리하세요.</div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="right-col">
+    <div class="side-card">
+      <div class="stat-row"><div class="small-muted">총 SP</div><div id="totalSP_sidebar" class="kv">0 SP</div></div>
+      <div class="stat-row"><div class="small-muted">수동 숭배력</div><div id="manual_sidebar" class="kv">0 SP</div></div>
+      <div class="stat-row"><div class="small-muted">자동 숭배력</div><div id="sps_sidebar" class="kv">0 SPS</div></div>
+    </div>
+
+    <div class="side-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="small-muted">빠른 이동</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <a href="worship.html" class="small-muted">→ 자쿠드 숭배하기</a>
+        <a href="generator.html" class="small-muted">→ 자쿠드 제네레이터</a>
+        <a href="index.html" class="small-muted">→ 메인</a>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="small-muted" style="margin-bottom:8px">설정</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <label class="theme-switch" title="다크 모드">
+          <input id="themeToggleSidebar" type="checkbox" />
+          <span class="slider"></span>
+        </label>
+        <div class="small-muted">다크 모드</div>
+      </div>
+    </div>
+  </aside>
 </main>
 
 <script>
-/* logo try */
-(function(){ const img=document.getElementById('siteLogo3'); const base=img.dataset.ibb; const cand=[base.replace('ibb.co','i.ibb.co')+'.png','/assets/logo.png']; let i=0; function next(){ if(i>=cand.length) return; img.src=cand[i++]; } img.addEventListener('error',next); next(); })();
-/* theme */
-(function(){ const t=document.getElementById('themeToggle3'); const apply=v=>{ if(v==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); t.checked=(v==='dark'); }; const s=localStorage.getItem('theme')|| (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'); apply(s); t.addEventListener('change',()=>{ const n=t.checked?'dark':'light'; localStorage.setItem('theme',n); apply(n); }); })();
+/* BN helpers (same logic used across pages) */
+const UNITS = ['M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','KU'];
+function bn_fromNumber(n){
+  let m = Number(n), e = 0;
+  if(!isFinite(m) || m === 0) return {m:0,e:0};
+  while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
+  while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
+  return {m,e};
+}
+function bn_normalize(b){
+  if(!b || !isFinite(b.m)) return {m:0,e:0};
+  let m = b.m, e = b.e;
+  if(m === 0) return {m:0,e:0};
+  while(Math.abs(m) >= 1000){ m /= 1000; e += 1; }
+  while(Math.abs(m) > 0 && Math.abs(m) < 1 && e > -1000){ m *= 1000; e -= 1; }
+  return {m,e};
+}
+function bn_toNumberIfSafe(b){
+  try{
+    const val = b.m * Math.pow(1000, b.e);
+    if(Number.isFinite(val) && Math.abs(val) <= Number.MAX_SAFE_INTEGER) return val;
+    return null;
+  }catch(e){ return null; }
+}
+function bn_toStringUnit(b){
+  b = bn_normalize(b);
+  if(!b || b.m === 0) return '0 SP';
+  const e = b.e;
+  if(e < 2){
+    const val = b.m * Math.pow(1000, e);
+    return Math.floor(val).toLocaleString() + ' SP';
+  }
+  const unitIndex = Math.min(e - 2, UNITS.length - 1);
+  const displayVal = b.m * Math.pow(1000, e - (unitIndex + 2));
+  return displayVal.toFixed(2) + ' ' + UNITS[unitIndex];
+}
+
+/* Read same storage key used by worship */
+const KEY = 'zk_tycoon_v_final_v2';
+function loadTopState(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return { spDisplay: localStorage.getItem('zk_sp_v1') || '0 SP', manual: null, sps: null };
+    const parsed = JSON.parse(raw);
+    let spBN = {m:0,e:0};
+    if(parsed.sp && typeof parsed.sp === 'object' && parsed.sp.m !== undefined) spBN = bn_normalize(parsed.sp);
+    else spBN = bn_fromNumber(Number(parsed.sp || 0));
+    const spDisplay = bn_toStringUnit(spBN);
+
+    const manualBase = Number(parsed.manualBase ?? parsed.manualPower ?? 1);
+    const templeCount = (parsed.buildings && parsed.buildings.temple && parsed.buildings.temple.count) || 0;
+    const devotionLv = (parsed.upgrades && parsed.upgrades.devotion && parsed.upgrades.devotion.level) || 0;
+    const effManual = (manualBase + templeCount) * Math.pow(2, devotionLv);
+
+    let totalSps = null;
+    try{
+      totalSps = 0;
+      const b = parsed.buildings || {};
+      if(b.follower) totalSps += (b.follower.count || 0) * (b.follower.sps ?? 0.5);
+      if(b.altar) totalSps += (b.altar.count || 0) * (b.altar.sps ?? 2);
+      if(b.temple) totalSps += (b.temple.count || 0) * (b.temple.sps ?? 10);
+      totalSps *= Math.pow(2, devotionLv);
+    } catch(e){ totalSps = null; }
+
+    return { spDisplay, manual: effManual, sps: totalSps };
+  }catch(e){
+    return { spDisplay: localStorage.getItem('zk_sp_v1') || '0 SP', manual:null, sps:null };
+  }
+}
+
+function applyTopStateToUI(){
+  const st = loadTopState();
+  document.getElementById('totalSP_sidebar').textContent = st.spDisplay || '0 SP';
+  if(st.manual !== null){
+    const v = st.manual;
+    document.getElementById('manual_sidebar').textContent = (Math.abs(v) >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(v)) : Math.round(v)) + ' SP';
+  } else {
+    document.getElementById('manual_sidebar').textContent = '—';
+  }
+  if(st.sps !== null){
+    const v = Math.round(st.sps * 100) / 100;
+    document.getElementById('sps_sidebar').textContent = (Math.abs(v) >= 1_000_000 ? bn_toStringUnit(bn_fromNumber(v)) : (v % 1 === 0 ? v.toFixed(0) : v.toFixed(2))) + ' SPS';
+  } else {
+    document.getElementById('sps_sidebar').textContent = '—';
+  }
+}
+
+/* theme toggles sync */
+(function(){
+  const toggles = [document.getElementById('themeToggle'), document.getElementById('themeToggleSidebar')].filter(Boolean);
+  const apply = (t)=>{ if(t==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); toggles.forEach(el=>el.checked=(t==='dark')); };
+  const saved = localStorage.getItem('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  apply(initial);
+  toggles.forEach(el => el.addEventListener('change', ()=>{
+    const next = el.checked ? 'dark' : 'light';
+    localStorage.setItem('theme', next);
+    apply(next);
+  }));
+})();
+
+/* init and periodic update */
+applyTopStateToUI();
+setInterval(applyTopStateToUI, 1500);
 </script>
 </body>
 </html>
