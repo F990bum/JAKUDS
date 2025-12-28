@@ -3,166 +3,376 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>자쿠드 제네레이터</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+<title>자쿠드 숭배 시뮬레이터 — 자쿠드 제네레이터</title>
+
+<link rel="icon" href="favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+
 <style>
-  html{font-size:100%}
-  :root{--bg:#f4f7fb;--card-bg:#fff;--accent:#2563eb;--accent-2:#ffb86b;--muted:#6b7280;--shadow:rgba(10,20,40,0.12)}
-  html.dark{--bg:#071018;--card-bg:#0b1724;--accent:#ffd166;--accent-2:#ffb86b;--muted:#9aa0ab;--shadow:rgba(0,0,0,0.45)}
-  body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--muted)}
-  .header{position:sticky;top:0;background:var(--card-bg);box-shadow:0 1px 0 rgba(0,0,0,0.04);z-index:1000}
-  .header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem}
-  .brand img{width:3rem;height:3rem;border-radius:6px}
-  .header-nav{display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.25rem;border-top:1px solid #eee}
-  .wrap{max-width:1100px;margin:1.5rem auto;padding:1rem;display:flex;gap:1rem;align-items:flex-start}
-  .left{flex:1;min-width:320px;display:flex;flex-direction:column;gap:1rem;align-items:center}
-  .card-wrap{width:360px;height:480px;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.02));box-shadow:0 18px 40px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}
-  #card{width:84%;height:78%;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:900;color:#071018;text-align:center;padding:.5rem;transition:transform .28s}
-  .right{width:320px;display:flex;flex-direction:column;gap:.9rem}
-  .controls{display:flex;flex-direction:column;gap:.6rem}
-  .btn{padding:.9rem 1rem;border-radius:10px;border:0;font-weight:900;cursor:pointer;font-size:1rem}
-  .btn-pull{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071018;box-shadow:0 10px 24px rgba(0,0,0,0.12)}
-  .btn-10{background:#fff;border:1px solid rgba(0,0,0,0.06);font-weight:800}
-  .meta{background:var(--card-bg);border-radius:10px;padding:.75rem;box-shadow:0 8px 22px var(--shadow);font-size:.95rem}
-  .log{background:transparent;max-height:260px;overflow:auto;padding:.6rem;border-radius:8px;font-size:.95rem;color:var(--muted)}
-  .log .entry{margin-bottom:.6rem;background:rgba(0,0,0,0.03);padding:.55rem;border-radius:8px;color:var(--muted)}
-  @media(max-width:920px){.wrap{flex-direction:column;align-items:center}.right{width:100%}.card-wrap{width:88%;height:420px}}
+:root{
+  --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
+  --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
+  --rarity-common:#cbd5e1; --rarity-rare:#7dd3fc; --rarity-epic:#a78bfa; --rarity-legend:#ffd166;
+}
+html.dark{
+  --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
+  --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff; --shadow:rgba(0,0,0,0.45);
+}
+*{box-sizing:border-box}
+html{font-size:100%}
+body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+/* header (same look as other pages) */
+.header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
+.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; }
+.brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
+.brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
+.brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
+
+.right-controls{ display:flex; align-items:center; gap:0.6rem; }
+.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:160px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
+
+/* nav */
+.nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.6rem; padding:0.45rem 18px; border-top:1px solid var(--line); background:transparent; box-sizing:border-box; }
+.nav-left{ display:flex; gap:0.6rem; align-items:center; }
+.nav-left a{ text-decoration:none; padding:0.45rem 0.9rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
+.nav-left a.active{ background: rgba(99,102,241,0.12); color: var(--accent); }
+
+.nav-right{ display:flex; align-items:center; gap:0.6rem; }
+.theme-label{ color:var(--muted); font-weight:700; font-size:0.95rem; }
+.theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
+.theme-switch input{ opacity:0; width:0; height:0; }
+.slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
+.slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
+.theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
+.theme-switch input:checked + .slider::before{ transform: translateX(20px); }
+
+/* main layout */
+.main-wrap{ max-width:1180px; margin:1.6rem auto; padding:0 18px; display:flex; justify-content:center; }
+.hero{ width:100%; max-width:920px; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:1.4rem; box-shadow:0 12px 30px rgba(0,0,0,0.06); display:flex; gap:1rem; align-items:flex-start; flex-direction:column; }
+
+/* generator controls */
+.controls{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.select, .num-input, .btn { font-weight:800; border-radius:10px; padding:8px 12px; border:1px solid var(--line); background:var(--card); cursor:pointer; }
+.btn.generate{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; border:0; box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+.small{ padding:6px 8px; font-weight:700; }
+
+/* preview area */
+.preview-wrap{ width:100%; display:flex; flex-direction:column; gap:12px; align-items:center; }
+.preview-canvas{ width:100%; background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent); border-radius:10px; padding:16px; border:1px solid var(--line); min-height:220px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
+
+/* pull grid */
+.pull-grid{ display:grid; gap:10px; grid-auto-flow:column; grid-auto-columns:120px; align-items:start; justify-content:center; padding:8px; }
+.pull-card{ width:120px; height:160px; border-radius:10px; background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(0,0,0,0.02)); box-shadow:0 8px 20px rgba(0,0,0,0.06); display:flex; flex-direction:column; align-items:center; justify-content:center; border:2px solid var(--line); transform-origin:center; transition: transform 300ms ease, opacity 300ms ease; }
+.pull-card.hidden{ transform: translateY(12px) scale(0.98); opacity:0.08; }
+.icon{ font-size:44px; line-height:1; }
+.label{ margin-top:8px; font-weight:900; font-size:0.9rem; text-align:center; }
+.rarity{ margin-top:6px; font-size:0.8rem; font-weight:800; opacity:0.95; }
+
+/* small footer controls */
+.footer-actions{ display:flex; gap:8px; align-items:center; margin-top:8px; }
+
+/* responsive */
+@media(max-width:720px){
+  .pull-grid{ grid-auto-columns:96px; }
+  .pull-card{ width:96px; height:140px; }
+}
 </style>
 </head>
 <body>
+
 <header class="header">
   <div class="header-top">
-    <a class="brand" href="worship.html"><img id="logoGen" data-ibb="https://ibb.co/ZrgK1DJ" alt="logo"></a>
-    <div style="display:flex;gap:1rem"><a href="worship.html">숭배하기</a><a href="bible.html">성경</a></div>
+    <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
+      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고" onerror="this.onerror=null;this.src='/assets/logo.png'">
+      <span class="title">자쿠드 숭배 시뮬레이터</span>
+    </a>
+
+    <div class="right-controls">
+      <div id="spBadge" class="sp-badge">0 SP</div>
+      <a class="myhome-btn" href="home.html">My Home</a>
+    </div>
   </div>
-  <div class="header-nav">
-    <div></div>
-    <div style="display:flex;align-items:center;gap:1rem">
-      <div style="display:flex;align-items:center;gap:.5rem"><span style="color:var(--muted)">다크</span><label style="display:inline-block"><input id="themeToggleGen" type="checkbox"></label></div>
+
+  <div class="nav-row" role="navigation" aria-label="Main">
+    <div class="nav-left">
+      <a id="nav-index" href="index.html">메인</a>
+      <a id="nav-worship" href="worship.html">자쿠드 숭배하기</a>
+      <a id="nav-bible" href="bible.html">자쿠드 성경</a>
+      <a id="nav-generator" href="generator.html">자쿠드 제네레이터</a>
+    </div>
+
+    <div class="nav-right">
+      <div class="theme-label">다크 모드</div>
+      <label class="theme-switch" title="다크 모드">
+        <input id="themeToggle" type="checkbox" />
+        <span class="slider"></span>
+      </label>
     </div>
   </div>
 </header>
 
-<main>
-  <div class="wrap">
-    <div class="left">
-      <div class="card-wrap"><div class="card-placeholder" style="position:absolute;top:12px;left:12px;color:var(--muted)">연출 위치</div><div id="card">?</div></div>
-      <div style="width:360px;max-width:88%;display:flex;justify-content:center;gap:.6rem;color:var(--muted)">확률: <strong style="color:var(--muted);font-weight:800">SSR 1% / SR 6% / R 93%</strong></div>
+<main class="main-wrap">
+  <section class="hero" role="main" aria-labelledby="gen-title">
+    <h1 id="gen-title" class="site-name">가챠 제너레이터</h1>
+    <p class="lead">간단한 가챠 연출을 미리보기하는 도구입니다. 개수와 연출을 선택 후 생성하세요.</p>
+
+    <div class="controls" aria-label="generator controls">
+      <label>
+        개수
+        <select id="countSelect" class="select">
+          <option>1</option><option>3</option><option selected>5</option><option>10</option>
+        </select>
+      </label>
+
+      <label>
+        연출
+        <select id="styleSelect" class="select">
+          <option value="seq">순차 공개</option>
+          <option value="sim">동시 공개</option>
+          <option value="drum">드럼롤</option>
+        </select>
+      </label>
+
+      <button id="genBtn" class="btn generate">GENERATE</button>
+      <button id="downloadBtn" class="btn small" title="이미지로 저장">다운로드</button>
+      <button id="clearBtn" class="btn small">초기화</button>
     </div>
 
-    <div class="right">
-      <div class="controls">
-        <button id="pullBtn" class="btn btn-pull">한 번 뽑기</button>
-        <button id="pull10Btn" class="btn btn-10">10연 뽑기</button>
-        <button id="resetBtn" class="btn" style="background:transparent;border:1px solid rgba(0,0,0,0.06)">로그 초기화</button>
+    <div class="preview-wrap">
+      <div class="preview-canvas" id="previewCanvas" aria-live="polite">
+        <div id="pullGrid" class="pull-grid" aria-hidden="false"></div>
       </div>
 
-      <div class="meta">
-        <div style="display:flex;justify-content:space-between;margin-bottom:.35rem"><div>총 뽑기</div><div id="count">0</div></div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:.35rem"><div>SSR 횟수</div><div id="ssrCount">0</div></div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:.35rem"><div>SR 횟수</div><div id="srCount">0</div></div>
-        <div style="display:flex;justify-content:space-between"><div>R 횟수</div><div id="rCount">0</div></div>
+      <div class="footer-actions">
+        <div style="font-weight:800;color:var(--muted)">샘플 아이콘은 이모지로 표시됩니다. 각 등급은 색상으로 구분됩니다.</div>
       </div>
-
-      <div class="log" id="log"></div>
     </div>
-  </div>
+  </section>
 </main>
 
-<script type="module">
-/* logo try */
-(function(){ const img=document.getElementById('logoGen'); const base=img.dataset.ibb; const cand=[base.replace('ibb.co','i.ibb.co')+'.png','/assets/logo.png']; let i=0; function next(){ if(i>=cand.length) return; img.src=cand[i++]; } img.addEventListener('error',next); next(); })();
+<script>
+/* NAV active */
+(function(){
+  const path = location.pathname.split('/').pop() || 'index.html';
+  const map = { 'index.html':'nav-index', '':'nav-index', 'worship.html':'nav-worship', 'bible.html':'nav-bible', 'generator.html':'nav-generator' };
+  const id = map[path] || null;
+  if(id){ const el = document.getElementById(id); if(el) el.classList.add('active'); }
+})();
 
-/* theme */
-(function(){ const t=document.getElementById('themeToggleGen'); const apply=v=>{ if(v==='dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); t.checked=(v==='dark'); }; const s=localStorage.getItem('theme')|| (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark':'light'); apply(s); t.addEventListener('change',()=>{ const n=t.checked?'dark':'light'; localStorage.setItem('theme',n); apply(n); }); })();
+/* theme toggle */
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if(initial === 'dark') document.documentElement.classList.add('dark');
+  if(toggle) toggle.checked = (initial === 'dark');
+  if(toggle) toggle.addEventListener('change', ()=>{
+    const next = toggle.checked ? 'dark' : 'light';
+    localStorage.setItem('theme', next);
+    if(next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+  });
+})();
 
-/* Gacha logic */
-const POOL = [
-  { id:'A', name:'자쿠드-전설', rarity:'SSR', weight:1 },
-  { id:'B', name:'자쿠드-희귀', rarity:'SR', weight:6 },
-  { id:'C', name:'자쿠드-일반', rarity:'R', weight:93 }
+/* show current SP in header if available */
+(function applyTopState(){
+  try{
+    const alt = localStorage.getItem('zk_sp_v1');
+    const el = document.getElementById('spBadge');
+    if(el) el.textContent = alt ? alt : '0 SP';
+  }catch(e){}
+})();
+setInterval(applyTopState, 1500);
+
+/* Generator logic */
+const ITEMS = [
+  { name:'자쿠드의 축복', icon:'🛐', rarity:'legend'},
+  { name:'신도의 기도', icon:'🙏', rarity:'epic'},
+  { name:'제단의 불꽃', icon:'🔥', rarity:'epic'},
+  { name:'사원의 창조', icon:'❄️', rarity:'rare'},
+  { name:'작은 헌신', icon:'🌱', rarity:'common'},
+  { name:'운명의 실', icon:'🧵', rarity:'rare'},
+  { name:'비밀의 조각', icon:'🔷', rarity:'rare'},
+  { name:'빛의 파편', icon:'✨', rarity:'epic'},
+  { name:'황금 문장', icon:'🏆', rarity:'legend'},
+  { name:'약속된 흔적', icon:'📜', rarity:'rare'}
 ];
 
-const cardEl = document.getElementById('card');
-const pullBtn = document.getElementById('pullBtn');
-const pull10Btn = document.getElementById('pull10Btn');
-const resetBtn = document.getElementById('resetBtn');
-const logEl = document.getElementById('log');
-const countEl = document.getElementById('count');
-const ssrEl = document.getElementById('ssrCount');
-const srEl = document.getElementById('srCount');
-const rEl = document.getElementById('rCount');
+function pickRandomItem(){
+  const r = Math.random();
+  // weighted: legend ~3%, epic ~12%, rare ~35%, common rest
+  if(r < 0.03) return ITEMS.find(i=>i.rarity==='legend');
+  if(r < 0.15) return ITEMS.filter(i=>i.rarity==='epic')[Math.floor(Math.random()*ITEMS.filter(i=>i.rarity==='epic').length)];
+  if(r < 0.5) return ITEMS.filter(i=>i.rarity==='rare')[Math.floor(Math.random()*ITEMS.filter(i=>i.rarity==='rare').length)];
+  return ITEMS.filter(i=>i.rarity==='common')[Math.floor(Math.random()*ITEMS.filter(i=>i.rarity==='common').length)];
+}
 
-const STORAGE_KEY = 'zk_gen_stats_v1';
-let stats = JSON.parse(localStorage.getItem(STORAGE_KEY) || JSON.stringify({total:0,ssr:0,sr:0,r:0,history:[]}));
+/* create pull card element */
+function createCard(item){
+  const el = document.createElement('div');
+  el.className = 'pull-card hidden';
+  const icon = document.createElement('div');
+  icon.className = 'icon';
+  icon.textContent = item.icon || '❔';
+  const label = document.createElement('div');
+  label.className = 'label';
+  label.textContent = item.name;
+  const rarity = document.createElement('div');
+  rarity.className = 'rarity';
+  rarity.textContent = (item.rarity || 'common').toUpperCase();
+  // color by rarity
+  const color = item.rarity === 'legend' ? getComputedStyle(document.documentElement).getPropertyValue('--rarity-legend').trim()
+               : item.rarity === 'epic' ? getComputedStyle(document.documentElement).getPropertyValue('--rarity-epic').trim()
+               : item.rarity === 'rare' ? getComputedStyle(document.documentElement).getPropertyValue('--rarity-rare').trim()
+               : getComputedStyle(document.documentElement).getPropertyValue('--rarity-common').trim();
+  el.style.borderColor = color;
+  rarity.style.color = color;
+  el.appendChild(icon);
+  el.appendChild(label);
+  el.appendChild(rarity);
+  return el;
+}
 
-function saveStats(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(stats)); updateUI(); }
-function updateUI(){
-  countEl.textContent = stats.total;
-  ssrEl.textContent = stats.ssr;
-  srEl.textContent = stats.sr;
-  rEl.textContent = stats.r;
-  logEl.innerHTML = '';
-  stats.history.slice().reverse().forEach(h=>{
-    const d = document.createElement('div'); d.className='entry'; d.textContent = `[${new Date(h.ts).toLocaleTimeString()}] ${h.rarity} 획득: ${h.name}`; logEl.appendChild(d);
+/* reveal helpers */
+function revealSequential(cards, interval=450){
+  cards.forEach((c, i)=>{
+    setTimeout(()=> c.classList.remove('hidden'), i*interval);
+  });
+}
+function revealSimultaneous(cards){
+  setTimeout(()=> cards.forEach(c=>c.classList.remove('hidden')), 180);
+}
+function revealDrumroll(cards, interval=160){
+  cards.forEach((c,i)=>{
+    setTimeout(()=> c.classList.remove('hidden'), i*interval);
   });
 }
 
-function weightedDraw(pool){
-  const total = pool.reduce((s,p)=>s+p.weight,0);
-  let r = Math.random()*total;
-  for(const p of pool){ r-=p.weight; if(r<=0) return p; }
-  return pool[pool.length-1];
-}
+/* main generate */
+const genBtn = document.getElementById('genBtn');
+const countSelect = document.getElementById('countSelect');
+const styleSelect = document.getElementById('styleSelect');
+const pullGrid = document.getElementById('pullGrid');
+const downloadBtn = document.getElementById('downloadBtn');
+const clearBtn = document.getElementById('clearBtn');
 
-async function doPull(count){
-  // disable controls
-  pullBtn.disabled = true; pull10Btn.disabled = true;
-  const results = [];
+genBtn.addEventListener('click', ()=>{
+  pullGrid.innerHTML = '';
+  const count = Number(countSelect.value);
+  const cards = [];
   for(let i=0;i<count;i++){
-    // simple 연출
-    cardEl.textContent = '연출 중…';
-    cardEl.style.opacity = '0.9';
-    await new Promise(r=>setTimeout(r, 600)); // 연출
-    const res = weightedDraw(POOL);
-    // show
-    cardEl.textContent = res.name;
-    if(res.rarity==='SSR') cardEl.style.background='linear-gradient(180deg,#ffd166,#ffb86b)';
-    else if(res.rarity==='SR') cardEl.style.background='linear-gradient(180deg,#7cf6ff,#4bbfd9)';
-    else cardEl.style.background='linear-gradient(180deg,#d7d9df,#9aa0ab)';
-    // stats
-    stats.total+=1;
-    if(res.rarity==='SSR') stats.ssr+=1;
-    if(res.rarity==='SR') stats.sr+=1;
-    if(res.rarity==='R') stats.r+=1;
-    stats.history.push({ ts: Date.now(), id: res.id, name: res.name, rarity: res.rarity });
-    results.push(res);
-    await new Promise(r=>setTimeout(r, 180)); // 짧은 텀
+    const it = pickRandomItem();
+    // clone name to avoid duplicate references
+    const item = { name: it.name, icon: it.icon, rarity: it.rarity };
+    const card = createCard(item);
+    pullGrid.appendChild(card);
+    cards.push(card);
   }
-  saveStats();
-  // re-enable
-  pullBtn.disabled = false; pull10Btn.disabled = false;
-  // summary
-  return results;
+  // choose style
+  const style = styleSelect.value;
+  if(style === 'seq') revealSequential(cards, 420);
+  else if(style === 'drum') revealDrumroll(cards, 140);
+  else revealSimultaneous(cards);
+
+  // scroll into view
+  pullGrid.parentElement.scrollIntoView({ behavior:'smooth', block:'center' });
+});
+
+/* clear */
+clearBtn.addEventListener('click', ()=>{
+  pullGrid.innerHTML = '';
+});
+
+/* download: render pullGrid into a canvas (basic) */
+downloadBtn.addEventListener('click', ()=>{
+  if(!pullGrid.children.length) return alert('먼저 생성하세요.');
+  // compute canvas width by summing card widths
+  const cards = Array.from(pullGrid.children);
+  const cardW = Math.min(140, Math.max(96, cards[0].getBoundingClientRect().width || 120));
+  const cardH = Math.min(200, Math.max(140, cards[0].getBoundingClientRect().height || 160));
+  const gap = 10;
+  const cols = cards.length;
+  const canvasW = cols * cardW + (cols - 1) * gap + 32;
+  const canvasH = cardH + 64;
+  const cvs = document.createElement('canvas');
+  cvs.width = canvasW * devicePixelRatio;
+  cvs.height = canvasH * devicePixelRatio;
+  const ctx = cvs.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  // background
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card').trim() || '#fff';
+  ctx.fillRect(0,0,canvasW,canvasH);
+  // draw each card
+  cards.forEach((c, idx)=>{
+    const x = 16 + idx * (cardW + gap);
+    const y = 24;
+    // border
+    const border = c.style.borderColor || '#ddd';
+    ctx.fillStyle = '#fff';
+    roundRect(ctx, x, y, cardW, cardH, 10, true, false);
+    ctx.strokeStyle = border;
+    ctx.lineWidth = 3;
+    roundRect(ctx, x, y, cardW, cardH, 10, false, true);
+    // icon (draw emoji as text)
+    const icon = c.querySelector('.icon').textContent || '?';
+    ctx.font = `${Math.floor(cardW*0.36)}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#000';
+    ctx.fillText(icon, x + cardW/2, y + cardH*0.36);
+    // name
+    const name = c.querySelector('.label').textContent;
+    ctx.font = `700 ${Math.floor(cardW*0.08)}px "Noto Sans KR", system-ui, Arial`;
+    wrapText(ctx, name, x + 10, y + cardH*0.6, cardW - 20, Math.floor(cardW*0.09));
+    // rarity
+    const rarity = c.querySelector('.rarity').textContent;
+    ctx.font = `700 ${Math.floor(cardW*0.08)}px "Noto Sans KR", system-ui, Arial`;
+    ctx.fillStyle = c.querySelector('.rarity').style.color || '#666';
+    ctx.fillText(rarity, x + cardW/2, y + cardH - 18);
+  });
+  // download
+  const url = cvs.toDataURL('image/png');
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'jakud_gacha.png';
+  a.click();
+});
+
+/* helpers: rounded rect and wrapText */
+function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+  if (r === undefined) r = 5;
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+  if(fill) ctx.fill();
+  if(stroke) ctx.stroke();
+}
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  let curY = y;
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + ' ';
+    const metrics = ctx.measureText(testLine);
+    const testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      ctx.fillText(line, x + maxWidth/2, curY);
+      line = words[n] + ' ';
+      curY += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line.trim(), x + maxWidth/2, curY);
 }
 
-pullBtn.addEventListener('click', async ()=>{
-  await doPull(1);
-});
+/* safe random pick used above already; nothing else required */
 
-pull10Btn.addEventListener('click', async ()=>{
-  await doPull(10);
-});
-
-resetBtn.addEventListener('click', ()=>{
-  stats = { total:0, ssr:0, sr:0, r:0, history:[] };
-  saveStats();
-  cardEl.textContent='?'; cardEl.style.background='';
-});
-
-/* init */
-updateUI();
-if(!stats.history.length) { const p=document.createElement('div'); p.className='entry'; p.textContent='가챠 준비 완료'; logEl.appendChild(p); }
 </script>
 </body>
 </html>
