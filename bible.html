@@ -50,12 +50,12 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 .main-wrap{ max-width:1180px; margin:1.6rem auto; padding:0 18px; display:flex; justify-content:center; }
 .hero{ width:100%; max-width:920px; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:1.4rem; box-shadow:0 12px 30px rgba(0,0,0,0.06); display:flex; gap:1rem; align-items:flex-start; flex-direction:column; }
 .site-name{ font-size:2.4rem; font-weight:900; margin:0 0 0.6rem 0; color:var(--text-strong) }
-.lead{ font-size:1rem; color:var(--muted); line-height:1.6 }
 
-/* 버튼 그리드 - 심플, 12개 */
-.grid{ display:grid; grid-template-columns: repeat(6, 1fr); gap:12px; width:100%; max-width:720px; margin-top:6px; }
-.chap-btn{ padding:14px 10px; border-radius:10px; border:1px solid var(--line); background:transparent; cursor:pointer; font-weight:900; color:var(--text); text-align:center; font-size:1rem; text-decoration:none; display:flex; align-items:center; justify-content:center; height:64px; }
-.chap-btn.big{ grid-column: span 6; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+/* 버튼 그리드 - 심플, 12개. 가운데 정렬 및 그라데이션 적용 */
+.grid{ display:grid; grid-template-columns: repeat(6, 1fr); gap:12px; width:100%; max-width:720px; margin:0 auto; margin-top:6px; justify-items:center; }
+.chap-btn{ padding:14px 10px; border-radius:10px; border:0; cursor:pointer; font-weight:900; color:#071018; text-align:center; font-size:1rem; text-decoration:none; display:flex; align-items:center; justify-content:center; height:64px; width:100%; max-width:160px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+.chap-btn:active{ transform: translateY(1px); }
+.chap-btn.small{ max-width:120px; }
 
 @media(max-width:920px){
   .grid{ grid-template-columns: repeat(4, 1fr); }
@@ -102,7 +102,6 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 <main class="main-wrap">
   <section class="hero" role="main" aria-labelledby="bible-title">
     <h1 id="bible-title" class="site-name">자쿠드 성경</h1>
-    <p class="lead">원하는 장을 눌러 바로 이동합니다.</p>
 
     <div class="grid" aria-label="chapters">
       <a class="chap-btn" href="bible_chapter.html#1">1장</a>
@@ -116,8 +115,8 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
       <a class="chap-btn" href="bible_chapter.html#8">8장</a>
       <a class="chap-btn" href="bible_chapter.html#9">9장</a>
       <a class="chap-btn" href="bible_chapter.html#10">10장</a>
-      <a class="chap-btn" href="bible_chapter.html#EX">EX장</a>
-      <a class="chap-btn" href="bible_photos.html">사진</a>
+      <a class="chap-btn small" href="bible_chapter.html#EX">EX장</a>
+      <a class="chap-btn small" href="bible_photos.html">사진</a>
     </div>
   </section>
 </main>
