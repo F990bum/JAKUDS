@@ -5,63 +5,64 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>자쿠드 숭배 시뮬레이터 — 자쿠드 성경</title>
 
+<link rel="icon" href="favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --muted:#475569; --text:#0f172a; --text-strong:#071035;
+  --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
+  --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
 }
 html.dark{
-  --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff;
+  --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
+  --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff;
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 
-/* header same style as other pages (compact) */
+/* Header (index.html과 동일) */
 .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
-.header-top{ display:flex; align-items:center; justify-content:space-between; padding:0.6rem 18px; gap:1rem; }
+.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; }
 .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
-.brand img{ width:40px; height:40px; object-fit:contain; border-radius:6px; background:transparent; }
-.brand .title{ font-size:1.25rem; font-weight:900; color:var(--text-strong); }
+.brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
+.brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
 
 .right-controls{ display:flex; align-items:center; gap:0.6rem; }
-.sp-badge{ padding:0 12px; border-radius:8px; border:1px solid var(--line); font-weight:800; color:var(--accent); height:36px; display:flex; align-items:center; justify-content:center; font-size:13px; background:transparent; }
-.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); height:36px; display:flex; align-items:center; justify-content:center; font-size:13px; text-decoration:none; }
+.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:160px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
 
-.nav-row{ display:flex; align-items:center; justify-content:space-between; padding:0.45rem 18px; border-top:1px solid var(--line); }
+/* Nav */
+.nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.6rem; padding:0.45rem 18px; border-top:1px solid var(--line); background:transparent; box-sizing:border-box; }
 .nav-left{ display:flex; gap:0.6rem; align-items:center; }
-.nav-left a{ text-decoration:none; padding:0.35rem 0.8rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.92rem; }
+.nav-left a{ text-decoration:none; padding:0.45rem 0.9rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
 .nav-left a.active{ background: rgba(99,102,241,0.12); color: var(--accent); }
 
 .nav-right{ display:flex; align-items:center; gap:0.6rem; }
-.theme-label{ color:var(--muted); font-weight:700; font-size:0.92rem; }
+.theme-label{ color:var(--muted); font-weight:700; font-size:0.95rem; }
 .theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
 .theme-switch input{ opacity:0; width:0; height:0; }
-.slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
+.slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
 .slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
-.theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),#ffb86b); }
+.theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
 .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
 
-/* main simple layout */
-.main-wrap{ max-width:920px; margin:2rem auto; padding:0 18px; }
-.container{ background:var(--card); border-radius:12px; padding:28px; box-shadow:0 12px 30px rgba(0,0,0,0.06); display:flex; flex-direction:column; gap:20px; align-items:center; }
-.h1{ font-size:1.5rem; font-weight:900; color:var(--text-strong); margin:0; }
+/* Main layout - index 비율과 동일하게 구성 */
+.main-wrap{ max-width:1180px; margin:1.6rem auto; padding:0 18px; display:flex; justify-content:center; }
+.hero{ width:100%; max-width:920px; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:1.4rem; box-shadow:0 12px 30px rgba(0,0,0,0.06); display:flex; gap:1rem; align-items:flex-start; flex-direction:column; }
+.site-name{ font-size:2.4rem; font-weight:900; margin:0 0 0.6rem 0; color:var(--text-strong) }
+.lead{ font-size:1rem; color:var(--muted); line-height:1.6 }
 
-.grid{ display:grid; grid-template-columns: repeat(6, 1fr); gap:12px; width:100%; max-width:640px; }
-.btn{ padding:14px 10px; border-radius:10px; border:1px solid var(--line); background:transparent; cursor:pointer; font-weight:800; color:var(--text); text-align:center; }
-.btn.big{ grid-column: span 6; padding:16px; font-size:1.05rem; background:linear-gradient(90deg,var(--accent),#ffb86b); color:#071018; box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+/* 버튼 그리드 - 심플, 12개 */
+.grid{ display:grid; grid-template-columns: repeat(6, 1fr); gap:12px; width:100%; max-width:720px; margin-top:6px; }
+.chap-btn{ padding:14px 10px; border-radius:10px; border:1px solid var(--line); background:transparent; cursor:pointer; font-weight:900; color:var(--text); text-align:center; font-size:1rem; text-decoration:none; display:flex; align-items:center; justify-content:center; height:64px; }
+.chap-btn.big{ grid-column: span 6; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; box-shadow:0 8px 20px rgba(0,0,0,0.06); }
 
-/* image preview modal (very simple) */
-.preview-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:10000; }
-.preview-box{ width:90%; max-width:900px; background:var(--card); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:8px; align-items:center; }
-.preview-img{ max-width:100%; max-height:70vh; border-radius:6px; object-fit:contain; }
-
-/* footer note small */
-.note{ font-size:0.9rem; color:var(--muted); }
-
-/* responsive */
-@media(max-width:720px){
+@media(max-width:920px){
+  .grid{ grid-template-columns: repeat(4, 1fr); }
+}
+@media(max-width:560px){
   .grid{ grid-template-columns: repeat(3, 1fr); }
+  .site-name{ font-size:1.6rem; }
 }
 </style>
 </head>
@@ -69,8 +70,8 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 
 <header class="header">
   <div class="header-top">
-    <a class="brand" href="index.html">
-      <img src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="logo">
+    <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
+      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고" onerror="this.onerror=null;this.src='/assets/logo.png'">
       <span class="title">자쿠드 숭배 시뮬레이터</span>
     </a>
 
@@ -80,7 +81,7 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
     </div>
   </div>
 
-  <div class="nav-row" role="navigation">
+  <div class="nav-row" role="navigation" aria-label="Main">
     <div class="nav-left">
       <a id="nav-index" href="index.html">메인</a>
       <a id="nav-worship" href="worship.html">자쿠드 숭배하기</a>
@@ -99,43 +100,27 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 </header>
 
 <main class="main-wrap">
-  <div class="container" role="main" aria-labelledby="bibleTitle">
-    <h1 id="bibleTitle" class="h1">자쿠드 성경</h1>
+  <section class="hero" role="main" aria-labelledby="bible-title">
+    <h1 id="bible-title" class="site-name">자쿠드 성경</h1>
+    <p class="lead">원하는 장을 눌러 바로 이동합니다.</p>
 
-    <!-- chapter buttons 1..10 and EX -->
-    <div class="grid" id="chapters">
-      <button class="btn" data-ch="1">1장</button>
-      <button class="btn" data-ch="2">2장</button>
-      <button class="btn" data-ch="3">3장</button>
-      <button class="btn" data-ch="4">4장</button>
-      <button class="btn" data-ch="5">5장</button>
-      <button class="btn" data-ch="6">6장</button>
+    <div class="grid" aria-label="chapters">
+      <a class="chap-btn" href="bible_chapter.html#1">1장</a>
+      <a class="chap-btn" href="bible_chapter.html#2">2장</a>
+      <a class="chap-btn" href="bible_chapter.html#3">3장</a>
+      <a class="chap-btn" href="bible_chapter.html#4">4장</a>
+      <a class="chap-btn" href="bible_chapter.html#5">5장</a>
+      <a class="chap-btn" href="bible_chapter.html#6">6장</a>
 
-      <button class="btn" data-ch="7">7장</button>
-      <button class="btn" data-ch="8">8장</button>
-      <button class="btn" data-ch="9">9장</button>
-      <button class="btn" data-ch="10">10장</button>
-      <button class="btn" data-ch="EX">EX장</button>
-      <button class="btn" id="photoBtn">사진</button>
+      <a class="chap-btn" href="bible_chapter.html#7">7장</a>
+      <a class="chap-btn" href="bible_chapter.html#8">8장</a>
+      <a class="chap-btn" href="bible_chapter.html#9">9장</a>
+      <a class="chap-btn" href="bible_chapter.html#10">10장</a>
+      <a class="chap-btn" href="bible_chapter.html#EX">EX장</a>
+      <a class="chap-btn" href="bible_photos.html">사진</a>
     </div>
-
-    <button class="btn big" id="openSelected">열기</button>
-
-    <div class="note">원하는 장을 선택한 뒤 열기 버튼을 누르세요. 사진 버튼은 이미지 미리보기를 엽니다.</div>
-  </div>
+  </section>
 </main>
-
-<!-- image preview modal -->
-<div id="previewOverlay" class="preview-overlay" aria-hidden="true">
-  <div class="preview-box" role="dialog" aria-modal="true">
-    <img id="previewImg" class="preview-img" alt="선택한 사진이 여기 표시됩니다">
-    <div style="display:flex;gap:8px;">
-      <input id="fileInput" type="file" accept="image/*" style="display:none">
-      <button id="selectFile" class="btn">파일 선택</button>
-      <button id="closePreview" class="btn">닫기</button>
-    </div>
-  </div>
-</div>
 
 <script>
 /* nav active */
@@ -146,7 +131,7 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
   if(id){ const el=document.getElementById(id); if(el) el.classList.add('active'); }
 })();
 
-/* theme toggle (persist) */
+/* theme toggle persistent */
 (function(){
   const toggle = document.getElementById('themeToggle');
   const saved = localStorage.getItem('theme');
@@ -160,46 +145,7 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
   });
 })();
 
-/* chapter selection */
-const chapters = document.getElementById('chapters');
-let selected = null;
-chapters.addEventListener('click', (e)=>{
-  const btn = e.target.closest('button');
-  if(!btn) return;
-  if(btn.id === 'photoBtn') { openPhoto(); return; }
-  // toggle selection visual
-  const all = chapters.querySelectorAll('button');
-  all.forEach(b=>b.style.boxShadow='none');
-  btn.style.boxShadow = '0 6px 18px rgba(0,0,0,0.12)';
-  selected = btn.dataset.ch;
-});
-
-/* open selected (placeholder behavior: navigate to fragment or show alert) */
-document.getElementById('openSelected').addEventListener('click', ()=>{
-  if(!selected){ alert('장(1~10 또는 EX)을 먼저 선택하세요.'); return; }
-  // open a simple fragment anchor to show which chapter would open
-  // replace with real navigation if you have chapter pages
-  location.hash = 'chapter-' + selected;
-  // small inline preview modal could be implemented; for now show native alert for clarity
-  alert(selected + '장 열기 (여기에 실제 성경 텍스트를 삽입하세요).');
-});
-
-/* photo modal */
-const previewOverlay = document.getElementById('previewOverlay');
-const fileInput = document.getElementById('fileInput');
-const previewImg = document.getElementById('previewImg');
-document.getElementById('selectFile').addEventListener('click', ()=> fileInput.click());
-document.getElementById('closePreview').addEventListener('click', closePhoto);
-fileInput.addEventListener('change', (ev)=>{
-  const f = ev.target.files && ev.target.files[0];
-  if(!f) return;
-  const url = URL.createObjectURL(f);
-  previewImg.src = url;
-});
-function openPhoto(){ previewOverlay.style.display = 'flex'; previewOverlay.setAttribute('aria-hidden','false'); previewImg.src = ''; }
-function closePhoto(){ previewOverlay.style.display = 'none'; previewOverlay.setAttribute('aria-hidden','true'); previewImg.src = ''; fileInput.value = ''; }
-
-/* spBadge shows stored SP display if available (reuse small formatter) */
+/* top SP badge value if available */
 (function applyTopState(){
   try{
     const alt = localStorage.getItem('zk_sp_v1');
@@ -207,7 +153,7 @@ function closePhoto(){ previewOverlay.style.display = 'none'; previewOverlay.set
     if(el) el.textContent = alt ? alt : '0 SP';
   }catch(e){}
 })();
-setInterval(applyTopState, 2000);
+setInterval(applyTopState, 1500);
 </script>
 </body>
 </html>
