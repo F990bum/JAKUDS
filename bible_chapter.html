@@ -13,6 +13,9 @@
   --header-height:88px; /* header two-line height approximation */
   --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
   --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
+  --toc-width:260px; --toc-gap:28px; /* TOC width and gap from content */
+  --content-base:880px; /* original content width used previously */
+  --content-width: calc(var(--content-base) * 2.5); /* 2.5× width */
 }
 html.dark{
   --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
@@ -48,20 +51,23 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
 .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
 
-/* Layout: leave space on left for fixed TOC. content margin-left equals toc width + gap */
-:root{ --toc-width:260px; --toc-gap:20px; }
+/* Layout: TOC sits to the right of centered content. content is centered and 2.5× wider. */
 .container{ max-width:1180px; margin:1.6rem auto; padding:0 18px; display:block; }
 .page-wrap{ display:flex; gap:20px; align-items:flex-start; }
 
-/* TOC fixed on left as remote (always visible) */
-.toc-wrap{ width:var(--toc-width); position:fixed; left:18px; top:calc(var(--header-height) + 12px); }
+/* Position TOC to the right of centered content using calc based on content width so they won't overlap. */
+.toc-wrap{ position:fixed; top:calc(var(--header-height) + 72px); /* moved slightly lower */
+  left: calc(50% + (var(--content-width) / 2) + var(--toc-gap));
+  width: var(--toc-width);
+  z-index:1200;
+}
 .toc{ background:var(--card); border-radius:10px; padding:12px; border:1px solid var(--line); box-shadow:0 8px 22px var(--shadow); }
 .toc h3{ margin:0 0 8px 0; font-size:1rem; font-weight:900; color:var(--text-strong); }
 .toc a{ display:block; padding:8px 10px; border-radius:8px; text-decoration:none; color:var(--muted); font-weight:800; margin-bottom:6px; }
 .toc a:hover{ background:rgba(99,102,241,0.06); color:var(--accent); }
 
-/* Content sits to the right with left margin matching TOC width+gap */
-.content{ margin-left: calc(var(--toc-width) + var(--toc-gap)); max-width:880px; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:20px; box-shadow:0 12px 30px rgba(0,0,0,0.06); }
+/* Content centered and widened */
+.content{ width: var(--content-width); max-width:none; margin:0 auto; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:20px; box-shadow:0 12px 30px rgba(0,0,0,0.06); }
 
 .page-title{ font-size:2rem; font-weight:900; margin:4px 0 16px 0; color:var(--text-strong); }
 
@@ -71,9 +77,15 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 .chapter p{ margin:0; color:var(--muted); line-height:1.9; white-space:pre-wrap; }
 
 /* responsive: on small screens TOC becomes relative and content margin removed */
+@media(max-width:1200px){
+  :root{ --content-base:720px; --content-width: calc(var(--content-base) * 2.0); }
+  .toc-wrap{ position:fixed; left: auto; right:18px; top:calc(var(--header-height) + 60px); }
+  .content{ width: calc(100% - 40px); margin: 0 20px; }
+}
+
 @media(max-width:980px){
   .toc-wrap{ position:relative; left:auto; top:auto; width:100%; margin-bottom:12px; }
-  .content{ margin-left:0; }
+  .content{ margin-left:0; width:100%; }
   .page-wrap{ display:block; }
 }
 </style>
