@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>자쿠드 성경</title>
+<title>자쿠드 성경 — 본문</title>
 
 <link rel="icon" href="favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 :root{
+  --header-height:88px; /* 헤더 높이(상단 고정용) */
   --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
   --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
 }
@@ -22,8 +23,8 @@ html{scroll-behavior:smooth}
 body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 
 /* Header exactly like index.html */
-.header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
-.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; }
+.header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; height:var(--header-height); }
+.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; height:100%; }
 .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
 .brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
 .brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
@@ -55,14 +56,14 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 /* title */
 .page-title{ font-size:2rem; font-weight:900; margin:4px 0 16px 0; color:var(--text-strong); }
 
-/* toc */
-.toc{ background:var(--card); border-radius:10px; padding:12px; border:1px solid var(--line); box-shadow:0 8px 22px var(--shadow); position:sticky; top:88px; }
+/* toc: fixed on left even when scrolling */
+.toc{ background:var(--card); border-radius:10px; padding:12px; border:1px solid var(--line); box-shadow:0 8px 22px var(--shadow); position:sticky; top:calc(var(--header-height) + 12px); }
 .toc h3{ margin:0 0 8px 0; font-size:1rem; font-weight:900; color:var(--text-strong); }
 .toc a{ display:block; padding:8px 10px; border-radius:8px; text-decoration:none; color:var(--muted); font-weight:800; margin-bottom:6px; }
 .toc a:hover{ background:rgba(99,102,241,0.06); color:var(--accent); }
 
-/* chapter block */
-.chapter{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:18px; box-shadow:0 6px 18px var(--shadow); }
+/* chapter block -- ensure anchor target is visible below fixed header */
+.chapter{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:18px; box-shadow:0 6px 18px var(--shadow); scroll-margin-top:calc(var(--header-height) + 16px); }
 .chapter h2{ margin:0 0 10px 0; font-size:1.25rem; color:var(--text-strong); }
 .chapter p{ margin:0; color:var(--muted); line-height:1.9; white-space:pre-wrap; }
 
