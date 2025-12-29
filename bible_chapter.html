@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>자쿠드 성경 — 본문</title>
+<title>자쿠드 성경</title>
 
 <link rel="icon" href="favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@ html.dark{
 html{scroll-behavior:smooth}
 body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 
-/* Header (consistent with other pages) */
+/* Header exactly like index.html */
 .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
 .header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; }
 .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
@@ -32,7 +32,7 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 .sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:160px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
 .myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
 
-/* Nav */
+/* Nav exactly like index.html */
 .nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.6rem; padding:0.45rem 18px; border-top:1px solid var(--line); background:transparent; box-sizing:border-box; }
 .nav-left{ display:flex; gap:0.6rem; align-items:center; }
 .nav-left a{ text-decoration:none; padding:0.45rem 0.9rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
@@ -47,32 +47,30 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
 .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
 
-/* Layout */
+/* Page layout: left TOC, right content; widths similar to earlier pages */
 .container{ max-width:1180px; margin:1.6rem auto; padding:0 18px; display:flex; gap:20px; align-items:flex-start; }
-.content{ flex:1; max-width:920px; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:20px; box-shadow:0 12px 30px rgba(0,0,0,0.06); }
-.sidebar{ width:240px; position:sticky; top:88px; height:calc(100vh - 100px); overflow:auto; }
+.sidebar{ width:260px; }
+.content{ flex:1; max-width:880px; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); border-radius:12px; padding:20px; box-shadow:0 12px 30px rgba(0,0,0,0.06); }
 
-/* Title */
-.title{ font-size:2rem; font-weight:900; margin:0 0 12px 0; color:var(--text-strong); }
+/* title */
+.page-title{ font-size:2rem; font-weight:900; margin:4px 0 16px 0; color:var(--text-strong); }
 
-/* Chapter card */
-.chapter{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:18px; box-shadow:0 6px 18px var(--shadow); }
-.chapter h2{ margin:0 0 10px 0; font-size:1.25rem; color:var(--text-strong); }
-.chapter p{ margin:0; color:var(--muted); line-height:1.9; white-space:pre-wrap; }
-
-/* sidebar list */
-.toc{ background:var(--card); border-radius:10px; padding:12px; border:1px solid var(--line); box-shadow:0 8px 22px var(--shadow); }
+/* toc */
+.toc{ background:var(--card); border-radius:10px; padding:12px; border:1px solid var(--line); box-shadow:0 8px 22px var(--shadow); position:sticky; top:88px; }
 .toc h3{ margin:0 0 8px 0; font-size:1rem; font-weight:900; color:var(--text-strong); }
 .toc a{ display:block; padding:8px 10px; border-radius:8px; text-decoration:none; color:var(--muted); font-weight:800; margin-bottom:6px; }
 .toc a:hover{ background:rgba(99,102,241,0.06); color:var(--accent); }
 
-/* back to top */
-.top-btn{ display:inline-block; margin-top:8px; padding:8px 10px; border-radius:8px; border:1px solid var(--line); background:transparent; color:var(--muted); font-weight:800; text-decoration:none; }
+/* chapter block */
+.chapter{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:18px; box-shadow:0 6px 18px var(--shadow); }
+.chapter h2{ margin:0 0 10px 0; font-size:1.25rem; color:var(--text-strong); }
+.chapter p{ margin:0; color:var(--muted); line-height:1.9; white-space:pre-wrap; }
 
 /* responsive */
 @media(max-width:980px){
   .container{ flex-direction:column; padding:1rem; }
-  .sidebar{ position:relative; width:100%; height:auto; order:2; }
+  .sidebar{ width:100%; position:relative; top:auto; order:2; }
+  .toc{ position:relative; top:auto; }
 }
 </style>
 </head>
@@ -80,9 +78,9 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 
 <header class="header">
   <div class="header-top">
-    <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
+    <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이션">
       <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고" onerror="this.onerror=null;this.src='/assets/logo.png'">
-      <span class="title">자쿠드 성경</span>
+      <span class="title">자쿠드 숭배 시뮬레이션</span>
     </a>
 
     <div class="right-controls">
@@ -110,69 +108,8 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 </header>
 
 <div class="container">
-  <main class="content" id="mainContent">
-    <h1 class="title">자쿠드 성경 — 본문</h1>
-
-    <section id="1" class="chapter">
-      <h2>제 1장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <section id="2" class="chapter">
-      <h2>제 2장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <section id="3" class="chapter">
-      <h2>제 3장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <section id="4" class="chapter">
-      <h2>제 4장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <section id="5" class="chapter">
-      <h2>제 5장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <section id="6" class="chapter">
-      <h2>제 6장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <section id="7" class="chapter">
-      <h2>제 7장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <section id="8" class="chapter">
-      <h2>제 8장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <section id="9" class="chapter">
-      <h2>제 9장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <section id="10" class="chapter">
-      <h2>제 10장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <section id="EX" class="chapter">
-      <h2>EX장</h2>
-      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
-    </section>
-
-    <a class="top-btn" href="#top">맨 위로</a>
-  </main>
-
   <aside class="sidebar">
-    <div class="toc" role="navigation" aria-label="chapter list">
+    <nav class="toc" aria-label="목차">
       <h3>목차</h3>
       <a href="bible_chapter.html#1">1장</a>
       <a href="bible_chapter.html#2">2장</a>
@@ -186,12 +123,71 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
       <a href="bible_chapter.html#10">10장</a>
       <a href="bible_chapter.html#EX">EX장</a>
       <a href="bible_photos.html">사진</a>
-    </div>
+    </nav>
   </aside>
+
+  <main class="content" id="mainContent">
+    <h1 class="page-title">자쿠드 성경 — 본문</h1>
+
+    <section id="1" class="chapter">
+      <h2>제 1장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+
+    <section id="2" class="chapter">
+      <h2>제 2장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+
+    <section id="3" class="chapter">
+      <h2>제 3장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+
+    <section id="4" class="chapter">
+      <h2>제 4장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+
+    <section id="5" class="chapter">
+      <h2>제 5장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+
+    <section id="6" class="chapter">
+      <h2>제 6장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+
+    <section id="7" class="chapter">
+      <h2>제 7장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+
+    <section id="8" class="chapter">
+      <h2>제 8장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+
+    <section id="9" class="chapter">
+      <h2>제 9장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+
+    <section id="10" class="chapter">
+      <h2>제 10장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+
+    <section id="EX" class="chapter">
+      <h2>EX장</h2>
+      <p>ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ ㅇㅇ</p>
+    </section>
+  </main>
 </div>
 
 <script>
-/* nav active */
+/* nav active highlight (bible) */
 (function(){
   const path = location.pathname.split('/').pop() || 'index.html';
   const map = { 'index.html':'nav-index', '':'nav-index', 'worship.html':'nav-worship', 'bible.html':'nav-bible', 'generator.html':'nav-generator', 'bible_chapter.html':'nav-bible' };
@@ -199,7 +195,7 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
   if(id){ const el=document.getElementById(id); if(el) el.classList.add('active'); }
 })();
 
-/* theme toggle persistent */
+/* theme toggle persistence */
 (function(){
   const toggle = document.getElementById('themeToggle');
   const saved = localStorage.getItem('theme');
@@ -213,7 +209,7 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
   });
 })();
 
-/* top SP badge */
+/* top SP badge value if available */
 (function applyTopState(){
   try{
     const alt = localStorage.getItem('zk_sp_v1');
