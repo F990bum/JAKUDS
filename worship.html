@@ -660,7 +660,6 @@ function renderUpgrades(){
     hint.style.fontSize='0.75rem';
     hint.style.color='var(--muted)';
     hint.style.marginLeft='8px';
-    hint.textContent = `(초깃값:${formatDescNumber(r.def.basePrice)}, 계수:${r.def.mult})`;
     right.appendChild(hint);
     el.appendChild(left); el.appendChild(right); upgradesListEl.appendChild(el);
   });
