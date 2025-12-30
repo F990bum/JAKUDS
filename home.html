@@ -8,23 +8,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
+  --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
+  --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
+  --panel-gray:#e9ebec; --panel-text:#111; --accent-3:#ffd166; --danger:#ff3b30;
+}
+html.dark{
   --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
-  --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff; --panel-gray:#e9ebec; --panel-text:#111;
-  --orange:#f59e0b; --shadow: rgba(0,0,0,0.45);
+  --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff; --shadow:rgba(0,0,0,0.45);
+  --panel-gray:#0f1620; --panel-text:#dbe7f0; --accent-3:#ffd166; --danger:#ff6b6b;
 }
 *{box-sizing:border-box}
 html{font-size:100%}
 body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 
-/* Header */
+/* Header (index 기준) */
 .header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
 .header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; }
 .brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
 .brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
 .brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
+
 .right-controls{ display:flex; align-items:center; gap:0.6rem; }
-.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:120px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:140px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
 .myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
+
+/* Nav */
 .nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.6rem; padding:0.45rem 18px; border-top:1px solid var(--line); background:transparent; box-sizing:border-box; }
 .nav-left{ display:flex; gap:0.6rem; align-items:center; }
 .nav-left a{ text-decoration:none; padding:0.45rem 0.9rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
@@ -32,64 +40,68 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 .theme-label{ color:var(--muted); font-weight:700; font-size:0.95rem; }
 .theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
 .theme-switch input{ opacity:0; width:0; height:0; }
-.slider{ position:absolute; inset:0; background:#0f1724; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(255,255,255,0.02); }
+.slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
 .slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
 .theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
 .theme-switch input:checked + .slider::before{ transform: translateX(20px); }
 
-/* Layout */
-.page-wrap{ max-width:1260px; margin:20px auto; padding:0 18px; display:flex; justify-content:center; }
-.profile-container{ width:100%; max-width:980px; display:flex; flex-direction:column; gap:12px; }
+/* Main layout */
+.container{ max-width:1200px; margin:28px auto; padding:0 18px; display:flex; gap:24px; align-items:flex-start; justify-content:center; }
+.main{ width:100%; max-width:980px; display:block; }
 
 /* Hero */
-.profile-hero{
+.hero{
   background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-  border-radius:14px;
-  padding:18px;
-  box-shadow:0 18px 40px rgba(0,0,0,0.6);
+  border-radius:12px; padding:24px; box-shadow:0 20px 50px var(--shadow);
 }
-.profile-title{ font-size:28px; font-weight:900; margin:0 0 8px 0; color:var(--text-strong); }
+.title{ font-size:30px; font-weight:900; margin:0 0 8px 0; color:var(--text-strong) }
 
-/* Panels */
-.profile-main{
-  background:var(--panel-gray); color:var(--panel-text); border-radius:8px; padding:12px 16px; box-shadow:0 8px 24px rgba(0,0,0,0.35);
+/* Profile panel */
+.panel{
+  background:var(--panel-gray); color:var(--panel-text); border-radius:10px; padding:18px; box-shadow:0 12px 30px rgba(0,0,0,0.2);
+}
+.stats-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px 28px; align-items:center; }
+.stat-row{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.06); font-weight:800; color:var(--panel-text); }
+.stat-row:last-child{ border-bottom:0; }
+
+/* Card gallery: square tiles with caption */
+.gallery-section{ margin-top:16px; }
+.gallery-title{ font-weight:900; color:var(--text-strong); margin:6px 0 10px 0; }
+.tile-grid{ display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(86px, 1fr)); }
+.card-tile{
+  display:flex; flex-direction:column; align-items:center; gap:6px; padding:6px;
+}
+.card-image{
+  width:86px; height:86px; border-radius:8px; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.03)); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:26px; color:var(--panel-text);
+  overflow:hidden; object-fit:cover;
+  border:1px solid rgba(0,0,0,0.06);
+}
+.card-caption{ font-size:12px; color:var(--muted); text-align:center; max-width:86px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* placeholder when missing */
+.placeholder{
+  background:linear-gradient(90deg, rgba(0,0,0,0.05), rgba(255,255,255,0.02));
+  color:var(--muted);
 }
 
-/* Reduce vertical gaps above headings */
-.stats-block{ background:linear-gradient(0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02)); border-radius:8px; padding:12px; margin-bottom:8px; }
-.stats-block h2{ margin:0 0 8px 0; color:#0f1724; font-weight:900; font-size:1.05rem; }
-.stats-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px 28px; align-items:center; }
-.row-item{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.06); font-weight:800; color:#111; }
-.row-item:last-child{ border-bottom:0; }
-
-.card-list{ background:linear-gradient(0deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01)); border-radius:8px; padding:12px; margin-top:6px; min-height:80px; }
-.card-item{ padding:10px; border-bottom:1px solid rgba(0,0,0,0.06); color:#222; font-weight:700; }
-.card-item:last-child{ border-bottom:0; }
-
-/* SECTION HEADING (보유 카드 현황) — spacing control */
-.section-heading{ margin:20px 0 6px 4px; color:var(--text-strong); font-weight:900; font-size:1.15rem; }
-
-/* responsive */
-@media(max-width:980px){
-  .profile-container{ max-width:720px; }
-  .profile-title{ font-size:22px; }
-}
-@media(max-width:560px){
-  .profile-container{ padding:0 8px; }
+/* small responsive */
+@media(max-width:920px){
+  .container{ padding:16px; }
+  .title{ font-size:22px; }
 }
 </style>
 </head>
 <body>
 
-<header class="header">
+<header class="header" role="banner">
   <div class="header-top">
     <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
-      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고" onerror="this.onerror=null;this.src='/assets/logo.png'">
+      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고">
       <span class="title">자쿠드 숭배 시뮬레이터</span>
     </a>
 
     <div class="right-controls">
-      <div id="spBadge" class="sp-badge">0 SP</div>
+      <div id="spBadge" class="sp-badge" aria-live="polite">0 SP</div>
       <a class="myhome-btn" href="home.html">My Home</a>
     </div>
   </div>
@@ -104,7 +116,7 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
 
     <div class="nav-right">
       <div class="theme-label">다크 모드</div>
-      <label class="theme-switch" title="다크 모드">
+      <label class="theme-switch" aria-label="다크 모드 전환">
         <input id="themeToggle" type="checkbox" />
         <span class="slider"></span>
       </label>
@@ -112,158 +124,208 @@ body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);co
   </div>
 </header>
 
-<main class="page-wrap" role="main">
-  <div class="profile-container">
+<main class="container" role="main">
+  <div class="main">
+    <section class="hero" aria-labelledby="homeTitle">
+      <h1 id="homeTitle" class="title">자쿠드숭배신도 님의 프로필</h1>
+      <!-- 설명 제거 as requested -->
 
-    <section class="profile-hero" aria-labelledby="profileTitle">
-      <h1 id="profileTitle" class="profile-title">자쿠드숭배신도 님의 프로필</h1>
-
-      <!-- 통계 패널 -->
-      <div class="profile-main" role="region" aria-label="프로필 통계">
-        <div class="stats-block" aria-label="통계">
-          <div class="stats-grid">
-            <div class="row-item"><div>총 SP</div><div id="stat_totalSP">0 SP</div></div>
-            <div class="row-item"><div>환생 횟수</div><div id="stat_rebirth">0회</div></div>
-
-            <div class="row-item"><div>보유 KUR 카드 수</div><div id="stat_kur">0 / 5</div></div>
-            <div class="row-item"><div>보유 UR 카드 수</div><div id="stat_ur">0 / 10</div></div>
-
-            <div class="row-item"><div>보유 SSR 카드 수</div><div id="stat_ssr">0 / 10</div></div>
-            <div class="row-item"><div>보유 SR 카드 수</div><div id="stat_sr">0 / 15</div></div>
-          </div>
+      <div class="panel" role="region" aria-label="프로필 통계">
+        <div class="stats-grid" aria-hidden="false">
+          <div class="stat-row"><div>총 SP</div><div id="totalSP">0 SP</div></div>
+          <div class="stat-row"><div>환생 횟수</div><div id="rebirth">0회</div></div>
+          <div class="stat-row"><div>총 숭배 횟수</div><div id="totalClicks">0</div></div>
+          <div class="stat-row"><div>플레이 시간</div><div id="playTime">00:00:00</div></div>
+          <div class="stat-row"><div>보유 KUR 카드 수</div><div id="kurCount">(수치) / 5</div></div>
+          <div class="stat-row"><div>보유 UR 카드 수</div><div id="urCount">(수치) / 10</div></div>
         </div>
-      </div>
 
-      <!-- 보유 카드 현황 제목 (spacing controlled by .section-heading) -->
-      <h1 class="section-heading">보유 카드 현황</h1>
+        <!-- 각 등급별 갤러리: 고정 슬롯 수 (KUR 5, UR 10, SSR 10, SR 15) -->
+        <div class="gallery-section" aria-label="보유 카드 갤러리">
+          <div class="gallery-title">KUR</div>
+          <div class="tile-grid" id="gallery-kur" aria-live="polite"></div>
 
-      <!-- 카드 목록 패널 -->
-      <div class="profile-main" role="region" aria-label="보유 카드 현황">
-        <div class="stats-block" aria-label="보유 카드 현황">
-          <h2 style="font-size:1rem; margin:0 0 8px 0;">KUR (0 / 5)</h2>
-          <div id="cardListKur" class="card-list">
-            <div class="card-item">(카드 목록이 로컬스토리지에 없습니다.)</div>
-          </div>
+          <div class="gallery-title" style="margin-top:12px;">UR</div>
+          <div class="tile-grid" id="gallery-ur" aria-live="polite"></div>
 
-          <h2 style="font-size:1rem; margin-top:10px; margin-bottom:8px;">UR (0 / 10)</h2>
-          <div id="cardListUr" class="card-list">
-            <div class="card-item">(카드 목록이 로컬스토리지에 없습니다.)</div>
-          </div>
+          <div class="gallery-title" style="margin-top:12px;">SSR</div>
+          <div class="tile-grid" id="gallery-ssr" aria-live="polite"></div>
 
-          <h2 style="font-size:1rem; margin-top:10px; margin-bottom:8px;">SSR (0 / 10)</h2>
-          <div id="cardListSsr" class="card-list">
-            <div class="card-item">(카드 목록이 로컬스토리지에 없습니다.)</div>
-          </div>
-
-          <h2 style="font-size:1rem; margin-top:10px; margin-bottom:8px;">SR (0 / 15)</h2>
-          <div id="cardListSr" class="card-list">
-            <div class="card-item">(카드 목록이 로컬스토리지에 없습니다.)</div>
-          </div>
+          <div class="gallery-title" style="margin-top:12px;">SR</div>
+          <div class="tile-grid" id="gallery-sr" aria-live="polite"></div>
         </div>
-      </div>
 
+      </div>
     </section>
-
   </div>
 </main>
 
 <script>
+/* utils */
+function readLS(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function el(tag, cls){ const d = document.createElement(tag); if(cls) d.className = cls; return d; }
+
+/* theme init (index.html behaviour) */
 (function(){
-  function readLS(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
-  function safeText(id, txt){ const el = document.getElementById(id); if(el) el.textContent = txt; }
+  const toggle = document.getElementById('themeToggle');
+  const saved = readLS('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if(initial === 'dark') document.documentElement.classList.add('dark');
+  if(toggle) toggle.checked = (initial === 'dark');
+  if(toggle) toggle.addEventListener('change', ()=>{
+    const next = toggle.checked ? 'dark' : 'light';
+    try{ localStorage.setItem('theme', next); }catch(e){}
+    if(next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+  });
+})();
 
-  function updateSPDisplay(){
-    const spBadge = document.getElementById('spBadge');
-    const statSP = document.getElementById('stat_totalSP');
-    if(!spBadge || !statSP) return;
-
-    const spFormatted = readLS('zk_sp_v1') || readLS('zk_sp') || null;
-    if(spFormatted){ spBadge.textContent = spFormatted; statSP.textContent = spFormatted; return; }
-
+/* SP and basic stats updater */
+function updateSPAndBasic(){
+  const spFormatted = readLS('zk_sp_v1') || readLS('zk_sp') || null;
+  if(spFormatted){
+    document.getElementById('totalSP').textContent = spFormatted;
+    const top = document.getElementById('spBadge'); if(top) top.textContent = spFormatted;
+  } else {
+    // try state parse
     const raw = readLS('zk_tycoon_v_final_v2');
     if(raw){
       try{
-        const obj = JSON.parse(raw);
-        if(obj.sp && typeof obj.sp === 'object' && obj.sp.m !== undefined && obj.sp.e !== undefined){
-          const e = Number(obj.sp.e), m = Number(obj.sp.m);
+        const s = JSON.parse(raw);
+        if(s.sp && s.sp.m !== undefined && s.sp.e !== undefined){
+          const m = Number(s.sp.m), e = Number(s.sp.e);
           if(Number.isFinite(m) && Number.isFinite(e) && e <= 6){
-            const val = Math.floor(m * Math.pow(1000, e));
-            const s = val.toLocaleString() + ' SP';
-            spBadge.textContent = s; statSP.textContent = s; return;
+            const val = Math.floor(m * Math.pow(1000, e)).toLocaleString() + ' SP';
+            document.getElementById('totalSP').textContent = val;
+            const top = document.getElementById('spBadge'); if(top) top.textContent = val;
           }
         }
-      }catch(e){ }
+      }catch(e){}
     }
-    spBadge.textContent = '0 SP'; statSP.textContent = '0 SP';
   }
 
-  function populateStats(){
-    const rebRaw = readLS('zk_rebirth') || readLS('zk_reborn') || readLS('zk_rebirth_count');
-    let reb = '0';
-    if(rebRaw && rebRaw !== '(수치)'){
-      const n = parseInt(rebRaw,10);
-      if(Number.isFinite(n)) reb = String(n);
-      else reb = rebRaw;
+  // rebirth
+  const reb = readLS('zk_rebirth') || readLS('zk_reborn') || '0';
+  document.getElementById('rebirth').textContent = (reb==='(수치)' ? '0회' : `${reb}회`);
+
+  // clicks
+  const clicks = readLS('zk_totalClicks') || (function(){ try{ const raw = readLS('zk_tycoon_v_final_v2'); if(!raw) return '0'; const p = JSON.parse(raw); return p.totalClicks || p.totalClicks===0 ? String(p.totalClicks) : '0'; }catch(e){ return '0'; } })();
+  document.getElementById('totalClicks').textContent = Number(clicks||0).toLocaleString();
+
+  // play time try compute
+  let playStr = '00:00:00';
+  try{
+    const raw = readLS('zk_tycoon_v_final_v2');
+    if(raw){
+      const p = JSON.parse(raw);
+      let acc = Number(p.playAcc || 0);
+      if(p.startTimestamp) acc += (Date.now() - Number(p.startTimestamp));
+      const s = Math.floor(acc/1000);
+      const hh = String(Math.floor(s/3600)).padStart(2,'0'), mm = String(Math.floor((s%3600)/60)).padStart(2,'0'), ss = String(s%60).padStart(2,'0');
+      playStr = `${hh}:${mm}:${ss}`;
     }
-    safeText('stat_rebirth', (reb ? `${reb}회` : '0회'));
+  }catch(e){}
+  document.getElementById('playTime').textContent = playStr;
 
-    // card counts
-    const kur = readLS('zk_kur'); safeText('stat_kur', kur ? `${kur} / 5` : '(수치) / 5');
-    const ur = readLS('zk_ur'); safeText('stat_ur', ur ? `${ur} / 10` : '(수치) / 10');
-    const ssr = readLS('zk_ssr'); safeText('stat_ssr', ssr ? `${ssr} / 10` : '0 / 10');
-    const sr = readLS('zk_sr'); safeText('stat_sr', sr ? `${sr} / 15` : '0 / 15');
+  // counts
+  const kur = readLS('zk_kur') || '(수치)';
+  const ur = readLS('zk_ur') || '(수치)';
+  document.getElementById('kurCount').textContent = (kur === '(수치)' ? '(수치) / 5' : `${kur} / 5`);
+  document.getElementById('urCount').textContent = (ur === '(수치)' ? '(수치) / 10' : `${ur} / 10`);
+}
 
-    // try to render card list JSON if present
-    const rawCards = readLS('zk_card_list');
-    if(rawCards){
-      try{
-        const arr = JSON.parse(rawCards);
-        if(Array.isArray(arr)){
-          const groups = { kur:[], ur:[], ssr:[], sr:[] };
-          arr.forEach(it=>{
-            const r = (it.rarity||'').toString().toLowerCase();
-            if(r.includes('kur')) groups.kur.push(it);
-            else if(r.includes('ur')) groups.ur.push(it);
-            else if(r.includes('ssr')) groups.ssr.push(it);
-            else if(r.includes('sr')) groups.sr.push(it);
-            else groups.kur.push(it);
-          });
-          function renderList(id, list){
-            const el = document.getElementById(id); if(!el) return;
-            el.innerHTML = '';
-            if(!list.length){ el.innerHTML = '<div class="card-item">(보유 카드 없음)</div>'; return; }
-            list.forEach(it=>{ const d = document.createElement('div'); d.className='card-item'; d.textContent = `${it.name||'(이름 없음)'}${it.rarity? ' — '+it.rarity : ''}`; el.appendChild(d); });
-          }
-          renderList('cardListKur', groups.kur);
-          renderList('cardListUr', groups.ur);
-          renderList('cardListSsr', groups.ssr);
-          renderList('cardListSr', groups.sr);
+/* card gallery rendering */
+const SLOTS = { kur:5, ur:10, ssr:10, sr:15 };
+
+function renderGallery(){
+  // clear grids
+  ['kur','ur','ssr','sr'].forEach(r=>{
+    const grid = document.getElementById('gallery-'+r);
+    if(grid) grid.innerHTML = '';
+  });
+
+  const raw = readLS('zk_card_list');
+  let arr = [];
+  if(raw){
+    try{ arr = JSON.parse(raw); if(!Array.isArray(arr)) arr = []; }catch(e){ arr = []; }
+  }
+
+  // group by rarity (normalized)
+  const grouped = { kur:[], ur:[], ssr:[], sr:[] };
+  arr.forEach(it=>{
+    const rarity = (it.rarity||'').toString().toLowerCase();
+    if(rarity.includes('kur')) grouped.kur.push(it);
+    else if(rarity.includes('ur')) grouped.ur.push(it);
+    else if(rarity.includes('ssr')) grouped.ssr.push(it);
+    else if(rarity.includes('sr')) grouped.sr.push(it);
+    else {
+      // guess by name length or push to kur by default
+      grouped.kur.push(it);
+    }
+  });
+
+  // for each rarity render exactly SLOTS[rarity] tiles
+  Object.entries(SLOTS).forEach(([rar,slotCount])=>{
+    const grid = document.getElementById('gallery-'+rar);
+    const list = grouped[rar] || [];
+    for(let i=0;i<slotCount;i++){
+      const tile = el('div','card-tile');
+      const imgWrap = el('div','card-image');
+      const caption = el('div','card-caption');
+      if(list[i]){
+        const card = list[i];
+        if(card.image){
+          const img = document.createElement('img');
+          img.src = card.image;
+          img.alt = card.name || `${rar.toUpperCase()} 카드`;
+          img.className = 'card-image';
+          // replace imgWrap with img element sized
+          img.style.width='86px'; img.style.height='86px'; img.style.borderRadius='8px'; img.style.objectFit='cover';
+          tile.appendChild(img);
+        } else {
+          imgWrap.textContent = (card.name && card.name.length ? card.name[0].toUpperCase() : card.name ? card.name : 'C');
+          tile.appendChild(imgWrap);
         }
-      }catch(e){ /* ignore parsing errors */ }
+        caption.textContent = card.name || '(이름 없음)';
+      } else {
+        // missing slot: show ? and '(미보유)'
+        imgWrap.classList.add('placeholder');
+        imgWrap.textContent = '?';
+        caption.textContent = '(미보유)';
+      }
+      // ensure caption exists when image element used
+      if(!tile.querySelector('.card-image')) {
+        // already appended img element as first child
+      }
+      tile.appendChild(caption);
+      grid.appendChild(tile);
     }
-  }
+  });
+}
 
-  function refreshAll(){ updateSPDisplay(); populateStats(); }
+/* bootstrap + sync */
+function refreshAll(){
+  updateSPAndBasic();
+  renderGallery();
+}
 
-  function initTheme(){
-    const toggle = document.getElementById('themeToggle');
-    const saved = readLS('theme') || 'dark';
-    if(saved === 'light') document.documentElement.classList.add('light');
-    if(toggle){ toggle.checked = (saved === 'dark'); toggle.addEventListener('change', ()=>{ const next = toggle.checked ? 'dark' : 'light'; try{ localStorage.setItem('theme', next); }catch(e){} if(next === 'light') document.documentElement.classList.add('light'); else document.documentElement.classList.remove('light'); }); }
-  }
+window.addEventListener('storage', (e)=>{
+  const keys = ['zk_sp_v1','zk_tycoon_v_final_v2','zk_card_list','zk_kur','zk_ur','zk_ssr','zk_sr','zk_rebirth'];
+  if(!e.key || keys.includes(e.key)) refreshAll();
+});
 
-  function setupSync(){
-    const keys = ['zk_sp_v1','zk_tycoon_v_final_v2','zk_cards','zk_card_list','zk_kur','zk_ur','zk_ssr','zk_sr','zk_rebirth'];
-    window.addEventListener('storage', (e)=>{ if(!e.key || keys.includes(e.key)) refreshAll(); });
-    let lastCheck = {};
-    setInterval(()=>{ let changed=false; keys.forEach(k=>{ const v = readLS(k) || ''; if(lastCheck[k] !== v){ lastCheck[k]=v; changed=true; } }); if(changed) refreshAll(); }, 1000);
-  }
+// polling for same-tab writes
+let last = {};
+setInterval(()=>{
+  const keys = ['zk_sp_v1','zk_tycoon_v_final_v2','zk_card_list','zk_kur','zk_ur','zk_ssr','zk_sr','zk_rebirth'];
+  let changed=false;
+  keys.forEach(k=>{
+    const v = readLS(k) || '';
+    if(last[k] !== v){ last[k]=v; changed=true; }
+  });
+  if(changed) refreshAll();
+}, 800);
 
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', ()=>{ initTheme(); setupSync(); refreshAll(); });
-  } else { initTheme(); setupSync(); refreshAll(); }
-
-})();
+document.addEventListener('DOMContentLoaded', ()=>{ refreshAll(); });
 </script>
 </body>
 </html>
