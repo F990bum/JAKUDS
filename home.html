@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>My Home — 자쿠드 숭배 시뮬레이터</title>
+
+<link rel="icon" href="favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#f6f8fb; --card:#fff; --line:#e5e7eb; --accent:#2563eb; --accent-2:#ffb86b;
+  --muted:#475569; --text:#0f172a; --text-strong:#071035; --shadow:rgba(10,20,40,0.06);
+  --profile-green-top:#102915; --profile-green-bottom:#7bd07a; --panel-gray:#d9d9d9; --orange:#f59e0b; --black:#111;
+}
+html.dark{
+  --bg:#071018; --card:#0b1724; --line:#12202a; --accent:#ffd166; --accent-2:#ffb86b;
+  --muted:#9aa0ab; --text:#eaf6ff; --text-strong:#fff;
+}
+*{box-sizing:border-box}
+html{font-size:100%}
+body{margin:0;font-family:"Noto Sans KR",system-ui,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+/* Header (원본과 완전히 동일) */
+.header{ background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1000; }
+.header-top{ display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.6rem 18px; width:100%; box-sizing:border-box; }
+.brand{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--text); }
+.brand img{ width:46px; height:46px; object-fit:contain; border-radius:6px; background:transparent; }
+.brand .title{ font-size:1.6rem; font-weight:900; color:var(--text-strong); }
+
+.right-controls{ display:flex; align-items:center; gap:0.6rem; }
+.sp-badge{ padding:0 12px; border-radius:8px; background:transparent; border:1px solid var(--line); font-weight:800; color:var(--accent); min-width:160px; text-align:center; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.myhome-btn{ padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--card); font-weight:700; color:var(--text); cursor:pointer; height:40px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-decoration:none; }
+
+/* Nav (둘째 줄 강조 없음) */
+.nav-row{ display:flex; align-items:center; justify-content:space-between; gap:0.6rem; padding:0.45rem 18px; border-top:1px solid var(--line); background:transparent; box-sizing:border-box; }
+.nav-left{ display:flex; gap:0.6rem; align-items:center; }
+.nav-left a{ text-decoration:none; padding:0.45rem 0.9rem; border-radius:8px; font-weight:700; color:var(--muted); font-size:0.95rem; }
+.nav-right{ display:flex; align-items:center; gap:0.6rem; }
+.theme-label{ color:var(--muted); font-weight:700; font-size:0.95rem; }
+.theme-switch{ position:relative; width:44px; height:24px; display:inline-block; }
+.theme-switch input{ opacity:0; width:0; height:0; }
+.slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:30px; transition:background .15s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
+.slider::before{ content:""; position:absolute; left:3px; top:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform .15s; }
+.theme-switch input:checked + .slider{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); }
+.theme-switch input:checked + .slider::before{ transform: translateX(20px); }
+
+/* Main layout */
+.main-wrap{ max-width:1180px; margin:1.6rem auto; padding:0 18px; display:flex; justify-content:center; }
+.home-hero{ width:100%; max-width:1000px; display:flex; flex-direction:column; gap:18px; }
+
+/* 상단의 검은-녹색 스트라이프 바 (이미지 재현) */
+.profile-title {
+  border-radius:8px;
+  padding:8px 12px;
+  color:#fff;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  height:48px;
+  background:
+    linear-gradient(90deg, #091207 0 20%, #0c2a10 20% 80%, #091207 80% 100%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 6px, rgba(255,255,255,0.02) 6px 12px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  font-size:1.05rem;
+}
+
+/* 회색 정보 패널 (이미지 스타일) */
+.profile-panel {
+  background: linear-gradient(180deg, var(--panel-gray), #efefef);
+  border-radius:6px;
+  padding:18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  color:var(--black);
+}
+
+/* grid: 좌우 두 열, 세 행 */
+.profile-grid {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap:24px;
+  row-gap:10px;
+}
+
+/* 각 항목: 왼쪽 레이블(화살표) / 오른쪽 값 */
+.profile-item {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 8px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  font-weight:800;
+  color:var(--text);
+  min-height:54px;
+}
+.profile-item .label { font-weight:800; color:#222; }
+.profile-item .value { font-weight:900; color:#000; }
+
+/* 카드 현황 헤더: 주황+검정 (이미지 재현) */
+.card-status-legend {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:8px;
+}
+.legend-label {
+  background:var(--orange);
+  color:#fff;
+  padding:12px 18px;
+  border-radius:4px;
+  font-weight:900;
+  display:inline-block;
+}
+.legend-desc {
+  background:#111;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:4px;
+  flex:1;
+  font-weight:700;
+}
+
+/* 작은 화면 처리 */
+@media (max-width:880px){
+  .profile-grid { grid-template-columns: 1fr; }
+  .profile-title{ font-size:1rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <a class="brand" href="index.html" title="자쿠드 숭배 시뮬레이터">
+      <img id="siteLogo" src="https://i.ibb.co/g8WwFK7/JAKUDS.png" alt="자쿠드 로고" onerror="this.onerror=null;this.src='/assets/logo.png'">
+      <span class="title">자쿠드 숭배 시뮬레이터</span>
+    </a>
+
+    <div class="right-controls">
+      <div id="spBadge" class="sp-badge">0 SP</div>
+      <a class="myhome-btn" href="home.html">My Home</a>
+    </div>
+  </div>
+
+  <div class="nav-row" role="navigation" aria-label="Main">
+    <div class="nav-left">
+      <a id="nav-index" href="index.html">메인</a>
+      <a id="nav-worship" href="worship.html">자쿠드 숭배하기</a>
+      <a id="nav-bible" href="bible.html">자쿠드 성경</a>
+      <a id="nav-generator" href="generator.html">자쿠드 제네레이터</a>
+    </div>
+
+    <div class="nav-right">
+      <div class="theme-label">다크 모드</div>
+      <label class="theme-switch" title="다크 모드">
+        <input id="themeToggle" type="checkbox" />
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+</header>
+
+<main class="main-wrap">
+  <div class="home-hero">
+
+    <!-- 상단 스트라이프 타이틀 바 -->
+    <div class="profile-title" aria-hidden="false">
+      <div style="width:10px;height:30px;border-radius:4px;background:linear-gradient(180deg,#fff4c0,#ffd166);box-shadow:0 2px 6px rgba(0,0,0,0.18)"></div>
+      <div>자쿠드숭배신도 님의 프로필</div>
+    </div>
+
+    <!-- 회색 정보 패널: 이미지의 모든 텍스트를 포함 -->
+    <section class="profile-panel" aria-label="프로필 정보">
+      <div class="profile-grid">
+        <!-- Row1 Left -->
+        <div class="profile-item">
+          <div class="label">▸ 현재 보유 SP</div>
+          <div class="value" id="home_sp">(수치) SP</div>
+        </div>
+        <!-- Row1 Right -->
+        <div class="profile-item">
+          <div class="label">▸ 환생 횟수</div>
+          <div class="value" id="home_rebirth">1회</div>
+        </div>
+
+        <!-- Row2 Left -->
+        <div class="profile-item">
+          <div class="label">▸ 보유 카드 수</div>
+          <div class="value" id="home_cards">(수치) / 50</div>
+        </div>
+        <!-- Row2 Right -->
+        <div class="profile-item">
+          <div class="label">▸ 보유 KUR 카드 수</div>
+          <div class="value" id="home_kur">(수치) / 5</div>
+        </div>
+
+        <!-- Row3 Left -->
+        <div class="profile-item">
+          <div class="label">▸ 보유 UR 카드 수</div>
+          <div class="value" id="home_ur">(수치) / 10</div>
+        </div>
+        <!-- Row3 Right -->
+        <div class="profile-item" style="border-bottom:0">
+          <div class="label">▸ 보유 SSR 카드 수</div>
+          <div class="value" id="home_ssr">(수치) / 15</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 카드 현황 헤더 -->
+    <div class="card-status-legend" style="margin-top:8px">
+      <div class="legend-label">카드 현황</div>
+      <div class="legend-desc">현재 보유중인 카드를 봅니다.</div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+/* 테마 토글 (index.html과 동일 동작) */
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('theme');
+  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if(initial === 'dark') document.documentElement.classList.add('dark');
+  if(toggle) toggle.checked = (initial === 'dark');
+  if(toggle) toggle.addEventListener('change', ()=>{ const next = toggle.checked ? 'dark' : 'light'; localStorage.setItem('theme', next); if(next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); });
+})();
+
+/* SP 및 카드 수 자동 채움:
+   - SP는 기존 게임이 저장하는 'zk_sp_v1'에서 불러옵니다.
+   - 카드 관련 수치들은 (있다면) localStorage의 키를 사용합니다.
+     사용중인 키: 'zk_cards','zk_kur','zk_ur','zk_ssr','zk_rebirth'
+   - 키가 없으면 이미지의 '(수치)' 그대로 둡니다.
+*/
+function readLocalOrPlaceholder(key, placeholder){
+  try{
+    const v = localStorage.getItem(key);
+    if(v === null || v === undefined) return placeholder;
+    // 보이는 문자열로 그대로 사용
+    return v;
+  }catch(e){ return placeholder; }
+}
+
+function populateHome(){
+  // SP: stored formatted string (zk_sp_v1) or fallback
+  const spStored = readLocalOrPlaceholder('zk_sp_v1','(수치) SP');
+  document.getElementById('home_sp').textContent = spStored;
+
+  const cards = readLocalOrPlaceholder('zk_cards','(수치)');
+  document.getElementById('home_cards').textContent = (cards === '(수치)' ? '(수치) / 50' : `${cards} / 50`);
+
+  const kur = readLocalOrPlaceholder('zk_kur','(수치)');
+  document.getElementById('home_kur').textContent = (kur === '(수치)' ? '(수치) / 5' : `${kur} / 5`);
+
+  const ur = readLocalOrPlaceholder('zk_ur','(수치)');
+  document.getElementById('home_ur').textContent = (ur === '(수치)' ? '(수치) / 10' : `${ur} / 10`);
+
+  const ssr = readLocalOrPlaceholder('zk_ssr','(수치)');
+  document.getElementById('home_ssr').textContent = (ssr === '(수치)' ? '(수치) / 15' : `${ssr} / 15`);
+
+  const rebirth = readLocalOrPlaceholder('zk_rebirth','1');
+  document.getElementById('home_rebirth').textContent = (rebirth === '(수치)' ? '1회' : `${rebirth}회`);
+}
+
+// 초기화 시 채움
+populateHome();
+</script>
+
+</body>
+</html>
