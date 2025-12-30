@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>자쿠드 숭배 시뮬레이터 — 숭배하기</title>
+<title>자쿠드 숭배하기</title>
 <link rel="icon" href="favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -91,7 +91,6 @@ html.dark .section-title{ color:#fff; }
 .upgrade-left{ font-weight:800; }
 .upgrade-right button{ padding:6px 8px; border-radius:8px; border:0; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071018; font-weight:800; cursor:pointer; }
 
-/* buy-all button style (like reset) */
 .small-btn{ background:transparent; border:1px solid var(--line); padding:6px 8px; border-radius:8px; cursor:pointer; font-weight:800; color:var(--muted); }
 
 /* modal overlay & dialog (overlay darkens but content is not blurred) */
@@ -100,7 +99,6 @@ html.dark .section-title{ color:#fff; }
 .dialog h3{ margin:0 0 8px 0; font-size:1.2rem; }
 .dialog .row{ display:flex; justify-content:space-between; margin:8px 0; color:var(--muted); }
 
-/* floating */
 .float-elem{ position:absolute; pointer-events:none; transform:translate(-50%, -50%); font-weight:900; opacity:1; white-space:nowrap; display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border-radius:16px; background:linear-gradient(90deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95)); color:#071018; font-size:16px; box-shadow:0 10px 28px rgba(0,0,0,0.18); animation: floatUp 1000ms forwards; z-index:9999; }
 html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rgba(10,10,20,0.92)); color:var(--text); }
 @keyframes floatUp{ 0%{ transform:translate(-50%, -10% ) scale(1); opacity:1; } 100%{ transform:translate(-50%, -180% ) scale(1.04); opacity:0; } }
@@ -200,9 +198,9 @@ html.dark .float-elem{ background:linear-gradient(90deg, rgba(20,20,30,0.97), rg
     <div class="row"><div>크리티컬 확률</div><div id="infoCrit">-</div></div>
     <div class="row"><div>피버 확률</div><div id="infoFever">-</div></div>
     <div class="thin-hr" style="margin-top:12px"></div>
-    <div class="row"><div>신도 1명당 크리티컬</div><div id="infoPerFollower">-</div></div>
-    <div class="row"><div>제단 1개당 피버</div><div id="infoPerAltar">-</div></div>
-    <div class="row"><div>사원 1개당 수동</div><div id="infoPerTemple">-</div></div>
+    <div class="row"><div>신도 1명당 크리티컬 확률</div><div id="infoPerFollower">-</div></div>
+    <div class="row"><div>제단 1개당 피버 확률</div><div id="infoPerAltar">-</div></div>
+    <div class="row"><div>사원 1개당 수동 숭배력</div><div id="infoPerTemple">-</div></div>
 
     <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
       <button id="resetBtn" class="reset-btn">초기화</button>
@@ -318,6 +316,57 @@ function formatSmallNumber(n){
 }
 
 /* -----------------------
+   New helpers for SPS / description formatting
+   ----------------------- */
+function parseFormattedUnit(formatted){
+  // formatted examples: "123 SP", "1.23 M SP", "123만 KU", "1.23 M SP"
+  if(!formatted || typeof formatted !== 'string') return {num:formatted, unit:''};
+  // KU special forms contain "KU" at end
+  const trimmed = formatted.trim();
+  const kuMatch = trimmed.match(/^(.*\S)\s+KU$/);
+  if(kuMatch) return {num: kuMatch[1], unit: 'KU'};
+  // usual SP forms e.g. "1.23 M SP" or "123 SP"
+  const spMatch = trimmed.match(/^(.*\S)\s+SP$/);
+  if(spMatch) return {num: spMatch[1], unit: 'SP'};
+  // fallback split by last space
+  const parts = trimmed.split(/\s+/);
+  if(parts.length > 1){
+    const unit = parts[parts.length-1];
+    return {num: parts.slice(0,parts.length-1).join(' '), unit};
+  }
+  return {num: trimmed, unit:''};
+}
+
+function formatSPSValue(n){
+  // n is a number (SPS per building) or small decimal.
+  if(!isFinite(n)) return '0 SPS';
+  if(n >= 1_000_000){
+    // reuse SP formatter but convert trailing SP -> SPS unless KU
+    const formatted = formatSPDisplay(bn_fromNumber(n));
+    const p = parseFormattedUnit(formatted);
+    if(p.unit === 'KU') return `${p.num} KUPS`; // KU -> KUPS
+    // otherwise show numeric part + ' SPS'
+    return `${p.num} SPS`;
+  }
+  // small numbers: use decimal formatting with commas where appropriate
+  return `${formatSmallNumber(n)} SPS`;
+}
+
+function formatDescNumber(n){
+  // formats numbers inside upgrade descriptions (commas, large-unit support)
+  if(!isFinite(n)) return '0';
+  if(Math.abs(n) >= 1_000_000){
+    // use SP display but remove trailing ' SP'
+    const formatted = formatSPDisplay(bn_fromNumber(n));
+    const p = parseFormattedUnit(formatted);
+    // return numeric+unit without trailing SP (ex: "1.23 M", or "123만 KU")
+    return `${p.num}${p.unit ? ' ' + p.unit : ''}`.trim();
+  }
+  // for moderate numbers, show commas and trim decimals
+  return formatSmallNumber(n);
+}
+
+/* -----------------------
    Defaults / State
    ----------------------- */
 const KEY = 'zk_tycoon_v_final_v2';
@@ -419,26 +468,39 @@ function sampleMultiLevel(Ppercent){
   return {level:n-1,n,r};
 }
 function sampleMultiLevelFever(Ppercent){
-  // behaves like crit sampling but allows multi-level fever
   return sampleMultiLevel(Ppercent);
 }
 
 /* CRITICAL label rules */
+/* updated: implement S-CRITICAL series with appended exclamations up to 5,
+   then move to S-S-CRITICAL series, etc. */
 function critMultiplierForLevel(level){
   if(level < 0) return 1;
   return Math.pow(2, level + 1);
 }
 function critLabelForLevel(level){
+  if(level < 0) return '';
   // exclamation count = level + 1
   const exCount = Math.max(0, level + 1);
+
+  // base short-phase (plain CRITICAL with increasing !)
   if(exCount < 6){
     return 'CRITICAL' + '!'.repeat(exCount);
   }
-  if(exCount === 6) return 'S-CRITICAL';
-  if(exCount === 7) return 'S-S-CRITICAL';
-  if(exCount === 8) return 'S-S-S-CRITICAL';
-  if(exCount === 9) return 'J-CRITICAL';
-  // exCount >= 10 -> KU-CRITICAL with numeric prefix (display exCountKU-CRITICAL plus 5 exclamation marks)
+
+  // groups after base. Each group cycles 6 positions:
+  // group 0: S-CRITICAL (pos 0) -> S-CRITICAL!!!!! (pos5)
+  // group 1: S-S-CRITICAL ...
+  const groupLabels = ['S-CRITICAL','S-S-CRITICAL','S-S-S-CRITICAL','J-CRITICAL'];
+  const idx = exCount - 6;
+  const group = Math.floor(idx / 6);
+  const pos = idx % 6; // 0..5, pos==0 => no extra '!' after label
+  if(group < groupLabels.length){
+    const baseLabel = groupLabels[group];
+    return baseLabel + (pos === 0 ? '' : '!'.repeat(pos));
+  }
+
+  // fallback: large KU-CRITICAL with numeric prefix and 5 exclamation marks
   return `${exCount}KU-CRITICAL` + '!'.repeat(5);
 }
 function critLevelDisplay(level){
@@ -472,7 +534,8 @@ function renderStore(){
     const left = document.createElement('div'); left.className='item-left';
     const right = document.createElement('div'); right.className='item-right';
     const perSps = buildingSpsEffective(item.key);
-    left.innerHTML = `<div style="font-weight:900">${item.label} x${b.count}</div><div class="sps-each">하나당 +${formatSmallNumber(perSps)} SPS</div>`;
+    // use formatSPSValue to correctly show M/B/T/KU etc and commas
+    left.innerHTML = `<div style="font-weight:900">${item.label} x${b.count}</div><div class="sps-each">하나당 +${formatSPSValue(perSps)}</div>`;
     const cost = Math.ceil(item.baseCost * Math.pow(1.15, b.count));
     const buyBtn = document.createElement('button'); buyBtn.className='buy'; buyBtn.textContent = formatCostForDisplay(cost);
     buyBtn.disabled = !bn_gte_number(state.sp, cost);
@@ -521,26 +584,54 @@ function buyMaxBuilding(key){
 }
 
 /* -----------------------
-   Upgrades (50 levels, higher growth). descriptions include formatted numbers.
+   Upgrades (50 levels, higher growth).
+   - initial prices and multipliers are centralized in UPGRADE_COSTS for easy tuning.
+   - each entry has a comment with "처음 가격" and "증가 계수" so 너가 바로 수정할 수 있음.
    ----------------------- */
+
+/* 조정 포인트:
+   각 업그레이드의 basePrice와 mult는 아래 UPGRADE_COSTS에서 편집하세요.
+   예: groupWorship: { basePrice: 1000, mult: 1.9 } // 처음 가격 1000, 증가계수 1.9
+*/
+const UPGRADE_COSTS = {
+  // groupWorship: 처음 가격 1000, 증가 계수 2.0
+  groupWorship: { basePrice: 1000, mult: 2.0 },
+  // godBless: 처음 가격 10000, 증가 계수 2.0
+  godBless: { basePrice: 10000, mult: 2.0 },
+  // faithMiracle: 처음 가격 100000, 증가 계수 2.0
+  faithMiracle: { basePrice: 100000, mult: 2.0 },
+  // devotion: 처음 가격 10000, 증가 계수 3.5
+  devotion: { basePrice: 10000, mult: 3.5 },
+  // followerBoost: 처음 가격 5000, 증가 계수 2.5
+  followerBoost: { basePrice: 5000, mult: 2.5 },
+  // altarBoost: 처음 가격 20000, 증가 계수 2.5
+  altarBoost: { basePrice: 20000, mult: 2.5 },
+  // templeBoost: 처음 가격 100000, 증가 계수 2.5
+  templeBoost: { basePrice: 100000, mult: 2.5 },
+  // godBlessEnhance: 처음 가격 100000, 증가 계수 3.0
+  godBlessEnhance: { basePrice: 100000, mult: 3.0 }
+};
+
 const UPGRADE_TEMPLATES = [
-  { key:'groupWorship', name:'단체 숭배', req:{building:'follower',count:10}, basePrice:1000, mult:1.9, descMaker:(lv)=>`신도 1명당 크리티컬 확률 +${(0.5*lv).toFixed(2)}%` },
-  { key:'godBless', name:'신의 축복', req:{building:'altar',count:10}, basePrice:10000, mult:2.0, descMaker:(lv)=>`제단 1개당 피버 확률 +${(0.1*lv).toFixed(2)}%` },
-  { key:'faithMiracle', name:'신앙심의 기적', req:{building:'temple',count:10}, basePrice:100000, mult:2.05, descMaker:(lv)=>`사원 1개당 수동 숭배력 +${(0.2*lv).toFixed(2)}` },
-  { key:'devotion', name:'헌신 강화', req:{building:'follower',count:30}, basePrice:150000, mult:2.4, descMaker:(lv)=>`수입 ×${Math.pow(1.9,lv).toFixed(2)}` },
-  { key:'followerBoost', name:'신도 강화', req:{building:'follower',count:5}, basePrice:5000, mult:2.2, descMaker:(lv)=>`신도 SPS ×${Math.pow(2,lv).toFixed(0)}` },
-  { key:'altarBoost', name:'제단 강화', req:{building:'altar',count:5}, basePrice:20000, mult:2.2, descMaker:(lv)=>`제단 SPS ×${Math.pow(2,lv).toFixed(0)}` },
-  { key:'templeBoost', name:'사원 강화', req:{building:'temple',count:2}, basePrice:100000, mult:2.3, descMaker:(lv)=>`사원 SPS ×${Math.pow(2,lv).toFixed(0)}` },
-  { key:'godBlessEnhance', name:'신의 축복 강화', req:{building:'altar',count:20}, basePrice:250000, mult:2.5, descMaker:(lv)=>`피버 지속시간 +${2*lv}s, 피버 효과 +${(0.1*lv).toFixed(2)}` }
+  { key:'groupWorship', name:'단체 숭배', req:{building:'follower',count:10}, basePriceKey:'groupWorship', descMaker:(lv)=>`신도 1명당 크리티컬 확률 +${formatDescNumber(0.5*lv)}%` },
+  { key:'godBless', name:'신의 축복', req:{building:'altar',count:10}, basePriceKey:'godBless', descMaker:(lv)=>`제단 1개당 피버 확률 +${formatDescNumber(0.1*lv)}%` },
+  { key:'faithMiracle', name:'신앙심의 기적', req:{building:'temple',count:10}, basePriceKey:'faithMiracle', descMaker:(lv)=>`사원 1개당 수동 숭배력 +${formatDescNumber(0.2*lv)}` },
+  { key:'devotion', name:'헌신 강화', req:{building:'follower',count:30}, basePriceKey:'devotion', descMaker:(lv)=>`수입 ×${formatDescNumber(Math.pow(1.9,lv))}` },
+  { key:'followerBoost', name:'신도 강화', req:{building:'follower',count:5}, basePriceKey:'followerBoost', descMaker:(lv)=>`신도 SPS ×${formatDescNumber(Math.pow(2,lv))}` },
+  { key:'altarBoost', name:'제단 강화', req:{building:'altar',count:5}, basePriceKey:'altarBoost', descMaker:(lv)=>`제단 SPS ×${formatDescNumber(Math.pow(2,lv))}` },
+  { key:'templeBoost', name:'사원 강화', req:{building:'temple',count:2}, basePriceKey:'templeBoost', descMaker:(lv)=>`사원 SPS ×${formatDescNumber(Math.pow(2,lv))}` },
+  { key:'godBlessEnhance', name:'신의 축복 강화', req:{building:'altar',count:20}, basePriceKey:'godBlessEnhance', descMaker:(lv)=>`피버 지속시간 +${formatDescNumber(2*lv)}s, 피버 효과 +${formatDescNumber(0.1*lv)}` }
 ];
 
 const UPGRADE_DEFS = UPGRADE_TEMPLATES.map(def=>{
+  const cfg = UPGRADE_COSTS[def.basePriceKey] || { basePrice:1000, mult:2.0 };
   const levels=[];
   for(let lv=1;lv<=50;lv++){
-    const price = Math.round(def.basePrice * Math.pow(def.mult, lv-1));
+    // price 계산: basePrice * mult^(lv-1)
+    const price = Math.round(cfg.basePrice * Math.pow(cfg.mult, lv-1));
     levels.push({lv, price, desc: def.descMaker(lv)});
   }
-  return Object.assign({}, def, {levels});
+  return Object.assign({}, def, {levels, basePrice: cfg.basePrice, mult: cfg.mult});
 });
 
 function renderUpgrades(){
@@ -557,12 +648,20 @@ function renderUpgrades(){
     const canUnlock = (state.buildings[r.def.req.building].count || 0) >= r.def.req.count;
     const el=document.createElement('div'); el.className='upgrade-row';
     const left=document.createElement('div'); left.className='upgrade-left';
+    // display next.desc already uses formatted numbers
     left.innerHTML = `<div>${r.def.name} Lv ${r.cur} → ${r.next.lv}</div><div style="font-size:0.85rem;color:var(--muted)">${r.next.desc}</div>`;
     const right=document.createElement('div'); right.className='upgrade-right';
     const btn=document.createElement('button'); btn.textContent = formatCostForDisplay(r.next.price);
     btn.disabled = !canUnlock || !bn_gte_number(state.sp, r.next.price);
     btn.addEventListener('pointerdown',(e)=>{ e.preventDefault(); buyUpgrade(r.def.key); });
     right.appendChild(btn);
+    // also show base price & multiplier small hint (for tuning)
+    const hint = document.createElement('div');
+    hint.style.fontSize='0.75rem';
+    hint.style.color='var(--muted)';
+    hint.style.marginLeft='8px';
+    hint.textContent = `(초깃값:${formatDescNumber(r.def.basePrice)}, 계수:${r.def.mult})`;
+    right.appendChild(hint);
     el.appendChild(left); el.appendChild(right); upgradesListEl.appendChild(el);
   });
 }
@@ -584,7 +683,6 @@ function buyUpgrade(key){
 function buyAllUpgrades(){
   // attempt rounds until no purchase possible
   let boughtAny = false;
-  // limit loops to avoid hang
   for(let round=0; round<200; round++){
     let boughtThisRound = false;
     const rows=[];
@@ -598,7 +696,6 @@ function buyAllUpgrades(){
       const canUnlock = (state.buildings[r.def.req.building].count || 0) >= r.def.req.count;
       if(!canUnlock) continue;
       if(bn_gte_number(state.sp, r.next.price)){
-        // buy one level
         state.sp = bn_subNumber(state.sp, r.next.price);
         state.upgrades[r.def.key] = (state.upgrades[r.def.key] || 0) + 1;
         boughtThisRound = true;
@@ -630,7 +727,6 @@ worshipBtn.addEventListener('pointerdown', (ev)=>{
   const finalManual = getEffectiveManualBase();
   const gain = Number.isFinite(finalManual) ? finalManual * critMult * feverClickMult : 0;
 
-  // guard against NaN
   const safeGain = (typeof gain === 'number' && isFinite(gain)) ? gain : 0;
 
   state.sp = bn_addNumber(state.sp, safeGain);
@@ -739,9 +835,26 @@ function updateUI(){
   totalClicksEl.textContent = (state.totalClicks || 0).toLocaleString();
 
   // info modal values updated so user sees converted per-building numbers
-  infoManual.textContent = formatSPDisplay(bn_fromNumber(getEffectiveManualBase())).replace(/ SP$/,'');
-  const spsVal = calcSPS();
-  infoAuto.textContent = (spsVal < 1_000_000 ? formatSmallNumber(Math.round(spsVal * 100)/100).replace(/\.00$/,'') : formatSPDisplay(bn_fromNumber(Math.round(spsVal * 100)/100))).toString() + ' SPS';
+  // 수동: (수치) SP 또는 (수치) KU
+  const manualFormatted = formatSPDisplay(bn_fromNumber(getEffectiveManualBase()));
+  const manualParsed = parseFormattedUnit(manualFormatted);
+  // if unit is KU, show (num) KU, else show (num) SP
+  infoManual.textContent = `(${manualParsed.num}) ${manualParsed.unit === 'KU' ? 'KU' : 'SP'}`;
+
+  // 자동: (수치) SPS or (수치) KUPS when KU
+  const spsValRaw = calcSPS();
+  const spsFormatted = spsValRaw < 1_000_000
+    ? (Math.round(spsValRaw * 100) / 100).toString()
+    : formatSPDisplay(bn_fromNumber(Math.round(spsValRaw * 100) / 100));
+  const spsParsed = parseFormattedUnit(spsFormatted);
+  if(spsParsed.unit === 'KU'){
+    infoAuto.textContent = `(${spsParsed.num}) KUPS`;
+  } else {
+    // display numeric part only and append 'SPS'
+    const numOnly = spsParsed.num || spsFormatted;
+    infoAuto.textContent = `(${numOnly}) SPS`;
+  }
+
   infoCrit.textContent = (Math.round(getCritPercent()*10)/10) + '%';
   infoFever.textContent = (Math.round(getFeverPercent()*10)/10) + '%';
   infoPerFollower.textContent = (state.upgrades.groupWorship ? (0.5 * state.upgrades.groupWorship).toFixed(2) : '0') + '%';
